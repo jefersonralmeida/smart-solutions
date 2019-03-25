@@ -20,6 +20,12 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('role')->default('dentista');
+            $table->string('cpf_cnpj');
+            $table->string('phone');
+            $table->string('cro');
+            $table->string('city');
+            $table->string('state');
+            $table->string('cellphone');
             $table->rememberToken();
             $table->timestamps();
         });

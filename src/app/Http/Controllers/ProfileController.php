@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateProfile;
+use Auth;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -28,5 +30,16 @@ class ProfileController extends Controller
                 ['label' => 'Dados Cadastrais']
             ]
         ]);
+    }
+
+    public function update(UpdateProfile $request)
+    {
+
+        $user = Auth::user();
+
+        $user->fill($request->all());
+        $user->save();
+
+        return redirect('profile')->with('success', true);
     }
 }
