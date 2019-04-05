@@ -19,13 +19,11 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('role')->default('dentista');
-            $table->string('cpf_cnpj');
-            $table->string('phone');
-            $table->string('cro');
-            $table->string('city');
-            $table->string('state');
-            $table->string('cellphone');
+            $table->string('api_token', 80)->unique()->nullable()->default(null);
+            $table->integer('clinic_id')->nullable();
+            $table->integer('dentist_id')->nullable();
+            $table->json('permissions')->nullable();
+            $table->boolean('authorized_newsletter')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

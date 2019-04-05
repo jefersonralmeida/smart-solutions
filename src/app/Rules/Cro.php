@@ -2,7 +2,6 @@
 
 namespace App\Rules;
 
-use App\ExternalApi\Cro\CroApiContract;
 use Illuminate\Contracts\Validation\Rule;
 
 class Cro implements Rule
@@ -12,19 +11,13 @@ class Cro implements Rule
     protected $nameAttribute;
 
     /**
-     * @var CroApiContract
-     */
-    protected $api;
-
-    /**
      * Create a new rule instance.
      *
      * @param string $nameAttribute
      */
-    public function __construct(string $nameAttribute = 'name', CroApiContract $api)
+    public function __construct(string $nameAttribute = 'name')
     {
         $this->nameAttribute = $nameAttribute;
-        $this->api = $api;
     }
 
     /**
@@ -36,26 +29,25 @@ class Cro implements Rule
      */
     public function passes($attribute, $value)
     {
-        $value = trim($value);
+        $value = strtoupper(trim($value));
 
-        if (!preg_match('/^[A-Z]{2}\-[A-Z]{2,}\-\d+$/', $value)) {
+        if (!preg_match('/^([A-Z]{2})\-?([A-Z]{2,})\-?\d+$/', $value, $matches)) {
             $this->message = "O CRO informado está mal formado. Use o Formato 'UF-XX-9999'";
             return false;
         }
 
-        $apiResponse = $this->api->request($value);
-
-        if (!$apiResponse) {
+        if (!in_array($matches[1], config('states'))) {
+            $this->message = "O CRO informado tem UF inválida.";
             return false;
         }
 
-        if (!$apiResponse->isActive()) {
-            $this->message = 'CRO inativo.';
+        if (!empty(request()->state) && $matches[1] !== request()->state) {
+            $this->message = "O CRO informado tem UF diferente do cadastro.";
             return false;
         }
 
-        if ($apiResponse->getName() !== sanitizeString(request()->get('name'))) {
-            $this->message = 'O nome registrado no CRO não confere com o nome do cadastro.';
+        if (!in_array($matches[2], array_keys(config('cro.categoryMap')))) {
+            $this->message = "O CRO informado tem categoria inválida";
             return false;
         }
 

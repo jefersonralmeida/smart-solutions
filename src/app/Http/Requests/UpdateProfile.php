@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\CpfCnpj;
-use App\Rules\Cro;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -22,6 +20,9 @@ use Illuminate\Validation\Rule;
  */
 class UpdateProfile extends FormRequest
 {
+
+    protected $redirect = 'profile/update-profile';
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -41,9 +42,7 @@ class UpdateProfile extends FormRequest
     {
         return [
             'name' => 'required',
-            'cpf_cnpj' => ['required', new CpfCnpj()],
             'email' => ['required', Rule::unique('users', 'email')->ignore(Auth::user()->id)],
-            'cro' => ['required', resolve(Cro::class)],
         ];
     }
 }

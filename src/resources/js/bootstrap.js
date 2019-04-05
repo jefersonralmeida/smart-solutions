@@ -1,4 +1,3 @@
-
 window._ = require('lodash');
 
 /**
@@ -12,7 +11,8 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
-} catch (e) {}
+} catch (e) {
+}
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -44,13 +44,82 @@ if (token) {
  * allows your team to easily build robust real-time web applications.
  */
 
-// import Echo from 'laravel-echo'
+if (Notification) {
+    if (Notification.permission !== "granted") {
+        Notification.requestPermission().then(x => {
+            console.log(x);
+        });
+    }
+}
 
-// window.Pusher = require('pusher-js');
+const desktopNotify = function (title, body) {
+    const notification = new Notification(title, {
+        body: body,
+    });
+};
 
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     encrypted: true
-// });
+import Echo from "laravel-echo"
+
+window.io = require('socket.io-client');
+
+window.Echo = new Echo({
+    broadcaster: 'socket.io',
+    host: window.location.hostname + ':6001'
+});
+
+window.Echo.private('App.User.' + userId).notification(function (notification) {
+    refreshNotifications();
+    if (desktopNotify) {
+        desktopNotify(notification.title, notification.message.join('\n'));
+    }
+});
+
+
+const moment = require('moment');
+
+// refresh the notifications
+const refreshNotifications = function () {
+    window.axios.get('api/notifications', {
+        'headers': {
+            Authorization: 'Bearer ' + apiToken,
+        }
+    }).then((response) => {
+        const notifications = response.data;
+        $("#notifications-counter").html(notifications.length ? notifications.length : '');
+        for (let i in notifications) {
+
+            console.log(notifications[i]);
+            const row = $('<li>');
+
+            const link = $('<a>');
+            link.prop('href', 'notifications/' + notifications[i].id);
+            row.append(link);
+
+            const div = $('<div style="margin-bottom: 8px;">');
+            link.append(div);
+
+            const title = $('<strong>');
+            title.html(notifications[i].data.title);
+            div.append(title);
+
+            const time = $('<span class="pull-right text-muted small">');
+            time.html(moment(notifications[i].created_at, "YYYY-MM-DD HH:mm:ss").format("DD/MM/YYYY HH:mm"));
+            div.append(time);
+
+            for (let j in notifications[i].data.message) {
+                const line = $('<p>');
+                line.html(notifications[i].data.message[j]);
+                link.append(line);
+            }
+
+            $("#notifications-list").append(row);
+
+        }
+    }).catch((error) => {
+        console.log(error);
+    });
+};
+refreshNotifications();
+
+
+

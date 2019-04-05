@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateProfile;
 use Auth;
-use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
@@ -21,14 +20,16 @@ class ProfileController extends Controller
     /**
      * Show the application dashboard.
      *
+     * @param string|null $form
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(?string $form = null)
     {
         return view('profile', [
-            'breadcrumbs'=> [
+            'breadcrumbs' => [
                 ['label' => 'Dados Cadastrais']
-            ]
+            ],
+            'form' => $form
         ]);
     }
 

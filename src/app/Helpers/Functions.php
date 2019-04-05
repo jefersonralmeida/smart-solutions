@@ -47,19 +47,6 @@ if (!function_exists('removeMask')) {
     }
 }
 
-if (!function_exists('getMask')) {
-    function getMask(string $key): string
-    {
-        $map = [
-            'cpf' => '999.999.999-99',
-            'cnpj' => '99.999.999/9999-99',
-            'phone' => '99-9999-9999',
-            'cellphone' => '99-99999-9999',
-        ];
-        return $map[$key];
-    }
-}
-
 if (!function_exists('validateCnpj')) {
 
     function validateCnpj(string $cnpj): bool
@@ -68,7 +55,7 @@ if (!function_exists('validateCnpj')) {
             return false;
         }
 
-        $cnpj = removeMask($cnpj, getMask('cnpj'));
+        $cnpj = removeMask($cnpj, config('masks.cnpj'));
 
         // Verifica se nenhuma das sequências invalidas abaixo
         // foi digitada. Caso afirmativo, retorna falso
@@ -110,7 +97,7 @@ if (!function_exists('validateCpf')) {
             return false;
         }
 
-        $cpf = removeMask($cpf, getMask('cpf'));
+        $cpf = removeMask($cpf, config('masks.cpf'));
 
         // Verifica se nenhuma das sequências invalidas abaixo
         // foi digitada. Caso afirmativo, retorna falso

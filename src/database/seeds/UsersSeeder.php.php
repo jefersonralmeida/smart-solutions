@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UsersSeeder extends Seeder
 {
@@ -13,50 +14,52 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([[
-            'name' => 'ROBERT PLANT',
-            'email' => 'dentista1@gmail.com',
-            'password' => Hash::make('password'),
-            'role' => 'dentista',
-            'cpf_cnpj' => '88177030019',
-            'phone' => '4133330001',
-            'cro' => 'PR-CD-149',
-            'city' => 'CURITIBA',
-            'state' => 'PR',
-            'cellphone' => '41999990001',
-        ], [
-            'name' => 'JIMMY PAGE',
-            'email' => 'dentista2@gmail.com',
-            'password' => Hash::make('password'),
-            'role' => 'dentista',
-            'cpf_cnpj' => '42001545010',
-            'phone' => '43333300002',
-            'cro' => 'PR-CD-167',
-            'city' => 'LONDRINA',
-            'state' => 'PR',
-            'cellphone' => '43999990002',
-        ], [
-            'name' => 'JOHN PAUL JONES',
-            'email' => 'dentista3@gmail.com',
-            'password' => Hash::make('password'),
-            'role' => 'dentista',
-            'cpf_cnpj' => '84124281000184',
-            'phone' => '4233330003',
-            'cro' => 'PR-CD-168',
-            'city' => 'PONTA GROSSA',
-            'state' => 'PR',
-            'cellphone' => '42999990003',
-        ], [
-            'name' => 'JOHN BONHAM',
-            'email' => 'dentista4@gmail.com',
-            'password' => Hash::make('password'),
-            'role' => 'dentista',
-            'cpf_cnpj' => '44658338000100',
-            'phone' => '4433330004',
-            'cro' => 'PR-CD-303',
-            'city' => 'MARINGA',
-            'state' => 'PR',
-            'cellphone' => '44999990004',
-        ]]);
+        DB::table('users')->insert([
+
+            // 1 - user without clinic
+            [
+                'name' => 'ROBERT PLANT',
+                'email' => 'noclinic@gmail.com',
+                'password' => Hash::make('password'),
+                'api_token' => Str::random(60),
+                'clinic_id' => null,
+                'dentist_id' => null,
+                'permissions' => json_encode([]),
+            ],
+
+            // 2 - clinic1 admin (can create dentists)
+            [
+                'name' => 'JIMMY PAGE',
+                'email' => 'nodentist@gmail.com',
+                'password' => Hash::make('password'),
+                'api_token' => Str::random(60),
+                'clinic_id' => 1,
+                'dentist_id' => null,
+                'permissions' => json_encode(['clinic-admin', 'manage_permissions', 'create_dentist', 'order']),
+            ],
+
+            // 3 - clinic2 admin (can create dentists)
+            [
+                'name' => 'JOHN PAUL JONES',
+                'email' => 'admin2@gmail.com',
+                'password' => Hash::make('password'),
+                'api_token' => Str::random(60),
+                'clinic_id' => 1,
+                'dentist_id' => null,
+                'permissions' => json_encode(['manage_permissions', 'create_dentist', 'order']),
+            ],
+
+            // 4 - clinic1 simple user
+            [
+                'name' => 'JOHN BONHAM',
+                'email' => 'user1@gmail.com',
+                'password' => Hash::make('password'),
+                'api_token' => Str::random(60),
+                'clinic_id' => 1,
+                'dentist_id' => null,
+                'permissions' => json_encode(['order']),
+            ],
+
+        ]);
     }
 }

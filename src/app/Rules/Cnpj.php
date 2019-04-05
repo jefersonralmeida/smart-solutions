@@ -4,13 +4,8 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class CpfCnpj implements Rule
+class Cnpj implements Rule
 {
-
-    /**
-     * @var string
-     */
-    protected $documentType;
 
     /**
      * Create a new rule instance.
@@ -31,11 +26,6 @@ class CpfCnpj implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        if (preg_match('/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/', $value)) {
-            $this->documentType = 'CPF';
-            return validateCpf($value);
-        }
-        $this->documentType = 'CNPJ';
         return validateCnpj($value);
     }
 
@@ -46,6 +36,6 @@ class CpfCnpj implements Rule
      */
     public function message()
     {
-        return "O {$this->documentType} informado é inválido.";
+        return "O CNPJ informado é inválido.";
     }
 }

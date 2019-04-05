@@ -3,11 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Smart Aligner - Painel de Controle</title>
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/datepicker3.css') }}" rel="stylesheet">
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+
+    <script>
+        const userId = "{{ Auth::user()->id }}";
+        const apiToken = "{{Auth::user()->api_token}}";
+    </script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!--Custom Font-->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i"
@@ -26,29 +33,10 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span></button>
-            <a class="navbar-brand" href="#"><img src="{{ asset('images/smart-aligner-logo.png') }}" class="img-responsive"/></a>
+            <a class="navbar-brand" href="#"><img src="{{ asset('images/smart-aligner-logo.png') }}"
+                                                  class="img-responsive"/></a>
             <ul class="nav navbar-top-links navbar-right">
-
-                <li class="dropdown"><a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                        <em class="fa fa-bell"></em><span class="label label-info">3</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-alerts">
-                        <li><a href="#">
-                                <div> Pedido 000000 - Smart Aligner
-                                    <span class="pull-right text-muted small">00/00/0000</span></div>
-                            </a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">
-                                <div> Pedido 000000 - Smart Aligner
-                                    <span class="pull-right text-muted small">00/00/0000</span></div>
-                            </a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">
-                                <div> Pedido 000000 - Smart Aligner
-                                    <span class="pull-right text-muted small">00/00/0000</span></div>
-                            </a></li>
-                    </ul>
-                </li>
+                @include('layouts.notifications')
             </ul>
         </div>
     </div><!-- /.container-fluid -->
@@ -56,7 +44,7 @@
 <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
     <div class="profile-sidebar">
         <div class="profile-userpic">
-            <img src="images/avatar/{{ Auth::user()->id }}.small.png" class="img-responsive" alt="">
+            <img src="{{ asset('images/avatar/' . Auth::user()->id . '.small.png') }}" class="img-responsive" alt="">
         </div>
         <div class="profile-usertitle">
             <div class="profile-usertitle-name">{{ Auth::user()->name }}</div>
@@ -88,7 +76,7 @@
                 @if(!isset($breadcrumb['route']))
                     <li class="active">{{ $breadcrumb['label'] }}</li>
                 @else
-                    <li><a href="{{ $breadcrumb['route'] }}">{{ $breadcrumb['label'] }}</a></li>
+                    <li><a href="{{ route($breadcrumb['route']) }}">{{ $breadcrumb['label'] }}</a></li>
                 @endif
             @endforeach
         </ol>
@@ -106,15 +94,15 @@
 <script src="{{ asset('js/custom.js') }}"></script>
 <script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js') }}"></script>
 <script>
-  window.onload = function () {
-    var chart1 = document.getElementById('line-chart').getContext('2d');
-    window.myLine = new Chart(chart1).Line(lineChartData, {
-      responsive: true,
-      scaleLineColor: 'rgba(0,0,0,.2)',
-      scaleGridLineColor: 'rgba(0,0,0,.05)',
-      scaleFontColor: '#c5c7cc',
-    });
-  };
+    window.onload = function () {
+        var chart1 = document.getElementById('line-chart').getContext('2d');
+        window.myLine = new Chart(chart1).Line(lineChartData, {
+            responsive: true,
+            scaleLineColor: 'rgba(0,0,0,.2)',
+            scaleGridLineColor: 'rgba(0,0,0,.05)',
+            scaleFontColor: '#c5c7cc',
+        });
+    };
 </script>
 @yield('scripts')
 

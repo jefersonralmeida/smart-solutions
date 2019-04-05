@@ -15,12 +15,6 @@ class CroResponse implements CroResponseContract
         $this->status = $status;
     }
 
-    public static function request(string $cro)
-    {
-
-
-    }
-
     public function isActive()
     {
         return $this->status === 'ATIVO';
@@ -29,5 +23,10 @@ class CroResponse implements CroResponseContract
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getState()
+    {
+
     }
 }
