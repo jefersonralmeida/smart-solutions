@@ -1,5 +1,5 @@
 @php
-/** @var \App\Dentist $dentist */
+/** @var \App\Patient $patient */
 @endphp
 @extends('layouts.main')
 
@@ -21,45 +21,27 @@
                     @csrf
                     @method ($method)
 
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label for="user_id">
-                                Usuário (opcional):
-                            </label>
-                            <select class="form-control" style="height: 47px;" id="user_id" name="user_id">
-                                <option value="">Nenhum</option>
-                                @foreach ($users as $user)
-                                    <option
-                                            {{ (old('user_id')) == $user->id ? 'selected' : '' }}
-                                            value="{{ $user->id }}"
-                                    >
-                                        {{ $user->name . ' | ' . $user->email }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="name">
-                                Nome do dentista:
+                                Nome do paciente:
                             </label>
                             <input class="form-control" id="name" name="name" placeholder="Digite o nome completo"
-                                   value="{{ old('name') ?? $dentist->name ?? '' }}"/>
+                                   value="{{ old('name') ?? $patient->name ?? '' }}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="birthday">
+                                Data de Nascimento:
+                            </label>
+                            <input class="form-control" id="birthday" name="birthday" placeholder="Digite a data de nascimento"
+                                   value="{{ old('birthday') ?? (isset($patient) ? $patient->birthday->format('d/m/Y') : '') }}"/>
                         </div>
                         <div class="form-group">
                             <label for="email">
                                 E-mail:
                             </label>
                             <input class="form-control" id="email" name="email" placeholder="Digite o e-mail"
-                                   value="{{ old('email') ?? $dentist->email ?? '' }}"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="cro">
-                                CRO:
-                            </label>
-                            <input class="form-control" id="cro" name="cro" placeholder="Digite o CRO"
-                                   value="{{ old('cro') ?? $dentist->cro ?? '' }}"/>
+                                   value="{{ old('email') ?? $patient->email ?? '' }}"/>
                         </div>
                         <div class="form-group">
                             <label for="phone">
@@ -67,23 +49,16 @@
                             </label>
                             <input class="form-control" id="phone" name="phone"
                                    placeholder="Digite o telefone {{ config('masks.phone') }}"
-                                   value="{{ old('phone') ?? $dentist->phone ?? '' }}"/>
+                                   value="{{ old('phone') ?? $patient->phone ?? '' }}"/>
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="cpf">
-                                CPF:
-                            </label>
-                            <input class="form-control" id="cpf" name="cpf" placeholder="Digite o CPF"
-                                   value="{{ old('cpf') ?? $dentist->cpf ?? '' }}"/>
-                        </div>
                         <div class="form-group">
                             <label for="city">
                                 Cidade:
                             </label>
                             <input class="form-control" id="city" name="city" placeholder="Digite a cidade"
-                                   value="{{ old('city') ?? $dentist->city ?? '' }}"/>
+                                   value="{{ old('city') ?? $patient->city ?? '' }}"/>
                         </div>
                         <div class="form-group">
                             <label for="state">
@@ -93,7 +68,7 @@
                                 <option value="">Selecione</option>
                                 @foreach (config('states') as $state)
                                     <option
-                                            {{ (old('state') ?? $dentist->state ?? '') == $state ? 'selected' : '' }}
+                                            {{ (old('state') ?? $patient->state ?? '') == $state ? 'selected' : '' }}
                                             value="{{ $state }}"
                                     >
                                         {{ $state }}
@@ -102,17 +77,27 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="gender">
+                                Sexo:
+                            </label>
+                            <select class="form-control" style="height: 47px;" id="gender" name="gender">
+                                <option value="">Selecione</option>
+                                <option value="M" {{ (old('gender') ?? $patient->gender ?? '') == 'M' ? 'selected' : '' }}>Masculino</option>
+                                <option value="F" {{ (old('gender') ?? $patient->gender ?? '') == 'F' ? 'selected' : '' }}>Feminino</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="cellphone">
                                 Celular:
                             </label>
                             <input class="form-control" id="cellphone" name="cellphone"
                                    placeholder="Digite o telefone {{ config('masks.cellphone') }}"
-                                   value="{{ old('cellphone') ?? $dentist->cellphone ?? '' }}"/>
+                                   value="{{ old('cellphone') ?? $patient->cellphone ?? '' }}"/>
                         </div>
                     </div>
                     <div class="col-lg-12">&nbsp;</div>
                     <div class="col-lg-12">
-                        <button type="submit" class="btn btn-primary">Gravar dentista</button>
+                        <button type="submit" class="btn btn-primary">Gravar Paciente</button>
                     </div>
                 </form>
             </div>
@@ -122,18 +107,8 @@
 
 @section('scripts')
     <script language="javascript">
-        $('#cpf').mask('{{ config('masks.cpf')}}');
+        $('#birthday').mask('{{ config('masks.date')}}');
         $('#phone').mask('{{ config('masks.phone')}}');
         $('#cellphone').mask('{{ config('masks.cellphone')}}');
-        $('#user_id').on('change', function () {
-            if ($('#user_id').val() === '') {
-                $("#name").prop('disabled', false);
-                $("#email").prop('disabled', false);
-            } else {
-                $("#name").prop('disabled', true);
-                $("#email").prop('disabled', true);
-            }
-        });
-        $('#user_id').change();
     </script>
 @endsection

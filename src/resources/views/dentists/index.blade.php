@@ -38,7 +38,7 @@
 
                 <div class="col-lg-12" style="background-color: #c8e0f0; margin-top: 15px; padding-top: 20px;" id="dentist-row-{{ $dentist->id }}">
                     <div class="col-lg-6">
-                        <p>Nome dodentista:&nbsp;&nbsp;<b>{{ $dentist->name }}</b></p>
+                        <p>Nome do dentista:&nbsp;&nbsp;<b>{{ $dentist->name }}</b></p>
                         <p>E-mail:&nbsp;&nbsp;<b>{{ $dentist->email }}</b></p>
                         <p>
                             CRO:&nbsp;&nbsp;<b>{{ $dentist->cro }}</b>&nbsp;&nbsp;

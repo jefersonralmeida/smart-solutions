@@ -41,3 +41,19 @@ Route::put('/dentists/{dentist}', 'DentistsController@update')->name('dentists.u
 Route::delete('/dentists/{dentist}', 'DentistsController@destroy')->name('dentists.destroy')->middleware('can:view-dentists');
 
 Route::get('/dentists/dispatch-cro-validation/{dentist}', 'DentistsController@dispatchCroValidation')->name('dentists.dispatch-cro-validation');
+
+
+Route::get('/patients', 'PacientsController@index')->name('patients')->middleware('can:view-patients');
+Route::get('/patients/{patient}', 'PacientsController@view')
+    ->where('patient', '\d+')
+    ->name('patients.view')
+    ->middleware('can:view-patients');
+Route::get('/patients/create', 'PacientsController@create')->name('patients.create')->middleware('can:view-patients');
+Route::post('/patients', 'PacientsController@store')->name('patients.store')->middleware('can:view-patients');
+Route::get('/patients/edit/{patient}', 'PacientsController@edit')->name('patients.edit')->middleware('can:view-patients');
+Route::put('/patients/{patient}', 'PacientsController@update')->name('patients.update')->middleware('can:view-patients');
+Route::delete('/patients/{patient}', 'PacientsController@destroy')->name('patients.destroy')->middleware('can:view-patients');
+Route::bind('deletedPatient', function ($value) {
+    return \App\Patient::onlyTrashed()->where('id', $value)->first() ?? abort(404);
+});
+Route::get('/patients/restore/{deletedPatient}', 'PacientsController@restore')->name('patients.restore')->middleware('can:view-patients');

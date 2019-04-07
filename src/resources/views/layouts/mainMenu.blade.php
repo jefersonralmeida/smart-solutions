@@ -15,7 +15,7 @@
 @endcan
 
 @can ('view-patients')
-    <li><a href="#"><em class="fa fa-users">&nbsp;</em> Pacientes</a></li>
+    <li><a href="{{ route('patients') }}"><em class="fa fa-users">&nbsp;</em> Pacientes</a></li>
 @endcan
 
 @can ('view-dentists')

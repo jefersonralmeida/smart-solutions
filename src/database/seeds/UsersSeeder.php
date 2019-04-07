@@ -41,10 +41,10 @@ class UsersSeeder extends Seeder
             // 3 - clinic2 admin (can create dentists)
             [
                 'name' => 'JOHN PAUL JONES',
-                'email' => 'admin2@gmail.com',
+                'email' => 'complete@gmail.com',
                 'password' => Hash::make('password'),
                 'api_token' => Str::random(60),
-                'clinic_id' => 1,
+                'clinic_id' => 2,
                 'dentist_id' => null,
                 'permissions' => json_encode(['manage_permissions', 'create_dentist', 'order']),
             ],
