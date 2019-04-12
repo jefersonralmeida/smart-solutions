@@ -47,9 +47,6 @@ trait BaseValidationTrait
             'email' => [
                 'email',
                 'required',
-//                Rule::unique('patients', 'email')->where(function (Builder $query) {
-//                    return $query->where('clinic_id', Auth::user()->clinic->id);
-//                })->ignore($patientId),
                 new UniqueSoftDeletes('patients', 'email', 'patients.restore', $patientId, []),
             ],
             'birthday' => 'date',

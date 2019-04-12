@@ -18,6 +18,9 @@ class ClinicsSeeder extends Seeder
         ], [
             'name' => 'DROLHAS ORTODENTIA',
             'cnpj' => '14297952000123',
+        ], [
+            'name' => 'BOM ALICATE DENTISTAS',
+            'cnpj' => '59931564000190',
         ]]);
     }
 }

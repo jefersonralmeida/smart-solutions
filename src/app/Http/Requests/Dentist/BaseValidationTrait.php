@@ -15,9 +15,7 @@ trait BaseValidationTrait
         return [
             'user_id' => [
                 'nullable',
-                Rule::exists('users', 'id')->where(function (Builder $query) {
-                    $query->where('clinic_id', Auth::user()->clinic->id);
-                }),
+                Rule::exists('users', 'id'),
             ],
             'name' => ['required_without:user_id'],
             'email' => ['email', 'required_without:user_id'],

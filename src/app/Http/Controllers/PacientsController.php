@@ -8,8 +8,6 @@ use App\Patient;
 use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PacientsController extends Controller
 {
@@ -45,7 +43,7 @@ class PacientsController extends Controller
     public function index()
     {
 
-        $query = Patient::where('clinic_id', Auth::user()->clinic->id);
+        $query = Patient::query();
 
         // if it's a search request, include the search conditions
         $search = request()->input('q');

@@ -175,6 +175,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        App\ExternalApi\Orders\Pixsoft\PixsoftProvider::class,
+        App\ExternalApi\Cro\CfoHttpParser\CfoHttpParserProvider::class,
+
     ],
 
     /*

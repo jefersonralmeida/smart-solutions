@@ -2,7 +2,9 @@
 
 namespace App;
 
+use App\Scopes\CurrentClinicScope;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -26,8 +28,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int clinic_id
  * @property Clinic clinic
  * @property User user
+ * @property string integration_status
+ * @property string integration_id
  * @property Carbon created_at
  * @property Carbon updated_at
+ * @method static Builder approved()
  */
 class Dentist extends Model
 {
@@ -37,6 +42,17 @@ class Dentist extends Model
     protected $fillable = ['name', 'email', 'cpf', 'cro', 'city', 'state', 'phone', 'cellphone'];
 
     protected $dates = ['cro_dispatched_at', 'cro_approved_at'];
+
+    /**
+     * @see CurrentClinicScope
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // apply current clinic scope
+        static::addGlobalScope(new CurrentClinicScope());
+    }
 
     public function user()
     {
@@ -102,7 +118,7 @@ class Dentist extends Model
      */
     public function setCpfAttribute($value)
     {
-        if ($value){
+        if ($value) {
             $this->attributes['cpf'] = removeMask($value, config('masks.cpf'));
         }
     }
@@ -144,5 +160,10 @@ class Dentist extends Model
     public function clinic()
     {
         return $this->belongsTo(Clinic::class);
+    }
+
+    public function scopeApproved(Builder $query)
+    {
+        return $query->where('cro_status', 'A');
     }
 }

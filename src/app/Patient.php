@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\CurrentClinicScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,6 +34,17 @@ class Patient extends Model
     protected $fillable = ['name', 'birthday', 'email', 'phone', 'city', 'state', 'gender', 'cellphone'];
 
     protected $dates = ['birthday'];
+
+    /**
+     * @see CurrentClinicScope
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // apply current clinic scope
+        static::addGlobalScope(new CurrentClinicScope());
+    }
 
     /**
      * Sanitizing the name
@@ -82,4 +94,5 @@ class Patient extends Model
     {
         return $this->belongsTo(Clinic::class);
     }
+
 }

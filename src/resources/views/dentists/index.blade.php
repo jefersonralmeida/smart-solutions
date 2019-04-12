@@ -36,9 +36,12 @@
 
             @foreach ($dentists as $dentist)
 
-                <div class="col-lg-12" style="background-color: #c8e0f0; margin-top: 15px; padding-top: 20px;" id="dentist-row-{{ $dentist->id }}">
+                <div class="col-lg-12" style="background-color: #c8e0f0; margin-top: 15px; padding-top: 20px;"
+                     id="dentist-row-{{ $dentist->id }}">
                     <div class="col-lg-6">
-                        <p>Nome do dentista:&nbsp;&nbsp;<b>{{ $dentist->name }}</b></p>
+                        <p>
+                            Nome do dentista:&nbsp;&nbsp;<b>{{ $dentist->name }}</b>&nbsp;&nbsp;
+                        </p>
                         <p>E-mail:&nbsp;&nbsp;<b>{{ $dentist->email }}</b></p>
                         <p>
                             CRO:&nbsp;&nbsp;<b>{{ $dentist->cro }}</b>&nbsp;&nbsp;
@@ -58,13 +61,15 @@
                                 <span class="cro-status badge badge-success bg-success">Aprovado em {{ $dentist->cro_approved_at->format('d/m/Y H:i') }}</span>
                                 @break
                                 @case('R')
-                                <span class="cro-status badge badge-danger bg-danger" title="{{ $dentist->cro_status_message }}">Reprovado </span>
+                                <span class="cro-status badge badge-danger bg-danger"
+                                      title="{{ $dentist->cro_status_message }}">Reprovado </span>
                                 @php
                                     $try = true;
                                 @endphp
                                 @break
                                 @case('E')
-                                <span class="cro-status badge badge-danger bg-danger" title="{{ $dentist->cro_status_message }}">Erro</span>
+                                <span class="cro-status badge badge-danger bg-danger"
+                                      title="{{ $dentist->cro_status_message }}">Erro</span>
                                 @php
                                     $try = true;
                                 @endphp

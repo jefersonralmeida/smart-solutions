@@ -1,13 +1,36 @@
 <?php
 
-namespace App\ExternalApi\Cro;
+namespace App\ExternalApi\Cro\CfoHttpParser;
 
-use GuzzleHttp\Client as Http;
+use App\ExternalApi\Cro\CroApiContract;
+use App\ExternalApi\Cro\CroResponseContract;
+use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\GuzzleException;
 
 class CroApi implements CroApiContract
 {
 
+    /**
+     * @var HttpClient
+     */
+    protected $httpClient;
+
+    /**
+     * @var array
+     */
+    protected $categoryMap;
+
+    public function __construct(HttpClient $httpClient, array $categoryMap)
+    {
+        $this->httpClient = $httpClient;
+        $this->categoryMap = $categoryMap;
+    }
+
+    /**
+     * @param string $cro
+     * @return CroResponseContract
+     * @throws GuzzleException
+     */
     public function request(string $cro): CroResponseContract
     {
         // splitting the CRO
@@ -19,28 +42,22 @@ class CroApi implements CroApiContract
         }
 
         // checking the category
-        $categoryMap = config('cro.categoryMap');
-        if (!isset($categoryMap[$category])) {
+        if (!isset($this->categoryMap[$category])) {
             return null;
         }
         /** @var int $categoryCode */
-        $categoryCode = $categoryMap[$category];
+        $categoryCode = $this->categoryMap[$category];
 
         // finally requesting the "API"
-        $client = new Http();
-        try {
-            $response = $client->request('GET', config('cro.url'), [
-                'query' => [
-                    'cro' => $state,
-                    'categoria' => $categoryCode,
-                    'especialidade' => 'todas',
-                    'inscricao' => $code,
-                    'nome' => ''
-                ]
-            ]);
-        } catch (GuzzleException $e) {
-            return null;
-        }
+        $response = $this->httpClient->request('GET', '', [
+            'query' => [
+                'cro' => $state,
+                'categoria' => $categoryCode,
+                'especialidade' => 'todas',
+                'inscricao' => $code,
+                'nome' => ''
+            ]
+        ]);
         $html = $response->getBody()->getContents();
         if (!preg_match('/Totais encontrados: 1.*/is', $html, $matches)) {
             return null;

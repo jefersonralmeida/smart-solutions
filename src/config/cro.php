@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'url' => 'http://cfo.org.br/website/profissionais-cadastrados/',
     'categoryMap' => [
         'CD' => 1,
         'EPAO' => 2,

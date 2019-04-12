@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Dentist;
+use App\Events\DentistCreated;
+use App\Events\DentistCroCheckRequested;
+use App\Events\DentistUpdated;
 use App\Http\Requests\Dentist\CreateDentist;
 use App\Http\Requests\Dentist\UpdateDentist;
-use App\Jobs\CheckCroJob;
 use App\User;
 use Auth;
 use DB;
@@ -24,6 +26,16 @@ class DentistsController extends Controller
         $this->middleware('auth');
     }
 
+    public function view(Dentist $dentist)
+    {
+        return view('dentists.index', [
+            'breadcrumbs' => [
+                ['label' => 'Dentistas', 'route' => 'dentists']
+            ],
+            'dentists' => collect([$dentist])
+        ]);
+    }
+
     /**
      * Show the application dashboard.
      *
@@ -32,7 +44,7 @@ class DentistsController extends Controller
     public function index()
     {
 
-        $query = Dentist::where('clinic_id', Auth::user()->clinic->id);
+        $query = Dentist::query();
 
         // if it's a search request, include the search conditions
         $search = request()->input('q');
@@ -50,7 +62,7 @@ class DentistsController extends Controller
 
         return view('dentists.index', [
             'breadcrumbs' => [
-                ['label' => 'Dentistas']
+                ['label' => 'Dentistas', 'route' => 'dentists']
             ],
             'dentists' => $dentists,
             'query' => $search
@@ -104,9 +116,9 @@ class DentistsController extends Controller
         }
         DB::commit();
 
-        CheckCroJob::dispatch($dentist, Auth::user());
+        event(new DentistCreated($dentist));
 
-        return redirect(route('dentists', ['q' => $dentist->cro]));
+        return redirect(route('dentists.view', [$dentist->id]));
 
     }
 
@@ -137,15 +149,13 @@ class DentistsController extends Controller
      */
     public function update(Dentist $dentist, UpdateDentist $request)
     {
+        $oldModel = clone $dentist;
         $dentist->fill($request->all());
-        if ($dentist->getOriginal('cro') !== $dentist->cro) {
-            $dentist->cro_status = "W";
-            $dentist->cro_status_message = "";
-            $dentist->cro_dispatched_at = now();
-        }
         $dentist->save();
-        CheckCroJob::dispatch($dentist, Auth::user());
-        return redirect(route('dentists', ['q' => $dentist->cro]));
+
+        event(new DentistUpdated($oldModel, $dentist));
+
+        return redirect(route('dentists.view', [$dentist->id]));
     }
 
     /**
@@ -165,11 +175,9 @@ class DentistsController extends Controller
      */
     public function dispatchCroValidation(Dentist $dentist)
     {
-        $dentist->cro_status = "W";
-        $dentist->cro_status_message = "";
-        $dentist->cro_dispatched_at = now();
-        $dentist->save();
-        CheckCroJob::dispatch($dentist, Auth::user());
-        return redirect(route('dentists', ['q' => $dentist->cro]));
+        event(new DentistCroCheckRequested($dentist));
+
+        return redirect(route('dentists.view', ['dentist' => $dentist->id]));
     }
+
 }

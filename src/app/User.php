@@ -26,6 +26,8 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    protected $with = ['clinic'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -52,6 +54,5 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Clinic::class);
     }
-
 
 }

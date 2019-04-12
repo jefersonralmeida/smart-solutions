@@ -28,6 +28,9 @@ class CreateDentistsTable extends Migration
             $table->string('phone')->nullable();
             $table->string('cellphone')->nullable();
             $table->integer('clinic_id')->nullable();
+            $table->char('integration_status')->default('P'); // Processing, Failed, Success
+            $table->string('integration_id')->nullable();
+            $table->string('integration_message')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

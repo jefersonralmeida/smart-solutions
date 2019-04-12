@@ -17,7 +17,9 @@ class CheckCroJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $timeout = 15;
     public $tries = 5;
+
     /**
      * @var User
      */

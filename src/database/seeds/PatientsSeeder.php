@@ -31,6 +31,26 @@ class PatientsSeeder extends Seeder
             'gender' => 'M',
             'cellphone' => '41999990011',
             'clinic_id' => 2,
+        ], [
+            'name' => 'NICK MASON',
+            'birthday' => '1944-01-27',
+            'email' => 'nick.mason@gmail.com',
+            'phone' => '4133330012',
+            'city' => 'LONDRINA',
+            'state' => 'PR',
+            'gender' => 'M',
+            'cellphone' => '41999990012',
+            'clinic_id' => 3,
+        ], [
+            'name' => 'ROGER WATERS',
+            'birthday' => '1943-09-09',
+            'email' => 'roger.waters@gmail.com',
+            'phone' => '4133330014',
+            'city' => 'JOINVILLE',
+            'state' => 'SC',
+            'gender' => 'M',
+            'cellphone' => '41999990014',
+            'clinic_id' => 3,
         ]]);
     }
 }

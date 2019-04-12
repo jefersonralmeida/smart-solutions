@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Dentist;
+use App\Http\Requests\OrderAligner;
+use App\Patient;
+use Auth;
+
 class OrderAlignerController extends Controller
 {
     /**
@@ -25,7 +30,16 @@ class OrderAlignerController extends Controller
             'breadcrumbs' => [
                 ['label' => 'Pedidos', 'route' => 'orders'],
                 ['label' => 'Solicitar Aligner'],
-            ]
+            ],
+            'patients' => Patient::all(),
+            'dentists' => Dentist::approved()->get(),
         ]);
+    }
+
+    public function store(OrderAligner $request) {
+        dd($request->toArray());
+
+        // TODO - Save the order on database
+        // TODO - Dispatch the job to send it through the API
     }
 }

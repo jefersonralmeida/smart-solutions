@@ -32,8 +32,14 @@ Route::put('/clinic', 'ClinicController@update')->name('clinic.update');
 Route::get('/orders', 'OrdersController@index')->name('orders')->middleware('can:view-orders');
 
 Route::get('/order/aligner', 'OrderAlignerController@create')->name('order-aligner')->middleware('can:place-orders');
+Route::post('/order/aligner', 'OrderAlignerController@store')->name('order-aligner.store')->middleware('can:place-orders');
 
+// dentists
 Route::get('/dentists', 'DentistsController@index')->name('dentists')->middleware('can:view-dentists');
+Route::get('/dentists/{dentist}', 'DentistsController@view')
+    ->where('dentist', '\d+')
+    ->name('dentists.view')
+    ->middleware('can:view-dentists');
 Route::get('/dentists/create', 'DentistsController@create')->name('dentists.create')->middleware('can:view-dentists');
 Route::post('/dentists', 'DentistsController@store')->name('dentists.store')->middleware('can:view-dentists');
 Route::get('/dentists/edit/{dentist}', 'DentistsController@edit')->name('dentists.edit')->middleware('can:view-dentists');
@@ -41,7 +47,8 @@ Route::put('/dentists/{dentist}', 'DentistsController@update')->name('dentists.u
 Route::delete('/dentists/{dentist}', 'DentistsController@destroy')->name('dentists.destroy')->middleware('can:view-dentists');
 
 Route::get('/dentists/dispatch-cro-validation/{dentist}', 'DentistsController@dispatchCroValidation')->name('dentists.dispatch-cro-validation');
-
+Route::get('/dentists/dispatch-orders-integration/{dentist}', 'DentistsController@dispatchOrdersIntegration')->name('dentists.dispatch-orders-integration');
+// end of dentists
 
 Route::get('/patients', 'PacientsController@index')->name('patients')->middleware('can:view-patients');
 Route::get('/patients/{patient}', 'PacientsController@view')

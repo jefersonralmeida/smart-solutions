@@ -1,6 +1,8 @@
 <?php
 
-namespace App\ExternalApi\Cro;
+namespace App\ExternalApi\Cro\CfoHttpParser;
+
+use App\ExternalApi\Cro\CroResponseContract;
 
 class CroResponse implements CroResponseContract
 {
