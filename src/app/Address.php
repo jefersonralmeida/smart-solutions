@@ -2,15 +2,22 @@
 
 namespace App;
 
+use App\Scopes\CurrentClinicScope;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Address
  * @package App
+ * @property int id
  * @property string identification
  * @property string receiver_name
- * @property string street_address_1
- * @property string street_address_2
+ * @property string zip_code
+ * @property string street
+ * @property string street_number
+ * @property string address_details
+ * @property string district
+ * @property string city
+ * @property string state
  * @property string reference_point
  * @property string phone
  * @property int clinic_id
@@ -18,6 +25,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Address extends Model
 {
+    protected static function boot()
+    {
+        parent::boot();
+
+        // apply current clinic scope
+        static::addGlobalScope(new CurrentClinicScope());
+    }
+
     public function clinic()
     {
         return $this->belongsTo(Clinic::class);

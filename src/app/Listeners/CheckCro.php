@@ -51,17 +51,6 @@ class CheckCro
         CheckCroJob::dispatch($dentist, Auth::user());
     }
 
-//    /**
-//     * Handle the event.
-//     *
-//     * @param DentistEventContract $event
-//     * @return void
-//     */
-//    public function handle(DentistEventContract $event)
-//    {
-//        CheckCroJob::dispatch($event->getDentist(), Auth::user());
-//    }
-
     public function subscribe(Dispatcher $dispatcher)
     {
         $dispatcher->listen(DentistCreated::class, static::class . '@onCreate');

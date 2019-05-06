@@ -12,13 +12,13 @@ class Api implements OrdersApiContract
 {
 
     /**
-     * @var Http
+     * @var HttpClient
      */
     protected $httpClient;
 
     /**
      * Api constructor.
-     * @param Http $httpClient
+     * @param HttpClient $httpClient
      */
     public function __construct(HttpClient $httpClient)
     {

@@ -30,9 +30,10 @@ Route::post('/clinic', 'ClinicController@store')->name('clinic.store');
 Route::put('/clinic', 'ClinicController@update')->name('clinic.update');
 
 Route::get('/orders', 'OrdersController@index')->name('orders')->middleware('can:view-orders');
+Route::get('/orders/aligner', 'OrderAlignerController@create')->name('order-aligner')->middleware('can:place-orders');
+Route::post('/orders/aligner', 'OrderAlignerController@store')->name('order-aligner.store')->middleware('can:place-orders');
 
-Route::get('/order/aligner', 'OrderAlignerController@create')->name('order-aligner')->middleware('can:place-orders');
-Route::post('/order/aligner', 'OrderAlignerController@store')->name('order-aligner.store')->middleware('can:place-orders');
+Route::get('/orders/{order}/confirm', 'OrdersController@confirmOrder')->name('orders.confirm')->where('order', '^\d+$');
 
 // dentists
 Route::get('/dentists', 'DentistsController@index')->name('dentists')->middleware('can:view-dentists');

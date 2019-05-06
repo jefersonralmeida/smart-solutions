@@ -7,6 +7,13 @@ use App\Patient;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * Class OrderAligner
+ * @package App\Http\Requests
+ * @property int dentist_id
+ * @property int patient_id
+ * @property array data
+ */
 class OrderAligner extends FormRequest
 {
     /**
@@ -22,6 +29,8 @@ class OrderAligner extends FormRequest
     protected function prepareForValidation()
     {
         $input = $this->all();
+
+        $input['data']['produto'] = 1;
 
         // condicoes clinicas gerais
         if (isset($input['data']['condicoes_clinicas_gerais'])) {
@@ -90,8 +99,8 @@ class OrderAligner extends FormRequest
     public function rules()
     {
         return [
-            'patient' => ['required', Rule::in(Patient::all()->pluck('id')->toArray())],
-            'dentist' => ['required', Rule::in(Dentist::approved()->get()->pluck('id')->toArray())],
+            'patient_id' => ['required', Rule::in(Patient::all()->pluck('id')->toArray())],
+            'dentist_id' => ['required', Rule::in(Dentist::approved()->get()->pluck('id')->toArray())],
             'data.tratamento_arcada_superior' => 'required',
             'data.tratamento_arcada_inferior' => 'required',
             'data.diastemas.correcao_apinhamento.superior.extracao_transversal' => 'required',

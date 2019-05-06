@@ -17,13 +17,17 @@ class CreateAddressesTable extends Migration
             $table->increments('id');
             $table->string('identification');
             $table->string('receiver_name');
-            $table->string('street_address_1');
-            $table->string('street_address_2');
-            $table->string('reference_point');
-            $table->string('phone');
+            $table->char('zip_code', 8);
+            $table->string('street');
+            $table->string('street_number');
+            $table->string('district')->nullable();
+            $table->string('address_details')->nullable();
+            $table->string('city');
+            $table->char('state', 2);
+            $table->string('reference_point')->nullable();
+            $table->string('phone')->nullable();
             $table->integer('clinic_id');
             $table->timestamps();
-            $table->unique('clinic_id', 'identification');
         });
     }
 

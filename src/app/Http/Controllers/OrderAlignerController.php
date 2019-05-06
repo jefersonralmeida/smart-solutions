@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Dentist;
+use App\Events\OrderCreated;
 use App\Http\Requests\OrderAligner;
+use App\Order;
 use App\Patient;
-use Auth;
 
 class OrderAlignerController extends Controller
 {
@@ -36,10 +37,20 @@ class OrderAlignerController extends Controller
         ]);
     }
 
+    /**
+     * @param OrderAligner $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function store(OrderAligner $request) {
-        dd($request->toArray());
 
-        // TODO - Save the order on database
-        // TODO - Dispatch the job to send it through the API
+        $order = new Order();
+        $order->product = 1;
+        $order->fill($request->all());
+        $order->status = 1;
+        $order->save();
+
+        event(new OrderCreated($order, $request->allFiles()));
+
+        return redirect(route('orders.confirm', ['order' => $order->id]));
     }
 }

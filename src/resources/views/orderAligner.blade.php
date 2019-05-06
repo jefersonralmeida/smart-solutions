@@ -7,7 +7,7 @@
 @section('content')
     <div class="panel panel-default">
         <div class="panel-heading">Preencha os dados para solicitar.</div>
-        <form method="POST" action="{{ route('order-aligner.store') }}">
+        <form method="POST" action="{{ route('order-aligner.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="panel-body">
                 @if ($errors->any())
@@ -32,7 +32,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="patient">PACIENTE</label>
-                        <select id="patient" name="patient" class="form-control is-invalid">
+                        <select id="patient" name="patient_id" class="form-control is-invalid">
                             <option value="">SELECIONE</option>
 
                             @foreach ($patients as $patient)
@@ -53,7 +53,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="dentist">DENTISTA</label>
-                        <select id="dentist" name="dentist" class="form-control">
+                        <select id="dentist" name="dentist_id" class="form-control">
                             <option value="">SELECIONE</option>
                             @foreach ($dentists as $dentist)
                                 <option
@@ -2018,7 +2018,6 @@
         });
 
         $('input[type=radio][name="data[linha_media][opcoes]"]').on('change', function () {
-            console.log($(this).val());
             if ($(this).val() == 3) {
                 $('select[name="data[linha_media][superior]"]').prop('disabled', false);
                 $('select[name="data[linha_media][inferior]"]').prop('disabled', false);

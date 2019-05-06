@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use Barryvdh\HttpCache\Middleware\CacheRequests;
+use Barryvdh\HttpCache\Middleware\SetTtl;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -61,6 +63,8 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'cache' => CacheRequests::class,
+        'cacheFor' => SetTtl::class,
     ];
 
     /**
