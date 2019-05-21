@@ -83,4 +83,6 @@ return [
         'table' => 'failed_jobs',
     ],
 
+    'enabled' => env('QUEUE_ENABLED', true),
+
 ];

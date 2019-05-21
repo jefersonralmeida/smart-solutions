@@ -13,11 +13,7 @@
 
 Auth::routes();
 
-Route::get('/', function() {
-    $loggedUser = Auth()->user();
-    $route = $loggedUser !== null && Auth::user()->can('view-dashboard') ? 'home' : 'profile';
-    return redirect($route);
-});
+Route::get('/', 'HomeController@root');
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('can:view-dashboard');
 
@@ -34,6 +30,8 @@ Route::get('/orders/aligner', 'OrderAlignerController@create')->name('order-alig
 Route::post('/orders/aligner', 'OrderAlignerController@store')->name('order-aligner.store')->middleware('can:place-orders');
 
 Route::get('/orders/{order}/confirm', 'OrdersController@confirmOrder')->name('orders.confirm')->where('order', '^\d+$');
+Route::post('/orders/{order}/confirm', 'OrdersController@confirmOrderStore')->name('orders.store')->where('order', '^\d+$');
+Route::get('/orders/{order}/force-integration', 'OrdersController@forceIntegration')->name('orders.forceIntegration')->where('order', '^\d+$');
 
 // dentists
 Route::get('/dentists', 'DentistsController@index')->name('dentists')->middleware('can:view-dentists');

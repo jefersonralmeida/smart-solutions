@@ -9,11 +9,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
 
 class CreateDentistJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue, Queueable, SerializesModels, Dispatchable;
 
     public $timeout = 10;
     public $tries = 5;
@@ -50,6 +49,9 @@ class CreateDentistJob implements ShouldQueue
     {
         $response = $api->createDentist($this->dentist);
 
-        // TODO - Update integration_status and integration_id
+        $this->dentist->integration_status = 'success';
+        $this->dentist->integration_id = $response->getId();
+
+        $this->dentist->save();
     }
 }

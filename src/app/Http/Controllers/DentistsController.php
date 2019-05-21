@@ -8,11 +8,14 @@ use App\Events\DentistCroCheckRequested;
 use App\Events\DentistUpdated;
 use App\Http\Requests\Dentist\CreateDentist;
 use App\Http\Requests\Dentist\UpdateDentist;
+use App\Jobs\CheckCroJob;
+use App\Listeners\CheckCro;
 use App\User;
 use Auth;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Nexmo\Verify\Check;
 
 class DentistsController extends Controller
 {
@@ -175,8 +178,7 @@ class DentistsController extends Controller
      */
     public function dispatchCroValidation(Dentist $dentist)
     {
-        event(new DentistCroCheckRequested($dentist));
-
+        CheckCroJob::dispatch($dentist, Auth::user());
         return redirect(route('dentists.view', ['dentist' => $dentist->id]));
     }
 

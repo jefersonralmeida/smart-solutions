@@ -29,6 +29,9 @@ class CreateOrdersTable extends Migration
             $table->string('billing_phone')->nullable();
             $table->string('billing_email')->nullable();
             $table->string('shipping')->nullable();
+            $table->string('payment')->nullable();
+            $table->integer('integration_id')->nullable();
+            $table->boolean('integration_failed')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

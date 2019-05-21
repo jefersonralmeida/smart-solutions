@@ -2,9 +2,8 @@
 
 namespace App\Providers;
 
-use App\Events\DentistCreated;
-use App\Events\DentistUpdated;
 use App\Listeners\CheckCro;
+use App\Listeners\SendOrderToApi;
 use App\Listeners\UploadOrderFiles;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -21,15 +20,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-//        DentistCreated::class => [
-//            CheckCro::class
-//        ],
-
     ];
 
     protected $subscribe = [
         CheckCro::class,
         UploadOrderFiles::class,
+        SendOrderToApi::class,
     ];
 
     /**

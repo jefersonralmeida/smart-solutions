@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Address
  * @package App
+ * @mixin \Eloquent
  * @property int id
  * @property string identification
  * @property string receiver_name
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string reference_point
  * @property string phone
  * @property int clinic_id
+ * @property array integration
  * @property Clinic $clinic
  */
 class Address extends Model
@@ -32,6 +34,10 @@ class Address extends Model
         // apply current clinic scope
         static::addGlobalScope(new CurrentClinicScope());
     }
+
+    protected $casts = [
+        'integration' => 'array',
+    ];
 
     public function clinic()
     {

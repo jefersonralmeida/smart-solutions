@@ -2,9 +2,9 @@
 
 namespace App\ExternalApi\Orders\Pixsoft;
 
-use App\ExternalApi\Orders\DentistCreateResponseContract;
+use App\ExternalApi\Orders\OrderCreateResponseContract;
 
-class DentistCreateResponse implements DentistCreateResponseContract
+class OrderCreateResponse implements OrderCreateResponseContract
 {
 
     use FromResponseTrait;
@@ -14,7 +14,7 @@ class DentistCreateResponse implements DentistCreateResponseContract
      */
     protected $response;
 
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->response->id ?? null;
     }

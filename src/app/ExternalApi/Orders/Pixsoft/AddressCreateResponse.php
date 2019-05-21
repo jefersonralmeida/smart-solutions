@@ -2,15 +2,15 @@
 
 namespace App\ExternalApi\Orders\Pixsoft;
 
-use App\ExternalApi\Orders\DentistCreateResponseContract;
+use App\ExternalApi\Orders\AddressCreateResponseContract;
 
-class DentistCreateResponse implements DentistCreateResponseContract
+class AddressCreateResponse implements AddressCreateResponseContract
 {
 
     use FromResponseTrait;
 
     /**
-     * @var \stdClass
+     * @var \stdClass|null
      */
     protected $response;
 

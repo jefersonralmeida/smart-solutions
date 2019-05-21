@@ -2,7 +2,7 @@
 
 namespace App\ExternalApi\Orders;
 
-interface DentistCreateResponseContract
+interface OrderCreateResponseContract
 {
     public function getId(): ?string;
 }

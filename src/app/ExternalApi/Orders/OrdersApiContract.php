@@ -2,9 +2,15 @@
 
 namespace App\ExternalApi\Orders;
 
+use App\Address;
 use App\Dentist;
+use App\Order;
 
 interface OrdersApiContract
 {
     public function createDentist(Dentist $dentist): DentistCreateResponseContract;
+
+    public function createAddress(Address $address, Dentist $dentist): AddressCreateResponseContract;
+
+    public function createOrder(Order $order): OrderCreateResponseContract;
 }

@@ -8,6 +8,7 @@ trait FromResponseTrait
 {
     public function __construct(Response $response)
     {
-        $this->response = json_decode($response->getBody()->getContents());
+        $code = $response->getStatusCode();
+        $this->response = $code >= 200 && $code < 300 ? json_decode($response->getBody()->getContents()) : null;
     }
 }

@@ -17,7 +17,7 @@ class OrderAlignerController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'can:domain-aligner']);
     }
 
     /**
@@ -46,7 +46,8 @@ class OrderAlignerController extends Controller
         $order = new Order();
         $order->product = 1;
         $order->fill($request->all());
-        $order->status = 1;
+        $order->incrementStatus();
+
         $order->save();
 
         event(new OrderCreated($order, $request->allFiles()));

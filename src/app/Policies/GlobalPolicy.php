@@ -49,8 +49,14 @@ class GlobalPolicy
         return $user->clinic_id !== null;
     }
 
+    public function alignerDomain()
+    {
+        return request()->getHost() === 'aligner.local';
+    }
 
-
-
+    public function solutionsDomain()
+    {
+        return request()->getHost() === 'smart.local';
+    }
 
 }

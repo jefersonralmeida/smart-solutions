@@ -49,8 +49,8 @@ class CroApi implements CroApiContract
         $categoryCode = $this->categoryMap[$category];
 
         // finally requesting the "API"
-        $response = $this->httpClient->request('GET', '', [
-            'query' => [
+        $response = $this->httpClient->request('POST', '', [
+            'form_params' => [
                 'cro' => $state,
                 'categoria' => $categoryCode,
                 'especialidade' => 'todas',

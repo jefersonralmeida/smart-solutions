@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Policies\DomainPolicy;
 use App\Policies\GlobalPolicy;
 use App\Policies\MenuPolicy;
 use Illuminate\Support\Facades\Gate;
@@ -33,5 +34,8 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('place-orders', GlobalPolicy::class . '@order');
         Gate::define('view-patients', GlobalPolicy::class . '@patients');
         Gate::define('view-dentists', GlobalPolicy::class . '@dentists');
+        Gate::define('domain-aligner', DomainPolicy::class . '@aligner');
+        Gate::define('domain-solutions', DomainPolicy::class . '@solutions');
+
     }
 }

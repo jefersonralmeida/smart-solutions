@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Address;
+use App\Events\OrderConfirmed;
 use App\ExternalApi\Shipping\ShippingManagerContract;
+use App\Http\Requests\ConfirmOrder;
+use App\Jobs\CreateOrderJob;
 use App\Order;
 
 class OrdersController extends Controller
@@ -25,10 +28,12 @@ class OrdersController extends Controller
      */
     public function index()
     {
-        return view('orders', [
+        $orders = Order::with('dentist', 'patient')->get();
+        return view('orders.index', [
             'breadcrumbs' => [
                 ['label' => 'Pedidos']
-            ]
+            ],
+            'orders' => $orders
         ]);
     }
 
@@ -39,6 +44,7 @@ class OrdersController extends Controller
      */
     public function confirmOrder(Order $order, ShippingManagerContract $shippingManager)
     {
+
         return view('orders.confirmOrder', [
             'breadcrumbs' => [
                 ['label' => 'Pedidos', 'route' => 'orders'],
@@ -53,12 +59,35 @@ class OrdersController extends Controller
         ]);
     }
 
-    public function confirmOrderStore()
+    public function confirmOrderStore(Order $order, ConfirmOrder $request)
     {
-        // TODO -
-        // - Check the dentist CRO
-        // - Check if the dentist is already on the API;
-        //   - if not, include it
-        // - Create the order on the API
+
+        $order->address_id = $request->address_id;
+        $order->load(['address', 'dentist']);
+
+        if ($request->billing_data == 'auto') {
+            $request->billing_name = $order->dentist->name;
+            $request->billing_document = $order->dentist->cpf;
+            $request->billing_address = "{$order->address->street}, {$order->address->street_number} - {$order->address->city} - {$order->address->state}";
+            $request->billing_zip_code = $order->address->zip_code;
+            $request->billing_email = $order->dentist->email;
+            $request->billing_phone = $order->dentist->phone;
+        }
+
+        $order->shipping = $request->shipping;
+        $order->payment = $request->payment;
+        $order->incrementStatus();
+
+        $order->save();
+
+        event(new OrderConfirmed($order));
+
+        return redirect(route('orders'));
+    }
+
+    public function forceIntegration(Order $order)
+    {
+        CreateOrderJob::dispatch($order);
+        return redirect(route('orders'));
     }
 }

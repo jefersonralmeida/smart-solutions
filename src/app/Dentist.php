@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string email
  * @property string cpf
  * @property string cro
- * @property string cro_status - CRO status. 1 char, among: Waiting, Approved, Reproved, Error
+ * @property string cro_status - [W]aiting, [A]pproved, [R]eproved, [E]rror
  * @property string cro_status_message
  * @property Carbon cro_dispatched_at
  * @property Carbon cro_approved_at
@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int clinic_id
  * @property Clinic clinic
  * @property User user
- * @property string integration_status
+ * @property string integration_status - [P]rocessing, [F]ailed or [S]uccess
  * @property string integration_id
  * @property Carbon created_at
  * @property Carbon updated_at

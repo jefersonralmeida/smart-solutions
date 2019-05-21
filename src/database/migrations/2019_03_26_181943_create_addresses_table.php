@@ -27,6 +27,7 @@ class CreateAddressesTable extends Migration
             $table->string('reference_point')->nullable();
             $table->string('phone')->nullable();
             $table->integer('clinic_id');
+            $table->json('integration')->nullable();
             $table->timestamps();
         });
     }

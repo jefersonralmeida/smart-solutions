@@ -9,9 +9,13 @@
 @endcan
 
 @can ('place-orders')
-    <li><a href="{{ route('order-aligner') }}"><em class="fa fa-paper-plane">&nbsp;</em> Solicitar Aligner</a></li>
-    <li><a href="#"><em class="fa fa-calendar-check-o">&nbsp;</em> Solicitar Scan Service</a></li>
-    <li><a href="#"><em class="fa fa-desktop">&nbsp;</em> STL</a></li>
+    @can('domain-aligner')
+        <li><a href="{{ route('order-aligner') }}"><em class="fa fa-paper-plane">&nbsp;</em> Solicitar Aligner</a></li>
+    @endcan
+    @can('domain-solutions')
+        <li><a href="#"><em class="fa fa-calendar-check-o">&nbsp;</em> Solicitar Scan Service</a></li>
+        <li><a href="#"><em class="fa fa-desktop">&nbsp;</em> STL</a></li>
+    @endcan
 @endcan
 
 @can ('view-patients')

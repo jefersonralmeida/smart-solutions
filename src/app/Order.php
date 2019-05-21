@@ -1,12 +1,15 @@
 <?php
+
 namespace App;
 
+use App\Scopes\DomainScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Order
  * @package App
+ * @mixin \Eloquent
  * @property int id
  * @property int product
  * @property string product_name
@@ -16,7 +19,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property array data
  * @property integer status
  * @property string status_desc
+ * @property string status_color
  * @property array status_history
+ * @property string status_next_label
+ * @property string status_next_route
  * @property string billing_name
  * @property string billing_document
  * @property string billing_address
@@ -24,6 +30,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string billing_pone
  * @property string billing_email
  * @property string shipping
+ * @property string payment
+ * @property int integration_id
+ * @property bool integration_failed
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property Dentist dentist
@@ -33,29 +42,78 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // apply domain scope
+        static::addGlobalScope(new DomainScope());
+    }
+
     /**
      * Map of the products and their codes
      */
     protected const PRODUCTS = [
         1 => [
             'name' => 'Smart Aligner',
-            'statuses' => [1, 2, 3, 4]
+            'statuses' => [1, 2, 3, 4, 5, 6],
         ],
-        4 => 'Surgery',
-        3 => 'Implant Guiada',
-        6 => 'Implant ROG',
-        7 => 'Esthetic',
-        8 => 'Smart Aligner Pre Protese',
+        4 => [
+            'name' => 'Surgery',
+            'statuses' => [1, 2, 5, 6],
+        ],
+        3 => [
+            'name' => 'Implant Guiada',
+            'statuses' => [1, 2, 5, 6],
+
+        ],
+        6 => [
+            'name' => 'Implant ROG',
+            'statuses' => [1, 2, 5, 6],
+
+        ],
+        7 => [
+            'name' => 'Esthetic',
+            'statuses' => [1, 2, 5, 6],
+        ],
+        8 => [
+            'name' => 'Smart Aligner Pre Protese',
+            'statuses' => [1, 2, 5, 6],
+        ]
     ];
 
     /**
      * Map of the statuses and their codes
      */
-    protected const STATUSES = [
-        1 => 'Pedido Iniciado',
-        2 => 'Pedido Realizado',
-        3 => 'Projeto Aprovado',
-        4 => 'Pagamento'
+    public const STATUSES = [
+        1 => [
+            'name' => 'Pedido Iniciado',
+            'color' => '#7bdd59',
+            'next' => [
+                'label' => 'Finalizar Pedido',
+                'route' => ['orders.confirm', ['id']],
+            ]
+        ],
+        2 => [
+            'name' => 'Em Processamento',
+            'color' => '#59ccdd',
+        ],
+        3 => [
+            'name' => 'Pedido Realizado',
+            'color' => '#ddbb53',
+        ],
+        4 => [
+            'name' => 'Projeto Aprovado',
+            'color' => '#9683d5',
+        ],
+        5 => [
+            'name' => 'Aguardando Pagamento',
+            'color' => '#848484',
+        ],
+        6 => [
+            'name' => 'Pedido Enviado',
+            'color' => '#848484',
+        ]
     ];
 
     /**
@@ -69,7 +127,7 @@ class Order extends Model
     protected $casts = [
         'data' => 'array',
         'files' => 'array',
-        'status_history' => 'array',
+        'status_history' => 'array'
     ];
 
     /**
@@ -78,12 +136,51 @@ class Order extends Model
      */
     public function getStatusDescAttribute()
     {
-        return self::STATUSES[$this->status];
+        return config('status')[$this->status]['name'];
+    }
+
+    public function getStatusColorAttribute()
+    {
+        return config('status')[$this->status]['color'];
+    }
+
+    public function getStatusNextLabelAttribute()
+    {
+        return config('status')[$this->status]['next']['label'] ?? '';
+
+    }
+
+    public function getStatusNextRouteAttribute()
+    {
+        if (!isset(config('status')[$this->status]['next'])) {
+            return '';
+        }
+        [$route, $fields] = config('status')[$this->status]['next']['route'];
+        $fields = array_map(function ($item) {
+            return $this->$item;
+        }, $fields);
+        return route($route, $fields);
     }
 
     public function getProductNameAttribute()
     {
-        return self::PRODUCTS[$this->product];
+        return config('products')[$this->product]['name'];
+    }
+
+    public function incrementStatus(): void
+    {
+        $statuses = config('products')[$this->product]['statuses'];
+        $currentIndex = array_search($this->status, $statuses);
+        $index = $currentIndex === false ? 0 : $currentIndex + 1;
+        $this->status = $statuses[$index];
+
+        // save the history
+        $statusHistory = $this->status_history;
+        $statusHistory[] = [
+            'status' => $this->status_desc,
+            'date' => now()->format('d/m/Y H:i')
+        ];
+        $this->status_history = $statusHistory;
     }
 
     public function dentist()
@@ -94,5 +191,10 @@ class Order extends Model
     public function patient()
     {
         return $this->belongsTo(Patient::class);
+    }
+
+    public function address()
+    {
+        return $this->belongsTo(Address::class);
     }
 }
