@@ -6,12 +6,14 @@ use App\Address;
 use App\Dentist;
 use App\ExternalApi\Orders\AddressCreateResponseContract;
 use App\ExternalApi\Orders\DentistCreateResponseContract;
+use App\ExternalApi\Orders\ListOrdersResponseContract;
 use App\ExternalApi\Orders\OrderCreateResponseContract;
 use App\ExternalApi\Orders\OrdersApiContract;
 use App\Order;
-use App\Patient;
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Model;
+use Log;
 
 class Api implements OrdersApiContract
 {
@@ -45,7 +47,6 @@ class Api implements OrdersApiContract
     /**
      * @param Dentist $dentist
      * @return DentistCreateResponseContract
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function createDentist(Dentist $dentist): DentistCreateResponseContract
     {
@@ -65,9 +66,14 @@ class Api implements OrdersApiContract
             'email',
         ];
 
-        $response = $this->httpClient->request('POST', 'profissional', [
-            'json' => $this->fromModel($dentist, $map),
-        ]);
+        try {
+            $response = $this->httpClient->request('POST', 'profissional', [
+                'json' => $this->fromModel($dentist, $map),
+            ]);
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            return null;
+        }
 
         return new DentistCreateResponse($response);
 
@@ -78,7 +84,6 @@ class Api implements OrdersApiContract
      * @param Address $address
      * @param Dentist $dentist
      * @return AddressCreateResponseContract
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function createAddress(Address $address, Dentist $dentist): AddressCreateResponseContract
     {
@@ -94,9 +99,14 @@ class Api implements OrdersApiContract
             'cep' => $address->zip_code,
         ];
 
-        $response = $this->httpClient->request('POST', 'endereco_dentista', [
-            'json' => $payload,
-        ]);
+        try {
+            $response = $this->httpClient->request('POST', 'endereco_dentista', [
+                'json' => $payload,
+            ]);
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            return null;
+        }
 
         return new AddressCreateResponse($response);
     }
@@ -104,14 +114,19 @@ class Api implements OrdersApiContract
     /**
      * @param Order $order
      * @return OrderCreateResponseContract
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function createOrder(Order $order): OrderCreateResponseContract
     {
+
+        $order->load('dentist', 'patient');
+
+        $data = $order->data;
+        $data['arquivos'] = [config('paths.uri') . '/' . $order->id];
+
         $payload = [
             'profissional' => $order->dentist->integration_id,
             'produto' => $order->product,
-            'patient' => [
+            'paciente' => [
                 'nome' => $order->patient->name,
                 'data_nascimento' => $order->patient->birthday->format('Y-m-d'),
                 'genero' => $order->patient->gender,
@@ -121,16 +136,65 @@ class Api implements OrdersApiContract
                 'estado' => $order->patient->state,
                 'cidade' => $order->patient->city,
             ],
+            'dentista' => [
+                'nome' => $order->dentist->name,
+                'CRO' => $order->dentist->cro,
+                'CPF' => $order->dentist->cpf,
+                'telefone' => $order->dentist->phone,
+                'email' => $order->dentist->email,
+            ],
             'forma_envio' => $order->shipping,
             'endereco_envio' => $order->address->identification,
             'forma_pagamento' => $order->payment,
             'dados' => $order->data,
         ];
 
-        $response = $this->httpClient->request('POST', 'pedidos', [
-            'json' => $payload,
-        ]);
+        try {
+            $response = $this->httpClient->request('POST', 'pedidos', [
+                'json' => $payload,
+            ]);
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            return null;
+        }
 
         return new OrderCreateResponse($response);
+    }
+
+    /**
+     * @param Dentist $dentist
+     * @return ListOrdersResponseContract
+     */
+    public function listOrders(Dentist $dentist): ?ListOrdersResponseContract
+    {
+        try {
+            $response = $this->httpClient->request('GET', "pedidos/profissional/{$dentist->integration_id}");
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            return null;
+        }
+        return new ListOrdersResponse($response);
+    }
+
+    public function approveOrder(Order $order): bool
+    {
+        try {
+            $this->httpClient->request('PUT', "pedidos/{$order->integration_id}/pre-planejamento/approve");
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    public function reproveOrder(Order $order): bool
+    {
+        try {
+            $this->httpClient->request('PUT', "pedidos/{$order->integration_id}/pre-planejamento/reject");
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            return false;
+        }
+        return true;
     }
 }

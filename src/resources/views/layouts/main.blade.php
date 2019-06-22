@@ -8,7 +8,7 @@
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/datepicker3.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/styles_' . (request()->getHost() == config('domains.alignerDomain') ? 'aligner' : 'solutions') .'.css') }}" rel="stylesheet">
 
     <script>
         const userId = "{{ Auth::user()->id }}";
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span></button>
-            <a class="navbar-brand" href="#"><img src="{{ asset('images/smart-aligner-logo.png') }}"
+            <a class="navbar-brand" href="#"><img src="{{ asset('images/smart-' . (request()->getHost() == config('domains.alignerDomain') ? 'aligner' : 'solutions') .'-logo.png') }}"
                                                   class="img-responsive"/></a>
             <ul class="nav navbar-top-links navbar-right">
                 @include('layouts.notifications')
@@ -93,17 +93,6 @@
 <script src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
 <script src="{{ asset('js/custom.js') }}"></script>
 <script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js') }}"></script>
-<script>
-    window.onload = function () {
-        var chart1 = document.getElementById('line-chart').getContext('2d');
-        window.myLine = new Chart(chart1).Line(lineChartData, {
-            responsive: true,
-            scaleLineColor: 'rgba(0,0,0,.2)',
-            scaleGridLineColor: 'rgba(0,0,0,.05)',
-            scaleFontColor: '#c5c7cc',
-        });
-    };
-</script>
 @yield('scripts')
 
 </body>

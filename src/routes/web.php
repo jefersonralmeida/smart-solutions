@@ -25,15 +25,40 @@ Route::put('/profile', 'ProfileController@update')->name('profile.update');
 Route::post('/clinic', 'ClinicController@store')->name('clinic.store');
 Route::put('/clinic', 'ClinicController@update')->name('clinic.update');
 
+// Orders
 Route::get('/orders', 'OrdersController@index')->name('orders')->middleware('can:view-orders');
-Route::get('/orders/aligner', 'OrderAlignerController@create')->name('order-aligner')->middleware('can:place-orders');
-Route::post('/orders/aligner', 'OrderAlignerController@store')->name('order-aligner.store')->middleware('can:place-orders');
-
 Route::get('/orders/{order}/confirm', 'OrdersController@confirmOrder')->name('orders.confirm')->where('order', '^\d+$');
 Route::post('/orders/{order}/confirm', 'OrdersController@confirmOrderStore')->name('orders.store')->where('order', '^\d+$');
 Route::get('/orders/{order}/force-integration', 'OrdersController@forceIntegration')->name('orders.forceIntegration')->where('order', '^\d+$');
+Route::get('/orders/{order}/approve-project', 'OrdersController@verifyProject')->name('orders.approve.view')->where('order', '^\d+$');
+Route::get('/orders/{order}/download-project-file/{fileId}', 'OrdersController@downloadProjectFile')
+    ->name('orders.downloadProjectFile')
+    ->where(['order', '^\d+$', 'fileId' => '^\d+$']);
+Route::post('/orders/{order}/approve-project', 'OrdersController@approveProject')->name('orders.approve')->where('order', '^\d+$');
+Route::post('/orders/{order}/reprove-project', 'OrdersController@reproveProject')->name('orders.reprove')->where('order', '^\d+$');
+Route::get('/orders/{order}/payments', 'OrdersController@payments')->name('orders.payments')->where('order', '^\d+$');
+Route::get('/orders/{order}/payment-return', 'OrdersController@paymentReturn')->name('orders.paymentReturn')->where('order', '^\d+$');
 
-// dentists
+// Products
+Route::get('/orders/aligner', 'Products\OrderAlignerController@create')->name('order-aligner')->middleware('can:place-orders');
+Route::post('/orders/aligner', 'Products\OrderAlignerController@store')->name('order-aligner.store')->middleware('can:place-orders');
+
+Route::get('/orders/surgery', 'Products\OrderSurgeryController@create')->name('order-surgery')->middleware('can:place-orders');
+Route::post('/orders/surgery', 'Products\OrderSurgeryController@store')->name('order-surgery.store')->middleware('can:place-orders');
+
+Route::get('/orders/implant-guiada', 'Products\OrderImplantGuiadaController@create')->name('order-implant-guiada')->middleware('can:place-orders');
+Route::post('/orders/implant-guiada', 'Products\OrderImplantGuiadaController@store')->name('order-implant-guiada.store')->middleware('can:place-orders');
+
+Route::get('/orders/implant-rog', 'Products\OrderImplantRogController@create')->name('order-implant-rog')->middleware('can:place-orders');
+Route::post('/orders/implant-rog', 'Products\OrderImplantRogController@store')->name('order-implant-rog.store')->middleware('can:place-orders');
+
+Route::get('/orders/esthetic', 'Products\OrderEstheticController@create')->name('order-esthetic')->middleware('can:place-orders');
+Route::post('/orders/esthetic', 'Products\OrderEstheticController@store')->name('order-esthetic.store')->middleware('can:place-orders');
+
+Route::get('/orders/aligner-pp', 'Products\OrderAlignerPPController@create')->name('order-aligner-pp')->middleware('can:place-orders');
+Route::post('/orders/aligner-pp', 'Products\OrderAlignerPPController@store')->name('order-aligner-pp.store')->middleware('can:place-orders');
+
+// Dentists
 Route::get('/dentists', 'DentistsController@index')->name('dentists')->middleware('can:view-dentists');
 Route::get('/dentists/{dentist}', 'DentistsController@view')
     ->where('dentist', '\d+')

@@ -17,7 +17,6 @@ use Illuminate\Http\Request;
 Route::group([], function() {
     Route::get('/notifications', 'NotificationsController@index');
     Route::get('/shipping-info/{provider}/{zipCode}', 'ShippingController@info')
-        ->where('provider', '^[a-z]+$')
         ->where('zipCode', '^\d{8}$')
         ->middleware(['cache', 'cacheFor:1800']);
 });

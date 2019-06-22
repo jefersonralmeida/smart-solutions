@@ -15,7 +15,7 @@
         @yield('error')
 
         <div class="login-panel panel panel-default">
-            <div class="panel-heading"><center><img src="images/smart-aligner-logo.png" class="img-responsive"/></center></div>
+            <div class="panel-heading"><center><img src="{{ asset('images/smart-' . (request()->getHost() == config('domains.alignerDomain') ? 'aligner' : 'solutions') .'-logo.png') }}" class="img-responsive"/></center></div>
             <div class="panel-body">
                 @yield('content')
             </div>

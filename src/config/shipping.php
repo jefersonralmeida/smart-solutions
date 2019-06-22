@@ -2,14 +2,14 @@
 
 return [
     'providers' => [
-        'retirada' => [
+        'Retirada na Smart Solutions' => [
             'class' => \App\ExternalApi\Shipping\Retirada\Retirada::class,
             'params' => [
                 'name' => env('LOCAL_PICK_NAME', 'Retirada na Smart Solutions.'),
                 'prize' => env('LOCAL_PICK_PRIZE')
             ]
         ],
-        'entrega' => [
+        'Entrega feita pela Smart Solutions' => [
             'class' => \App\ExternalApi\Shipping\Entrega\Entrega::class,
             'params' => [
                 'name' => env('LOCAL_SHIPPING_NAME', 'Entrega feita pela Smart Solutions (Grande Rio e Niteroi)'),
@@ -19,7 +19,7 @@ return [
                 'prize' => env('LOCAL_SHIPPING_PRIZE')
             ]
         ],
-        'correios' => [
+        'Correios | SEDEX' => [
             'class' => \App\ExternalApi\Shipping\Correios\Correios::class,
             'params' => [
                 'name' => env('CORREIOS_NAME', 'Correios | SEDEX'),
@@ -45,7 +45,7 @@ return [
 
             ],
         ],
-        'tamcargo' => [
+        'Entrega pela TAM ao destino final' => [
             'class' => \App\ExternalApi\Shipping\TamCargo\TamCargo::class,
             'params' => [
                 'name' => env('TAM_CARGO_NAME', 'Transporte aéreo (TAM Cargo)'),

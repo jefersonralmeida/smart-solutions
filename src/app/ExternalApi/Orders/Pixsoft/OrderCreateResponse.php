@@ -3,6 +3,7 @@
 namespace App\ExternalApi\Orders\Pixsoft;
 
 use App\ExternalApi\Orders\OrderCreateResponseContract;
+use GuzzleHttp\Psr7\Response;
 
 class OrderCreateResponse implements OrderCreateResponseContract
 {
@@ -10,7 +11,7 @@ class OrderCreateResponse implements OrderCreateResponseContract
     use FromResponseTrait;
 
     /**
-     * @var \stdClass
+     * @var Response
      */
     protected $response;
 

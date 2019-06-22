@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Dentist;
+use App\Events\OrderCreated;
+use App\Http\Requests\OrderAligner;
+use App\Order;
+use App\Patient;
+use Illuminate\Foundation\Http\FormRequest;
+
+abstract class OrderProductController extends Controller
+{
+
+    /**
+     * Can be aligner or solutions
+     * @return string
+     */
+    abstract protected function domain(): string;
+
+    /**
+     * The title of the form
+     * @return string
+     */
+    abstract protected function title(): string;
+
+    /**
+     * The view template for the product form
+     * @return string
+     */
+    abstract protected function viewTemplate(): string;
+
+    /**
+     * The product id (check config/products.php)
+     * @return int
+     */
+    abstract protected function productId(): int;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth', "can:domain-{$this->domain()}"]);
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view("products.{$this->viewTemplate()}", [
+            'breadcrumbs' => [
+                ['label' => 'Pedidos', 'route' => 'orders'],
+                ['label' => $this->title()],
+            ],
+            'patients' => Patient::all(),
+            'dentists' => Dentist::approved()->get(),
+        ]);
+    }
+
+    /**
+     * @param FormRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    protected function storeInternal(FormRequest $request)
+    {
+        $order = new Order();
+        $order->product = $this->productId();
+        $order->fill($request->all());
+        $order->setOrderCreated();
+
+        $order->save();
+
+        event(new OrderCreated($order, $request->allFiles()));
+
+        return redirect(route('orders.confirm', ['order' => $order->id]));
+    }
+}

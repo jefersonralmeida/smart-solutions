@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'pt',
 
     /*
     |--------------------------------------------------------------------------
@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\ExternalApi\Orders\Pixsoft\PixsoftProvider::class,
+        App\ExternalApi\Spc\Decisor\DecisorProvider::class,
         App\ExternalApi\Cro\CfoHttpParser\CfoHttpParserProvider::class,
         App\ExternalApi\Shipping\ShippingServiceProvider::class,
         \BC\Laravel\DropboxDriver\ServiceProvider::class,

@@ -3,12 +3,33 @@
 namespace App\ExternalApi\Orders\Pixsoft;
 
 use GuzzleHttp\Psr7\Response;
+use Log;
 
 trait FromResponseTrait
 {
     public function __construct(Response $response)
     {
-        $code = $response->getStatusCode();
-        $this->response = $code >= 200 && $code < 300 ? json_decode($response->getBody()->getContents()) : null;
+        $rawContent = $response->getBody()->getContents();
+        $result = json_decode($rawContent);
+
+        if (!empty($result->msgErro)) {
+            Log::error($result->msgErro);
+            $this->response = null;
+            return;
+        }
+
+        if ($response->getStatusCode() >= 400) {
+            Log::error('Erro ao consultar a api: ' . print_r($rawContent, true));
+            $this->response = null;
+            return;
+        }
+
+        if (empty($rawContent)) {
+            Log::error('Erro ao consultar a api: Resposta vazia.');
+            $this->response = null;
+            return;
+        }
+
+        $this->response = json_decode($rawContent);
     }
 }

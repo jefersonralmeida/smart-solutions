@@ -3,8 +3,10 @@
 namespace App;
 
 use App\Scopes\CurrentClinicScope;
+use App\Scopes\DomainScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -30,8 +32,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property User user
  * @property string integration_status - [P]rocessing, [F]ailed or [S]uccess
  * @property string integration_id
+ * @property Carbon last_order_check
  * @property Carbon created_at
  * @property Carbon updated_at
+ * @property Order[]|Collection orders
+ * @method static Builder withPendingOrders()
  * @method static Builder approved()
  */
 class Dentist extends Model
@@ -41,7 +46,7 @@ class Dentist extends Model
 
     protected $fillable = ['name', 'email', 'cpf', 'cro', 'city', 'state', 'phone', 'cellphone'];
 
-    protected $dates = ['cro_dispatched_at', 'cro_approved_at'];
+    protected $dates = ['last_order_check', 'cro_dispatched_at', 'cro_approved_at'];
 
     /**
      * @see CurrentClinicScope
@@ -160,6 +165,22 @@ class Dentist extends Model
     public function clinic()
     {
         return $this->belongsTo(Clinic::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class)->withoutGlobalScope(DomainScope::class);
+    }
+
+    public function scopeWithPendingOrders(Builder $query)
+    {
+        $query->whereIn('id', function(\Illuminate\Database\Query\Builder $query) {
+            $query->select('dentist_id')
+                ->from(with(new Order())->getTable())
+                ->where('status', config('orderCheck.pendingStatus'));
+            return $query;
+        });
+        return $query;
     }
 
     public function scopeApproved(Builder $query)

@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\ExternalApi\Orders\OrdersApiContract;
+use App\ExternalApi\Spc\SpcApiContract;
 use App\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,15 +36,16 @@ class CreateOrderJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param OrdersApiContract $api
+     * @param OrdersApiContract $ordersApi
+     * @param SpcApiContract $spcApi
      * @return void
      */
-    public function handle(OrdersApiContract $api)
+    public function handle(OrdersApiContract $ordersApi, SpcApiContract $spcApi)
     {
 
         // check if the dentist already exists on the api, if not, create it
         if ($this->order->dentist->integration_status != 'S') {
-            $response = $api->createDentist($this->order->dentist);
+            $response = $ordersApi->createDentist($this->order->dentist);
             $this->order->dentist->integration_status = 'S';
             $this->order->dentist->integration_id = $response->getId();
             $this->order->dentist->save();
@@ -52,18 +54,37 @@ class CreateOrderJob implements ShouldQueue
         // check if the address is already attached to the dentist on the api, if not, attach it
         $addressIntegration = $this->order->address->integration;
         if (!isset($addressIntegration[$this->order->dentist->id])) {
-            $response = $api->createAddress($this->order->address, $this->order->dentist);
+            $response = $ordersApi->createAddress($this->order->address, $this->order->dentist);
             $addressIntegration[$this->order->dentist->id] = $response->getId();
             $this->order->address->integration = $addressIntegration;
             $this->order->address->save();
         }
 
-        $response = $api->createOrder($this->order);
+        // creates the order
+        $orderResponse = $ordersApi->createOrder($this->order);
+        if (!empty($id = $orderResponse->getId())) {
 
-        if (($id = $response->getId()) !== false) {
-            $this->order->incrementStatus();
+            // check spc
+            try {
+                $spcResult = $spcApi->isClean('F', $this->order->dentist->cpf);
+                $spcResponse = $spcApi->getLastFullResponse();
+                $spcError = $spcApi->getLastError();
+            } catch (\Throwable $e) {
+                $spcResult = false;
+                $spcResponse = '';
+                $spcError = 'Erro na API do SPC.';
+            }
+
+            $this->order->setOrderPlaced();
             $this->order->integration_id = $id;
             $this->order->integration_failed = false;
+            $this->order->payment_methods = $spcResult
+                ? array_keys(config('payments.payment_methods'))
+                : config('payments.spcReproved');
+            $this->order->spc_result = [
+                'response' => $spcResponse,
+                'error' => $spcError,
+            ];
             $this->order->save();
         }
 

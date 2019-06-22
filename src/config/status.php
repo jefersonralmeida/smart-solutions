@@ -19,19 +19,31 @@ return [
         ]
     ],
     3 => [
-        'name' => 'Pedido Realizado',
+        'name' => 'Pedido Realizado - Aguardando Pre-projeto',
         'color' => '#ddbb53',
     ],
     4 => [
-        'name' => 'Projeto Aprovado',
+        'name' => 'Pre projeto criado - Aguardando Aprovação',
         'color' => '#9683d5',
-    ],
-    5 => [
-        'name' => 'Aguardando Pagamento',
-        'color' => '#848484',
+        'next' => [
+            'label' => 'Aprovar Projeto',
+            'route' => ['orders.approve.view', ['id']],
+        ]
     ],
     6 => [
-        'name' => 'Pedido Enviado',
+        'name' => 'Aguardando Pagamento',
         'color' => '#848484',
+        'next' => [
+            'label' => 'Realizar Pagamento',
+            'route' => ['orders.payments', ['id']],
+        ]
+    ],
+    7 => [
+        'name' => 'Aguardando Confirmação de Pagamento',
+        'color' => '#848484'
+    ],
+    8 => [
+        'name' => 'Pagamento Confirmado',
+        'color' => '#848484'
     ]
 ];

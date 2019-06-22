@@ -9,11 +9,11 @@ trait Dispatchable
         dispatch as dispatchQueue;
     }
 
-    public static function dispatch()
+    public static function dispatch(...$params)
     {
         if (config('queue.enabled')) {
-            return static::dispatch();
+            return static::dispatchQueue(...$params);
         }
-        return static::dispatchNow();
+        return static::dispatchNow(...$params);
     }
 }

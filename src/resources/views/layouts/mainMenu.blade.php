@@ -13,8 +13,21 @@
         <li><a href="{{ route('order-aligner') }}"><em class="fa fa-paper-plane">&nbsp;</em> Solicitar Aligner</a></li>
     @endcan
     @can('domain-solutions')
-        <li><a href="#"><em class="fa fa-calendar-check-o">&nbsp;</em> Solicitar Scan Service</a></li>
-        <li><a href="#"><em class="fa fa-desktop">&nbsp;</em> STL</a></li>
+        <li class="parent">
+            <a data-toggle="collapse" href="#sub-item-1">
+                <em class="fa fa-paper-plane">&nbsp;</em>Solicitar Implant
+                <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right">
+                    <em class="fa fa-plus"></em>
+                </span>
+            </a>
+            <ul class="children collapse" id="sub-item-1">
+                <li><a href="{{ route('order-implant-guiada') }}"><em class="fa fa-arrow-right">&nbsp;</em> Guiada</a></li>
+                <li><a href="{{ route('order-implant-rog') }}"><em class="fa fa-arrow-right">&nbsp;</em> ROG</a></li>
+            </ul>
+        </li>
+        <li><a href="{{ route('order-surgery') }}"><em class="fa fa-paper-plane">&nbsp;</em> Solicitar Surgery</a></li>
+        <li><a href="{{ route('order-esthetic') }}"><em class="fa fa-paper-plane">&nbsp;</em> Solicitar Esthetic</a></li>
+        {{--<li><a href="{{ route('order-aligner-pp') }}"><em class="fa fa-desktop">&nbsp;</em> Smart Aligner Pre Protese</a></li>--}}
     @endcan
 @endcan
 
