@@ -56,7 +56,7 @@ class Itau
     public function getEncryptedData(Order $order): string
     {
         $pedido = $order->id;
-        $valor = number_format($order->value, 2, ',', '');
+        $valor = number_format($order->total_value, 2, ',', '');
         $observacao = "";
         $nomeSacado = $order->billing_name;
         $codigoInscricao = "01";

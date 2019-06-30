@@ -220,7 +220,7 @@ class OrdersController extends Controller
                 ['label' => 'Pagamento'],
             ],
             'order' => $order,
-            'data' => $encryptedData
+            'data' => $encryptedData,
         ]);
     }
 

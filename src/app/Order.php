@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\ExternalApi\Shipping\ShippingManagerContract;
 use App\Scopes\CurrentClinicScope;
 use App\Scopes\DomainScope;
 use Carbon\Carbon;
@@ -38,6 +39,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string shipping
  * @property string payment
  * @property float value
+ * @property float shipping_value
+ * @property float total_value
  * @property int integration_id
  * @property bool integration_failed
  * @property array payment_methods
@@ -86,6 +89,8 @@ class Order extends Model
         'payment_methods' => 'array',
         'spc_result' => 'array',
     ];
+
+    protected $shippingValueSingleton = null;
 
     /**
      * List of products ids and their names
@@ -197,6 +202,22 @@ class Order extends Model
     public function getBillingStateAttribute()
     {
         return $this->billing_state ?? $this->address->state;
+    }
+
+    public function getShippingValueAttribute()
+    {
+        if ($this->shippingValueSingleton === null) {
+            /** @var ShippingManagerContract $shippingManager */
+            $shippingManager = resolve(ShippingManagerContract::class);
+            $provider = $shippingManager->getProviderObject($this->shipping, $this->address->zip_code);
+            $this->shippingValueSingleton = $provider->getPrice();
+        }
+        return $this->shippingValueSingleton;
+    }
+
+    public function getTotalValueAttribute()
+    {
+        return $this->value + $this->shipping_value;
     }
 
     /**

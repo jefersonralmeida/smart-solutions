@@ -14,6 +14,9 @@
                     <p>Nome do paciente:&nbsp;&nbsp;<b>{{ $order->patient->name }}</b></p>
                     <p>Envio:&nbsp;&nbsp;<b>{{ $order->shipping }}</b></p>
                     <p>Valor do Pedido:&nbsp;&nbsp;<b>R$ {{ number_format($order->value, 2, ',', ' ') }}</b></p>
+                    <p>Forma de envio:&nbsp;&nbsp;<b>{{ $order->shipping }}</b></p>
+                    <p>Valor do Envio:&nbsp;&nbsp;<b>R$ {{ number_format($order->shipping_value, 2, ',', ' ') }}</b></p>
+                    <p>Valor total:&nbsp;&nbsp;<b>R$ {{ number_format($order->total_value, 2, ',', ' ') }}</b></p>
                 </div>
             </div>
         </div>
@@ -23,7 +26,9 @@
             <form method="POST" action="https://shopline.itau.com.br/shopline/shopline.aspx">
                 @csrf
                 <input type="hidden" name="DC" value="{{ $data }}"/>
-                <button type="submit" class="btn btn-primary">Realizar Pagamento</button>
+                <button type="submit" class="btn btn-primary">Pagar R$ {{ number_format($order->total_value, 2, ',', ' ') }}</button>
+                &nbsp;&nbsp;
+                <span>* Você será redirecionado para o ambiente seguro do banco, para efetuar o pagamento.</span>
             </form>
         </div>
     </div>
