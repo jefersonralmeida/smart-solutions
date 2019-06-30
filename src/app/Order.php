@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\CurrentClinicScope;
 use App\Scopes\DomainScope;
 use Carbon\Carbon;
 use DB;
@@ -28,11 +29,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property string billing_name
  * @property string billing_document
  * @property string billing_address
+ * @property string billing_district
+ * @property string billing_city
+ * @property string billing_state
  * @property string billing_zip_code
  * @property string billing_phone
  * @property string billing_email
  * @property string shipping
  * @property string payment
+ * @property float value
  * @property int integration_id
  * @property bool integration_failed
  * @property array payment_methods
@@ -55,6 +60,10 @@ class Order extends Model
 
         // apply domain scope
         static::addGlobalScope(new DomainScope());
+
+        // apply the current clinic scope
+        static::addGlobalScope(new CurrentClinicScope('dentist'));
+
     }
 
     /**
@@ -93,7 +102,7 @@ class Order extends Model
     /**
      * List of the products ids that requires pre planning
      */
-    const REQUIRES_PRE_PLANNING = [1];
+    const REQUIRES_PRE_PLANNING = [1, 4, 3, 6, 8];
 
     /**
      * Acessor to return the status description
@@ -133,7 +142,61 @@ class Order extends Model
      */
     public function getProductNameAttribute()
     {
-        return self::PRODUCTS[$this->product]['name'];
+        return self::PRODUCTS[$this->product];
+    }
+
+    /**
+     * Returns the billing document (CPF) if set, or the dentist document.
+     * @return string
+     */
+    public function getBillingDocumentAttribute()
+    {
+        return $this->billing_document ?? $this->dentist->cpf;
+    }
+
+    /**
+     * If set, return the billing name, or return the dentist name
+     * @return string
+     */
+    public function getBillingNameAttribute()
+    {
+        return $this->billing_name ?? $this->dentist->name;
+    }
+
+    /**
+     * If set, return the billing street address, or return the shipping address
+     * @return string
+     */
+    public function getBillingAddressAttribute()
+    {
+        return $this->billing_address ?? $this->address->street_address;
+    }
+
+    /**
+     * If set, return the billing district, or return the shipping district
+     * @return string
+     */
+    public function getBillingDistrictAttribute()
+    {
+        return $this->billing_district ?? $this->address->district;
+    }
+
+    /**
+     * If set, return the billing city, or return the shipping city
+     * @return string
+     */
+    public function getBillingCityAttribute()
+    {
+        return $this->billing_city ?? $this->address->city;
+    }
+
+    /**
+     * If set, return the billing state/province, or return the shipping state/province
+     * @return string
+     */
+    public function getBillingStateAttribute()
+    {
+        return $this->billing_state ?? $this->address->state;
     }
 
     /**

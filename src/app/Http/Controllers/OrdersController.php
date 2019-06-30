@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Address;
 use App\Events\OrderConfirmed;
+use App\Events\OrderReproved;
 use App\ExternalApi\Itau\Itau;
 use App\ExternalApi\Shipping\ShippingManagerContract;
 use App\Http\Requests\ConfirmOrder;
@@ -192,8 +193,8 @@ class OrdersController extends Controller
 
     public function reproveProject(Order $order)
     {
-        var_dump('REPROVADO!!!');
-        dd($order);
+        event(new OrderReproved($order));
+        return redirect(route('orders'));
     }
 
     /**

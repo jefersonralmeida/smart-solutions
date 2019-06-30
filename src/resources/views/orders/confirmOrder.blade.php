@@ -115,9 +115,40 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="cobranca_endereco">
-                                Endereço Completo:
+                                Endereço (Logradouro e número):
                             </label>
                             <input type="text" id="cobranca_endereco" class="form-control" name="billing_address"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <label for="cobranca_bairro">
+                                Bairro:
+                            </label>
+                            <input type="text" id="cobranca_bairro" class="form-control" name="billing_district"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <label for="cobranca_cidade">
+                                Cidade:
+                            </label>
+                            <input type="text" id="cobranca_cidade" class="form-control" name="billing_city"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="cobranca_uf">
+                                Estado:
+                            </label>
+                            <select class="form-control" style="height: 47px;" id="cobranca_uf" name="billing_state">
+                                <option value="">Selecione</option>
+                                @foreach (config('states') as $state)
+                                    <option value="{{ $state }}">
+                                        {{ $state }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="col-lg-6">

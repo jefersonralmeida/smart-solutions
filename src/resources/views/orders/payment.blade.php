@@ -12,6 +12,8 @@
                     <p>Produto:&nbsp;&nbsp;<b>{{ $order->product_name }}</b></p>
                     <p>Nome do dentista:&nbsp;&nbsp;<b>{{ $order->dentist->name }}</b></p>
                     <p>Nome do paciente:&nbsp;&nbsp;<b>{{ $order->patient->name }}</b></p>
+                    <p>Envio:&nbsp;&nbsp;<b>{{ $order->shipping }}</b></p>
+                    <p>Valor do Pedido:&nbsp;&nbsp;<b>R$ {{ number_format($order->value, 2, ',', ' ') }}</b></p>
                 </div>
             </div>
         </div>

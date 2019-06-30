@@ -16,6 +16,8 @@ interface OrdersApiContract
 
     public function listOrders(Dentist $dentist): ?ListOrdersResponseContract;
 
+    public function prePlanning(Order $order): ?PrePlanningResponseContract;
+
     public function approveOrder(Order $order): bool;
 
     public function reproveOrder(Order $order): bool;

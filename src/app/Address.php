@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string phone
  * @property int clinic_id
  * @property array integration
+ * @property string street_address
  * @property Clinic $clinic
  */
 class Address extends Model
@@ -42,5 +43,10 @@ class Address extends Model
     public function clinic()
     {
         return $this->belongsTo(Clinic::class);
+    }
+
+    public function getStreetAddressAttribute()
+    {
+        return "{$this->street}, {$this->street_number}";
     }
 }

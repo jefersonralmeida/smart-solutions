@@ -8,6 +8,7 @@ use App\Order;
 use App\Scopes\CurrentClinicScope;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CheckOrders extends Command
 {
@@ -50,7 +51,10 @@ class CheckOrders extends Command
     {
         $dentists = Dentist::withPendingOrders()
             ->withoutGlobalScope(CurrentClinicScope::class)
-            ->with('orders')
+            ->with(['orders' => function (HasMany $query) {
+                $query->where('status', 3); // only orders on status 3
+                $query->withoutGlobalScope(CurrentClinicScope::class);
+            }])
             ->where(function (Builder $query) {
                 return $query
                     ->orWhereNull('last_order_check')
@@ -61,6 +65,7 @@ class CheckOrders extends Command
         foreach ($dentists as $dentist) {
 
             $items = $this->ordersApi->listOrders($dentist)->getOrders();
+
             if (!empty($items)) {
                 $ordersToChange = [];
                 foreach ($items as $item) {
@@ -69,12 +74,20 @@ class CheckOrders extends Command
                     }
                 }
 
-                $orders = $dentist->orders->filter(function (Order $item) use ($ordersToChange) {
-                    return in_array($item->integration_id, $ordersToChange);
+                $orders = $dentist->orders->filter(function (Order $order) use ($ordersToChange) {
+                    return in_array($order->integration_id, $ordersToChange);
                 });
 
                 /** @var Order $order */
                 foreach ($orders as $order) {
+                    $value = $this->ordersApi->prePlanning($order)->getPrice();
+
+                    // ignore orders without price value
+                    if ($value == 0) {
+                        \Log::error("Pedido {$order->id} ({$order->integration_id}) sem preço.");
+                        continue;
+                    }
+                    $order->value = $this->ordersApi->prePlanning($order)->getPrice();
                     $order->setWaitingApprovement();
                     $order->save();
                 }

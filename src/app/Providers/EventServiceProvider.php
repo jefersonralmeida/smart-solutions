@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Listeners\ApproveOrderOnApi;
 use App\Listeners\CheckCro;
+use App\Listeners\ReproveOrderOnApi;
 use App\Listeners\SendOrderToApi;
 use App\Listeners\UploadOrderFiles;
 use Illuminate\Auth\Events\Registered;
@@ -26,6 +28,8 @@ class EventServiceProvider extends ServiceProvider
         CheckCro::class,
         UploadOrderFiles::class,
         SendOrderToApi::class,
+        ApproveOrderOnApi::class,
+        ReproveOrderOnApi::class,
     ];
 
     /**

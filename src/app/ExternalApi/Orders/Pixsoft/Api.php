@@ -9,6 +9,8 @@ use App\ExternalApi\Orders\DentistCreateResponseContract;
 use App\ExternalApi\Orders\ListOrdersResponseContract;
 use App\ExternalApi\Orders\OrderCreateResponseContract;
 use App\ExternalApi\Orders\OrdersApiContract;
+use App\ExternalApi\Orders\Pixsoft\PrePlanningResponse;
+use App\ExternalApi\Orders\PrePlanningResponseContract;
 use App\Order;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\GuzzleException;
@@ -174,6 +176,17 @@ class Api implements OrdersApiContract
             return null;
         }
         return new ListOrdersResponse($response);
+    }
+
+    public function prePlanning(Order $order): ?PrePlanningResponseContract
+    {
+        try {
+            $response = $this->httpClient->request('GET', "pedidos/{$order->integration_id}/pre-planejamento");
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            return null;
+        }
+        return new PrePlanningResponse($response);
     }
 
     public function approveOrder(Order $order): bool

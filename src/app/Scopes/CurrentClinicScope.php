@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\Scope;
 
 class CurrentClinicScope implements Scope
 {
+    protected $relation;
+
+    public function __construct(?string $relation = null)
+    {
+        $this->relation = $relation;
+    }
 
     /**
      * Apply the scope to a given Eloquent query builder.
@@ -19,6 +25,12 @@ class CurrentClinicScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
+        if ($this->relation !== null) {
+            $builder->whereHas($this->relation, function (Builder $builder) {
+                $builder->where('clinic_id', Auth::user()->clinic->id);
+            });
+            return;
+        }
         $builder->where('clinic_id', Auth::user()->clinic->id);
     }
 }

@@ -7,6 +7,7 @@ use App\Events\OrderCreated;
 use App\Http\Requests\OrderAligner;
 use App\Order;
 use App\Patient;
+use App\Price;
 use Illuminate\Foundation\Http\FormRequest;
 
 abstract class OrderProductController extends Controller
@@ -71,6 +72,16 @@ abstract class OrderProductController extends Controller
     {
         $order = new Order();
         $order->product = $this->productId();
+
+        // grab the price calculator for the product (it's a callable/closure)
+        $valueCalculator = config('price')[$this->productId()];
+
+        // grab the prices table for the product
+        /** @var Price $priceObject */
+        if ($priceObject = Price::where('product_id', $this->productId())->first()) {
+            $order->value = $valueCalculator($request, $priceObject->prices);
+        }
+
         $order->fill($request->all());
         $order->setOrderCreated();
 

@@ -56,16 +56,16 @@ class Itau
     public function getEncryptedData(Order $order): string
     {
         $pedido = $order->id;
-        $valor = "150,00";
+        $valor = number_format($order->value, 2, ',', '');
         $observacao = "";
         $nomeSacado = $order->billing_name;
         $codigoInscricao = "01";
-        $numeroInscricao = $order->billing_document;
+        $numeroInscricao = removeMask($order->billing_document, config('masks.cpf'));
         $enderecoSacado = $order->billing_address;
-        $bairroSacado = "";
+        $bairroSacado = $order->billing_district;
         $cepSacado = $order->billing_zip_code;
-        $cidadeSacado = "";
-        $estadoSacado = "";
+        $cidadeSacado = $order->billing_city;
+        $estadoSacado = $order->billing_state;
         $dataVencimento = now()->addDays(5)->format('dmY');
         $urlRetorna = route('orders.paymentReturn', ['order' => $order->id]);
         $obsAd1 = "";
