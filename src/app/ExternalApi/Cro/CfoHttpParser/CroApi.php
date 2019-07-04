@@ -34,25 +34,18 @@ class CroApi implements CroApiContract
     public function request(string $cro): ?CroResponseContract
     {
         // splitting the CRO
-        [$state, $category, $code] = explode('-', $cro);
+        [$state, $code] = explode('-', $cro);
 
         // checking if the state is valid
         if (!in_array($state, config('states'))) {
             return null;
         }
 
-        // checking the category
-        if (!isset($this->categoryMap[$category])) {
-            return null;
-        }
-        /** @var int $categoryCode */
-        $categoryCode = $this->categoryMap[$category];
-
         // finally requesting the "API"
         $response = $this->httpClient->request('GET', '', [
             'query' => [
                 'cro' => $state,
-                'categoria' => $categoryCode,
+                'categoria' => 'todas',
                 'especialidade' => 'todas',
                 'inscricao' => $code,
                 'nome' => ''

@@ -58,7 +58,7 @@
                             <label for="cro">
                                 CRO:
                             </label>
-                            <input class="form-control" id="cro" name="cro" placeholder="Digite o CRO"
+                            <input class="form-control" id="cro" name="cro" placeholder="Digite o CRO (Formato: UF-9999)"
                                    value="{{ old('cro') ?? $dentist->cro ?? '' }}"/>
                         </div>
                         <div class="form-group">

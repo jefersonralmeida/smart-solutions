@@ -31,8 +31,8 @@ class Cro implements Rule
     {
         $value = strtoupper(trim($value));
 
-        if (!preg_match('/^([A-Z]{2})\-?([A-Z]{2,})\-?\d+$/', $value, $matches)) {
-            $this->message = "O CRO informado está mal formado. Use o Formato 'UF-XX-9999'";
+        if (!preg_match('/^([A-Z]{2})\-\d+$/', $value, $matches)) {
+            $this->message = "O CRO informado está mal formado. Use o Formato 'UF-9999'";
             return false;
         }
 
@@ -43,11 +43,6 @@ class Cro implements Rule
 
         if (!empty(request()->state) && $matches[1] !== request()->state) {
             $this->message = "O CRO informado tem UF diferente do cadastro.";
-            return false;
-        }
-
-        if (!in_array($matches[2], array_keys(config('cro.categoryMap')))) {
-            $this->message = "O CRO informado tem categoria inválida";
             return false;
         }
 

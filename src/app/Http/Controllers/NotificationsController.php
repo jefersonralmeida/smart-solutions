@@ -10,7 +10,8 @@ class NotificationsController extends Controller
 
     public function index()
     {
-        return Auth::user()->unreadNotifications;
+        $loggedUser = Auth::user();
+        return isset($loggedUser) ? Auth::user()->unreadNotifications : '';
     }
 
     public function read(DatabaseNotification $notification)
