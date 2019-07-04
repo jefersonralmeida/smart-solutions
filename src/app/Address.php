@@ -28,6 +28,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Address extends Model
 {
+
+    protected $fillable = [
+        'identification', 'receiver_name', 'zip_code', 'street', 'street_number', 'address_details',
+        'district', 'city', 'state', 'reference_point', 'phone', 'clinic_id'
+    ];
+
     protected static function boot()
     {
         parent::boot();

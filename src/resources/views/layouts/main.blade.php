@@ -1,10 +1,20 @@
 <!DOCTYPE html>
+@php
+    $file = 'images/avatar/' . Auth::user()->id . '.small.png';
+    $smallAvatar = file_exists(public_path($file))
+        ? asset($file)
+        : 'https://ui-avatars.com/api/?name=' . Auth::user()->name . '&size=50&background=0D8ABC&color=fff';
+@endphp
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Smart Aligner - Painel de Controle</title>
+    @if(request()->getHost() == config('domains.alignerDomain'))
+        <title>Smart Aligner - Painel de Controle</title>
+    @else
+        <title>Smart Solutions - Painel de Controle</title>
+    @endif
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/datepicker3.css') }}" rel="stylesheet">
@@ -44,7 +54,7 @@
 <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
     <div class="profile-sidebar">
         <div class="profile-userpic">
-            <img src="{{ asset('images/avatar/' . Auth::user()->id . '.small.png') }}" class="img-responsive" alt="">
+            <img src="{{ $smallAvatar }}" class="img-responsive" alt="">
         </div>
         <div class="profile-usertitle">
             <div class="profile-usertitle-name">{{ Auth::user()->name }}</div>

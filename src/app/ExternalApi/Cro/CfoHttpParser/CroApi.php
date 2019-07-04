@@ -31,7 +31,7 @@ class CroApi implements CroApiContract
      * @return CroResponseContract
      * @throws GuzzleException
      */
-    public function request(string $cro): CroResponseContract
+    public function request(string $cro): ?CroResponseContract
     {
         // splitting the CRO
         [$state, $category, $code] = explode('-', $cro);
@@ -49,8 +49,8 @@ class CroApi implements CroApiContract
         $categoryCode = $this->categoryMap[$category];
 
         // finally requesting the "API"
-        $response = $this->httpClient->request('POST', '', [
-            'form_params' => [
+        $response = $this->httpClient->request('GET', '', [
+            'query' => [
                 'cro' => $state,
                 'categoria' => $categoryCode,
                 'especialidade' => 'todas',
@@ -59,6 +59,7 @@ class CroApi implements CroApiContract
             ]
         ]);
         $html = $response->getBody()->getContents();
+
         if (!preg_match('/Totais encontrados: 1.*/is', $html, $matches)) {
             return null;
         }
@@ -68,6 +69,7 @@ class CroApi implements CroApiContract
         if (!preg_match('/<b>([A-Z ]+)<\/b>/', $html, $matches)) {
             return null;
         }
+
         $name = sanitizeString($matches[1]);
 
         // extracting the status

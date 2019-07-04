@@ -178,7 +178,20 @@ class DentistsController extends Controller
      */
     public function dispatchCroValidation(Dentist $dentist)
     {
-        CheckCroJob::dispatch($dentist, Auth::user());
+
+        $dentist->cro_status = "W";
+        $dentist->cro_status_message = "";
+        $dentist->cro_dispatched_at = now();
+        $dentist->save();
+
+        // this try/catch block is just to handle exceptions when the queue is disabled
+        try {
+            CheckCroJob::dispatch($dentist, Auth::user());
+        } catch (\Throwable $e) {
+            $dentist->cro_status = 'E';
+            $dentist->cro_status_message = $e->getMessage();
+            $dentist->save();
+        }
         return redirect(route('dentists.view', ['dentist' => $dentist->id]));
     }
 

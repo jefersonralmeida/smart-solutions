@@ -1,11 +1,18 @@
 @extends('layouts.main')
 
+@php
+    $file = 'images/avatar/' . Auth::user()->id . '.png';
+    $bigAvatar = file_exists(public_path($file))
+        ? asset($file)
+        : 'https://ui-avatars.com/api/?name=' . Auth::user()->name . '&size=140&background=0D8ABC&color=fff';
+@endphp
+
 @section('content')
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row" style="margin: 10px;">
                 <div class="col-lg-2">
-                    <img src="{{ asset('images/avatar/' . Auth::user()->id . '.png') }}" class="img-responsive"
+                    <img src="{{ $bigAvatar }}" class="img-responsive"
                          style="height: 140px; width: 140px;"/>
                     <a href="#">Alterar imagem</a>
                 </div>
@@ -193,12 +200,23 @@
                         <div class="row"><h3>Endereços</h3></div>
                         <div class="row">
                             @if (Auth::user()->clinic->addresses->count())
-                                {{--TODO - Mostrar os endereços--}}
+                                @foreach(Auth::user()->clinic->addresses as $address)
+                                    <div class="col-lg-12">
+                                        <hr/>
+                                    </div>
+                                    @include('addresses.cell', compact('address'))
+                                @endforeach
+                                <div class="col-lg-12">
+                                    <hr/>
+                                </div>
+                                <div class="col-lg-12">
+                                    <a href="{{ route('addresses.create') }}">Adicionar Novo Endereço</a>
+                                </div>
                             @else
                                 <div class="col-lg-12">
                                     <p>
                                         Sua clínica não tem nenhum endereço ativo.
-                                        <a href="#createClinicForm" data-toggle="collapse">Inclua</a> pelo menos um
+                                        <a href="{{ route('addresses.create') }}">Inclua</a> pelo menos um
                                         endereço
                                         para poder realizar pedidos.
                                     </p>

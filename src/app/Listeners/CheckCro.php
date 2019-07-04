@@ -24,7 +24,16 @@ class CheckCro
 
     public function onCreate(DentistCreated $event)
     {
-        CheckCroJob::dispatch($event->getDentist(), Auth::user());
+        $dentist = $event->getDentist();
+
+        // this try/catch block is just to handle exceptions when the queue is disabled
+        try {
+            CheckCroJob::dispatch($dentist, Auth::user());
+        } catch (\Throwable $e) {
+            $dentist->cro_status = 'E';
+            $dentist->cro_status_message = $e->getMessage();
+            $dentist->save();
+        }
     }
 
     public function onUpdate(DentistUpdated $event)
@@ -37,7 +46,14 @@ class CheckCro
             $new->cro_status_message = "";
             $new->cro_dispatched_at = now();
             $new->save();
-            CheckCroJob::dispatch($new, Auth::user());
+
+            try {
+                CheckCroJob::dispatch($new, Auth::user());
+            } catch(\Throwable $e) {
+                $new->cro_status = 'E';
+                $new->cro_status_message = $e->getMessage();
+                $new->save();
+            }
         }
     }
 
@@ -48,7 +64,15 @@ class CheckCro
         $dentist->cro_status_message = "";
         $dentist->cro_dispatched_at = now();
         $dentist->save();
-        CheckCroJob::dispatch($dentist, Auth::user());
+
+        // this try/catch block is just to handle exceptions when the queue is disabled
+        try {
+            CheckCroJob::dispatch($dentist, Auth::user());
+        } catch (\Throwable $e) {
+            $dentist->cro_status = 'E';
+            $dentist->cro_status_message = $e->getMessage();
+            $dentist->save();
+        }
     }
 
     public function subscribe(Dispatcher $dispatcher)

@@ -74,6 +74,7 @@ Route::get('/dentists/dispatch-cro-validation/{dentist}', 'DentistsController@di
 Route::get('/dentists/dispatch-orders-integration/{dentist}', 'DentistsController@dispatchOrdersIntegration')->name('dentists.dispatch-orders-integration');
 // end of dentists
 
+// Patients
 Route::get('/patients', 'PacientsController@index')->name('patients')->middleware('can:view-patients');
 Route::get('/patients/{patient}', 'PacientsController@view')
     ->where('patient', '\d+')
@@ -88,3 +89,8 @@ Route::bind('deletedPatient', function ($value) {
     return \App\Patient::onlyTrashed()->where('id', $value)->first() ?? abort(404);
 });
 Route::get('/patients/restore/{deletedPatient}', 'PacientsController@restore')->name('patients.restore')->middleware('can:view-patients');
+
+
+// addresses
+Route::get('/addresses/create', 'AddressesController@create')->name('addresses.create');
+Route::post('addresses', 'AddressesController@store')->name('addresses.store');
