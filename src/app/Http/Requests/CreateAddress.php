@@ -23,11 +23,11 @@ class CreateAddress extends FormRequest
     {
         $input = $this->all();
 
-        $input['identification'] = sanitizeString($input['identification']);
-        $input['receiver_name'] = sanitizeString($input['receiver_name']);
-        $input['street'] = sanitizeString($input['street']);
-        $input['district'] = sanitizeString($input['district']);
-        $input['city'] = sanitizeString($input['city']);
+        $input['identification'] = sanitizeString($input['identification'] ?? '');
+        $input['receiver_name'] = sanitizeString($input['receiver_name'] ?? '');
+        $input['street'] = sanitizeString($input['street'] ?? '');
+        $input['district'] = sanitizeString($input['district'] ?? '');
+        $input['city'] = sanitizeString($input['city'] ?? '');
         $input['clinic_id'] = Auth::user()->clinic_id;
 
         $this->replace($input);

@@ -54,7 +54,7 @@
                                 Rua:
                             </label>
                             <input class="form-control" id="street" name="street" placeholder="Digite a Rua"
-                                   value="{{ old('street') ?? $address->street ?? '' }}"/>
+                                   value="{{ old('street') ?? $address->street ?? '' }}" disabled/>
                         </div>
                     </div>
                     <div class="col-lg-2">
@@ -64,7 +64,7 @@
                             </label>
                             <input class="form-control" id="street_number" name="street_number"
                                    placeholder="Digite o número"
-                                   value="{{ old('street_number') ?? $address->street_number ?? '' }}"/>
+                                   value="{{ old('street_number') ?? $address->street_number ?? '' }}" disabled/>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -73,7 +73,7 @@
                                 Complemento:
                             </label>
                             <input class="form-control" id="address_details" name="address_details" placeholder="Digite o Complemento"
-                                   value="{{ old('address_details') ?? $address->address_details ?? '' }}"/>
+                                   value="{{ old('address_details') ?? $address->address_details ?? '' }}" disabled/>
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -82,7 +82,7 @@
                                 Bairro:
                             </label>
                             <input class="form-control" id="district" name="district" placeholder="Digite o Bairro"
-                                   value="{{ old('district') ?? $address->district ?? '' }}"/>
+                                   value="{{ old('district') ?? $address->district ?? '' }}" disabled/>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -91,7 +91,7 @@
                                 Cidade:
                             </label>
                             <input class="form-control" id="city" name="city" placeholder="Digite a cidade"
-                                   value="{{ old('city') ?? $address->city ?? '' }}"/>
+                                   value="{{ old('city') ?? $address->city ?? '' }}" disabled/>
                         </div>
                     </div>
                     <div class="col-lg-2">
@@ -99,7 +99,7 @@
                             <label for="state">
                                 Estado:
                             </label>
-                            <select class="form-control" style="height: 47px;" id="state" name="state">
+                            <select class="form-control" style="height: 47px;" id="state" name="state" disabled>
                                 <option value="">Selecione</option>
                                 @foreach (config('states') as $state)
                                     <option
@@ -145,5 +145,42 @@
 @section('scripts')
     <script language="javascript">
         $('#phone').mask('{{ config('masks.phone')}}');
+        $('#zip_code').on('change', function () {
+            let zip = $('#zip_code').val();
+            zip = zip.replace('-', '');
+            if (zip.search(/^[0-9]{8}$/) < 0) {
+                alert('CEP inválido');
+                return false;
+            }
+            let street = $('#street');
+            let street_number = $('#street_number');
+            let address_details = $('#address_details');
+            let district = $('#district');
+            let city = $('#city');
+            let state = $('#state');
+
+            const url = 'https://viacep.com.br/ws/' + zip + '/json/';
+            $.get(url, '', function (response) {
+                street.val(response.logradouro);
+                street.prop('disabled', false);
+                street_number.prop('disabled', false);
+                address_details.prop('disabled', false);
+
+                district.val(response.bairro);
+                district.prop('disabled', false);
+                city.val(response.localidade);
+                city.prop('disabled', false);
+                state.val(response.uf);
+                state.prop('disabled', false);
+
+                if (street.val()) {
+                    street_number.focus();
+                } else {
+                    street.focus();
+                }
+
+            });
+
+        });
     </script>
 @endsection
