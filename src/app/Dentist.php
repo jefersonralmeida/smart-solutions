@@ -101,8 +101,10 @@ class Dentist extends Model
     public function getCroAttribute()
     {
         $cro = $this->attributes['cro'];
-        preg_match('/^([A-Z]{2})(\d+)$/', $cro, $matches);
-        return "$matches[1]-$matches[2]";
+        if (preg_match('/^([A-Z]{2})(\d+)$/', $cro, $matches)) {
+            return "$matches[1]-$matches[2]";
+        }
+        return $cro;
 
     }
 
