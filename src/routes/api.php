@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use GuzzleHttp\Client as HttpClient;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,18 +22,28 @@ Route::group([], function() {
         ->middleware(['cache', 'cacheFor:1800']);
 });
 
-Route::get('/dentists', function(Request $request) {
+Route::get('/dentists', function(Request $request, HttpClient $httpClient) {
 
     $perPage = $request->query('perpage', 15);
 
-    $filters = [
-        'city' => sanitizeString($request->query('city', '')),
-        'state' => sanitizeString($request->query('state', '')),
-    ];
+    $zip = trim(str_replace(['-', ' '], '', $request->query('zip', '')));
 
-    $filters = array_filter($filters, function ($item) {
-        return $item;
-    });
+    if (!empty($zip) && preg_match('/^\d{8}$/', $zip)) {
+
+        $response = $httpClient->request('GET', 'https://viacep.com.br/ws/' . $zip . '/json/');
+
+        $response = json_decode($response->getBody()->getContents());
+
+        $filters = [
+            'city' => sanitizeString($response->localidade ?? ''),
+            'state' => sanitizeString($response->uf ?? ''),
+        ];
+    } else {
+        $filters = [
+            'city' => sanitizeString($request->query('city', '')),
+            'state' => sanitizeString($request->query('state', '')),
+        ];
+    }
 
     $builder = \App\Dentist::withoutGlobalScope(\App\Scopes\CurrentClinicScope::class);
 
