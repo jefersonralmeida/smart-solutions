@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d52f36fb5aeb6f67dbb7ac66a17c03b1",
+    "content-hash": "1f5a64b30bcb4733ff08f20409aa238b",
     "packages": [
         {
             "name": "barryvdh/laravel-httpcache",
@@ -175,6 +175,48 @@
                 "laravel"
             ],
             "time": "2018-12-10T12:53:41+00:00"
+        },
+        {
+            "name": "developersrede/erede-php",
+            "version": "4.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DevelopersRede/erede-php.git",
+                "reference": "69f505357c673fdb59cfa64c19c273e61983aecd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DevelopersRede/erede-php/zipball/69f505357c673fdb59cfa64c19c273e61983aecd",
+                "reference": "69f505357c673fdb59cfa64c19c273e61983aecd",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.6",
+                "psr/log": "^1.1"
+            },
+            "suggest": {
+                "monolog/monolog": "Allows more advanced logging of the application flow"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Rede\\": "src//Rede"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joao Batista Neto",
+                    "email": "neto.joaobatista@gmail.com"
+                }
+            ],
+            "description": "e.Rede integration SDK",
+            "time": "2019-04-10T20:44:54+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",

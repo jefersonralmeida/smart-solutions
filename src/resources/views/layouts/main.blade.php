@@ -26,6 +26,8 @@
     </script>
     <script src="{{ asset('js/app.js') }}" defer></script>
 
+    <link href="https://fonts.googleapis.com/css?family=Aldrich|Nova+Square|Parisienne&display=swap" rel="stylesheet">
+
     <!--Custom Font-->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i"
           rel="stylesheet">

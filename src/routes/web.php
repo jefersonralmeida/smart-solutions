@@ -38,6 +38,7 @@ Route::post('/orders/{order}/approve-project', 'OrdersController@approveProject'
 Route::post('/orders/{order}/reprove-project', 'OrdersController@reproveProject')->name('orders.reprove')->where('order', '^\d+$');
 Route::get('/orders/{order}/payments', 'OrdersController@payments')->name('orders.payments')->where('order', '^\d+$');
 Route::get('/orders/{order}/payment-return', 'OrdersController@paymentReturn')->name('orders.paymentReturn')->where('order', '^\d+$');
+Route::post('/orders/{order}/pay/rede', 'OrdersController@payWithRede')->name('orders.pay.rede')->where('order', '^\d+$');
 
 // Products
 Route::get('/orders/aligner', 'Products\OrderAlignerController@create')->name('order-aligner')->middleware('can:place-orders');

@@ -180,6 +180,7 @@ return [
         App\ExternalApi\Cro\CfoHttpParser\CfoHttpParserProvider::class,
         App\ExternalApi\Shipping\ShippingServiceProvider::class,
         \BC\Laravel\DropboxDriver\ServiceProvider::class,
+        App\ExternalApi\Rede\RedeProvider::class,
 
     ],
 

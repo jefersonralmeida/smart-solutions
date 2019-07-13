@@ -6,12 +6,15 @@ use App\Address;
 use App\Events\OrderConfirmed;
 use App\Events\OrderReproved;
 use App\ExternalApi\Itau\Itau;
+use App\ExternalApi\Rede\Rede;
 use App\ExternalApi\Shipping\ShippingManagerContract;
 use App\Http\Requests\ConfirmOrder;
+use App\Http\Requests\PayWithRede;
 use App\Jobs\CreateOrderJob;
 use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\MessageBag;
 
 class OrdersController extends Controller
 {
@@ -207,6 +210,14 @@ class OrdersController extends Controller
     public function payments(Order $order, Itau $itau)
     {
 
+        // verifica se houve erro no processamento da rede, e exibe
+        $errors = new MessageBag();
+        if (request()->query('payment_error')) {
+            $errors->add('payment_error', 'O pagamento falhou. Tente novamente mais tarde, e caso o problema 
+        permaneça, contacte a Smart Solutions diretamente.');
+        }
+
+        // gera a criptografia para o Itaú
         try {
             $encryptedData = $itau->getEncryptedData($order);
         } catch (\Throwable $e) {
@@ -221,7 +232,7 @@ class OrdersController extends Controller
             ],
             'order' => $order,
             'data' => $encryptedData,
-        ]);
+        ])->withErrors($errors);
     }
 
     /**
@@ -252,6 +263,34 @@ class OrdersController extends Controller
         return redirect(route('orders.thankYou', [
             'order' => $orderId
         ]));
+    }
+
+    public function payWithRede(PayWithRede $request, Order $order, Rede $rede)
+    {
+
+        $errorMessage = $rede->authorize(
+            $order->id,
+            $request->amount,
+            $request->card_holder,
+            str_replace(' ', '', $request->card_number),
+            $request->expiration,
+            $request->security_code
+        );
+        if (empty($errorMessage)) {
+            $order->payment_method = 'Cartão de Crédito';
+            $order->setWaitingPaymentConfirmation();
+            $order->save();
+            return redirect(route('orders.thankYou', [
+                'order' => $order->id
+            ]));
+        }
+
+        \Log::error("PAYMENT ERROR: $errorMessage");
+
+        return redirect(route('orders.payments', [
+            'order' => $order->id
+        ]) . '?payment_error=1');
+
     }
 
     /**
