@@ -81,23 +81,23 @@
                 <div class="col-md-12"><label>2.1 - Prótese</label></div>
 
                 <div class="col-md-12">
-                    <div class="checkbox">
+                    <div class="radio">
                         <label>
                             <input
-                                    type="checkbox"
-                                    name="data[protese][1]"
+                                    type="radio"
+                                    name="data[protese]"
                                     value="1"
-                                    {{ isset(old('data')['protese']['1']) ? 'checked' : '' }}
+                                    checked
                             >Cimentada
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="radio">
                         <label>
                             <input
-                                    type="checkbox"
-                                    name="data[protese][2]"
-                                    value="1"
-                                    {{ isset(old('data')['protese']['2']) ? 'checked' : '' }}
+                                    type="radio"
+                                    name="data[protese]"
+                                    value="2"
+                                    {{ old('data')['protese'] == 2 ? 'checked' : '' }}
                             >Parafusada
                         </label>
                     </div>
@@ -109,83 +109,83 @@
                 <div class="col-md-12"><label>2.2 - Sistema de implante a ser utilizado</label></div>
 
                 <div class="col-md-12">
-                    <div class="checkbox">
+                    <div class="radio">
                         <label>
                             <input
-                                    type="checkbox"
-                                    name="data[sistema_implante][opcoes][1]"
+                                    type="radio"
+                                    name="data[sistema_implante][opcoes]"
                                     value="1"
-                                    {{ isset(old('data')['sistema_implante']['opcoes']['1']) ? 'checked' : '' }}
+                                    checked
                             >SIN (HE ou CM)
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="radio">
                         <label>
                             <input
-                                    type="checkbox"
-                                    name="data[sistema_implante][opcoes][2]"
-                                    value="1"
-                                    {{ isset(old('data')['sistema_implante']['opcoes']['2']) ? 'checked' : '' }}
+                                    type="radio"
+                                    name="data[sistema_implante][opcoes]"
+                                    value="2"
+                                    {{ old('data')['sistema_implante']['opcoes'] == '2' ? 'checked' : '' }}
                             >NEODENT (Titamax, Alvim, Drive, Facility ou GM)
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="radio">
                         <label>
                             <input
-                                    type="checkbox"
-                                    name="data[sistema_implante][opcoes][3]"
-                                    value="1"
-                                    {{ isset(old('data')['sistema_implante']['opcoes']['3']) ? 'checked' : '' }}
+                                    type="radio"
+                                    name="data[sistema_implante][opcoes]"
+                                    value="3"
+                                    {{ old('data')['sistema_implante']['opcoes'] == '3' ? 'checked' : '' }}
                             >CONEXÃO (HE, HI ou OM)
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="radio">
                         <label>
                             <input
-                                    type="checkbox"
-                                    name="data[sistema_implante][opcoes][4]"
-                                    value="1"
-                                    {{ isset(old('data')['sistema_implante']['opcoes']['4']) ? 'checked' : '' }}
+                                    type="radio"
+                                    name="data[sistema_implante][opcoes]"
+                                    value="4"
+                                    {{ old('data')['sistema_implante']['opcoes'] == '4' ? 'checked' : '' }}
                             >STRAUMANN (BL, BLT ou Tissue)
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="radio">
                         <label>
                             <input
-                                    type="checkbox"
-                                    name="data[sistema_implante][opcoes][5]"
-                                    value="1"
-                                    {{ isset(old('data')['sistema_implante']['opcoes']['5']) ? 'checked' : '' }}
+                                    type="radio"
+                                    name="data[sistema_implante][opcoes]"
+                                    value="5"
+                                    {{ old('data')['sistema_implante']['opcoes'] == '5' ? 'checked' : '' }}
                             >DERIG (Singular ou Bioneck)
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="radio">
                         <label>
                             <input
-                                    type="checkbox"
-                                    name="data[sistema_implante][opcoes][6]"
-                                    value="1"
-                                    {{ isset(old('data')['sistema_implante']['opcoes']['6']) ? 'checked' : '' }}
+                                    type="radio"
+                                    name="data[sistema_implante][opcoes]"
+                                    value="6"
+                                    {{ old('data')['sistema_implante']['opcoes'] == '6' ? 'checked' : '' }}
                             >EMFILS
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="radio">
                         <label>
                             <input
-                                    type="checkbox"
-                                    name="data[sistema_implante][opcoes][7]"
-                                    value="1"
-                                    {{ isset(old('data')['sistema_implante']['opcoes']['7']) ? 'checked' : '' }}
+                                    type="radio"
+                                    name="data[sistema_implante][opcoes]"
+                                    value="7"
+                                    {{ old('data')['sistema_implante']['opcoes'] == '7' ? 'checked' : '' }}
                             >IMPLACIL
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="radio">
                         <label>
                             <input
-                                    type="checkbox"
-                                    name="data[sistema_implante][opcoes][8]"
-                                    value="1"
-                                    {{ isset(old('data')['sistema_implante']['opcoes']['8']) ? 'checked' : '' }}
+                                    type="radio"
+                                    name="data[sistema_implante][opcoes]"
+                                    value="8"
+                                    {{ old('data')['sistema_implante']['opcoes'] == '8' ? 'checked' : '' }}
                             >OUTRO
                         </label>
                     </div>
@@ -214,7 +214,7 @@
 
                 <div class="col-md-12">
                     <label>
-                        3 - OUTRAS INFORMAÇÕES IMPORTANTES PARA REALIZAÇÃO DO SETUP
+                        3 - OUTRAS INFORMAÇÕES IMPORTANTES PARA REALIZAÇÃO DO PLANEJAMENTO
                     </label>
                     <textarea class="form-control" rows="3" name="data[observacoes]"></textarea>
                 </div>
@@ -284,12 +284,36 @@
                         1. Modelos digitais: escaneamento intraoral (preferencialmente) ou modelo de gesso obtidos por
                         modelagem com silicone de adição digitalizados.
                     </label>
-                    <input type="file" name="file_escaneamento_intraoral">
+                    <br/>
+                    <label for="file_escaneamento_intraoral_mandibula">Mandíbula</label>
+                    <input
+                            type="file"
+                            id="file_escaneamento_intraoral_mandibula"
+                            name="file_escaneamento_intraoral_mandibula"
+                            required
+                    />
+                    <br/>
+                    <label for="file_escaneamento_intraoral_maxila">Maxila</label>
+                    <input
+                            type="file"
+                            id="file_escaneamento_intraoral_maxila"
+                            name="file_escaneamento_intraoral_maxila"
+                            required
+                    />
+                    <br/>
+
+                    <label for="file_escaneamento_intraoral_registro_mordida">Registro de Mordida</label>
+                    <input
+                            type="file"
+                            id="file_escaneamento_intraoral_registro_mordida"
+                            name="file_escaneamento_intraoral_registro_mordida"
+                    />
                     <br/><br/>
                     <label>
                         2. Tomografia computadorizada Cone Beam com a boca entreaberta.
                     </label>
-                    <input type="file" name="file_tomografia_computadorizada_cone_bean">
+                    <input type="file" name="file_tomografia_computadorizada_cone_bean_1" style="margin: 5px 0">
+                    <a href="#" id="adicionar_arquivo_complementar"  style="margin: 5px 0">Adicionar Arquivo</a>
                     <br/><br/>
                     <div class="col-md-12">
                         <hr/>
@@ -313,6 +337,16 @@
             } else {
                 $('input[type=radio][name="data[destino_modelo_fisico]"]').prop('disabled', true);
             }
+        });
+
+        $('#adicionar_arquivo_complementar').on('click', function(e) {
+            e.preventDefault();
+            let last = $(this).prev('input[type=file]');
+            let lastName = last.prop('name');
+            let newName = lastName.replace(/\d+$/, (match) => {
+                return parseInt(match) + 1;
+            });
+            last.after(last.clone().prop('name', newName));
         });
 
     </script>

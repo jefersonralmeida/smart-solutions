@@ -50,6 +50,7 @@ class CheckCroJob implements ShouldQueue
      */
     public function handle(CroApiContract $api)
     {
+
         $apiResponse = $api->request($this->dentist->cro);
 
         if (!$apiResponse) {

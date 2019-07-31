@@ -5,7 +5,9 @@
 
 @section('content')
 
-    @include('orders.index.searchBox')
+    @include('layouts.flash-message')
+
+    @include('orders.index.searchBox', compact($patients, $dentists))
 
     <div class="row">
         @foreach($orders as $order)

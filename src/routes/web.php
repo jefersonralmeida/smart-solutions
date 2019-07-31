@@ -19,11 +19,15 @@ Route::get('/home', 'HomeController@index')->name('home')->middleware('can:view-
 
 Route::get('/notifications/{notification}', 'NotificationsController@read')->name('notifications.read');
 
-Route::get('/profile/{form?}', 'ProfileController@index')->name('profile');
 Route::put('/profile', 'ProfileController@update')->name('profile.update');
+Route::put('/profile/change-password', 'ProfileController@changePassword')->name('profile.change-password');
+Route::post('/profile/avatar/change', 'ProfileController@changeAvatar')->name('profile.change-avatar');
+Route::get('/profile/avatar/{size?}', 'ProfileController@avatar')->name('profile.avatar');
+Route::get('/profile/{form?}', 'ProfileController@index')->name('profile');
 
-Route::post('/clinic', 'ClinicController@store')->name('clinic.store');
-Route::put('/clinic', 'ClinicController@update')->name('clinic.update');
+// Clinics
+Route::post('/clinics', 'ClinicController@store')->name('clinic.store');
+Route::put('/clinics/{clinic}', 'ClinicController@update')->name('clinic.update');
 
 // Orders
 Route::get('/orders', 'OrdersController@index')->name('orders')->middleware('can:view-orders');
@@ -95,3 +99,6 @@ Route::get('/patients/restore/{deletedPatient}', 'PacientsController@restore')->
 // addresses
 Route::get('/addresses/create', 'AddressesController@create')->name('addresses.create');
 Route::post('addresses', 'AddressesController@store')->name('addresses.store');
+Route::get('addresses/{address}/edit', 'AddressesController@edit')->name('addresses.edit');
+Route::put('addresses/{address}', 'AddressesController@update')->name('addresses.update');
+

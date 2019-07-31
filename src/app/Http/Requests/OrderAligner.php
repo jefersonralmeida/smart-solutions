@@ -101,6 +101,7 @@ class OrderAligner extends FormRequest
         return [
             'patient_id' => ['required', Rule::in(Patient::all()->pluck('id')->toArray())],
             'dentist_id' => ['required', Rule::in(Dentist::approved()->get()->pluck('id')->toArray())],
+            'data.observacoes_clinicas_objetivos' => 'required',
             'data.tratamento_arcada_superior' => 'required',
             'data.tratamento_arcada_inferior' => 'required',
             'data.diastemas.correcao_apinhamento.superior.extracao_transversal' => 'required',

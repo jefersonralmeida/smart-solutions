@@ -187,6 +187,9 @@ class Dentist extends Model
 
     public function scopeApproved(Builder $query)
     {
-        return $query->where('cro_status', 'A');
+        if (config('cro.checkEnabled')) {
+            return $query->where('cro_status', 'A');
+        }
+        return $query;
     }
 }

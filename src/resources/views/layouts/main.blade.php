@@ -1,10 +1,4 @@
 <!DOCTYPE html>
-@php
-    $file = 'images/avatar/' . Auth::user()->id . '.small.png';
-    $smallAvatar = file_exists(public_path($file))
-        ? asset($file)
-        : 'https://ui-avatars.com/api/?name=' . Auth::user()->name . '&size=50&background=0D8ABC&color=fff';
-@endphp
 <html>
 <head>
     <meta charset="utf-8">
@@ -56,7 +50,7 @@
 <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
     <div class="profile-sidebar">
         <div class="profile-userpic">
-            <img src="{{ $smallAvatar }}" class="img-responsive" alt="">
+            <img src="{{ route('profile.avatar', ['size' => 'small']) }}" class="img-responsive" alt="">
         </div>
         <div class="profile-usertitle">
             <div class="profile-usertitle-name">{{ Auth::user()->name }}</div>

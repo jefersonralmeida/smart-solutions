@@ -1,20 +1,14 @@
 @extends('layouts.main')
 
-@php
-    $file = 'images/avatar/' . Auth::user()->id . '.png';
-    $bigAvatar = file_exists(public_path($file))
-        ? asset($file)
-        : 'https://ui-avatars.com/api/?name=' . Auth::user()->name . '&size=140&background=0D8ABC&color=fff';
-@endphp
-
 @section('content')
     <div class="panel panel-default">
         <div class="panel-body">
+            @include('layouts/flash-message')
             <div class="row" style="margin: 10px;">
                 <div class="col-lg-2">
-                    <img src="{{ $bigAvatar }}" class="img-responsive"
+                    <img src="{{ route('profile.avatar') }}" class="img-responsive"
                          style="height: 140px; width: 140px;"/>
-                    <a href="#">Alterar imagem</a>
+                    <a href="#changeAvatarForm" data-toggle="collapse">Alterar imagem</a>
                 </div>
                 <div class="col-lg-10">
                     <div class="row"><h3>Dados Acesso</h3></div>
@@ -30,14 +24,11 @@
                         @if ($form != 'update-profile' || !$errors->any())
                             <a href="#updateProfileForm" data-toggle="collapse">Alterar dados</a> |
                         @endif
-                        <a href="#">Alterar senha</a>
+                        <a href="#changePasswordForm" data-toggle="collapse">Alterar senha</a>
                     </div>
                     <hr/>
                     <div class="row">
                         <div class="col-lg-12">
-                            @if ($form == 'update-profile' && session('success'))
-                                <div class="alert bg-success" role="alert">O dentista foi alterado com sucesso.</div>
-                            @endif
                             <div id="updateProfileForm"
                                  class="{{ ($form == 'update-profile') && old() ? '' : 'collapse' }}">
                                 @if ($form == 'update-profile' && $errors->any())
@@ -75,6 +66,72 @@
                                     </div>
                                 </form>
                             </div>
+                            <div id="changePasswordForm" class="collapse">
+                                <form method="POST" action="{{ route('profile.change-password') }}">
+                                    @csrf
+                                    @method('PUT')
+
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="old_password">Senha Atual:</label>
+                                            <input id="old_password" type="password" class="form-control" name="old_password"
+                                                   value=""/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="new_password">Nova Senha:</label>
+                                            <input id="new_password" type="password" class="form-control" name="new_password"
+                                                   value=""/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="repeat_password">Nova Senha:</label>
+                                            <input id="repeat_password" type="password" class="form-control" name="repeat_password"
+                                                   value=""/>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-6">
+
+                                    </div>
+                                    <div class="col-lg-12">&nbsp;</div>
+                                    <div class="col-lg-12">
+                                        <button type="submit" class="btn btn-primary">Alterar a Senha</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="changeAvatarForm"
+                                 class="{{ ($form == 'change-avatar') && old() ? '' : 'collapse' }}">
+                                @if ($form == 'change-avatar' && $errors->any())
+                                    <div class="alert bg-warning" role="alert">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                                <form method="POST" action="{{ route('profile.change-avatar') }}" enctype="multipart/form-data">
+                                    @csrf
+
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="avatar">Imagem:</label>
+                                            <input id="avatar" type="file" class="form-control" name="avatar"
+                                                   value=""/>
+                                            <small id="avatarHelp" class="form-text text-muted">Apenas arquivos PNG ou JPG</small>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-6">
+
+                                    </div>
+                                    <div class="col-lg-12">&nbsp;</div>
+                                    <div class="col-lg-12">
+                                        <button type="submit" class="btn btn-primary">Alterar a imagem</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
 
@@ -108,9 +165,11 @@
                             </div>
                             @if ($form != 'update-clinic' || !$errors->any())
                                 <a href="#updateClinicForm" data-toggle="collapse">Alterar dados</a>
+                            @endif
                                 <div id="updateClinicForm"
-                                     class="{{ ($form == 'create-clinic') && old() ? '' : 'collapse' }}">
+                                     class="{{ ($form == 'update-clinic') && old() ? '' : 'collapse' }}">
                                     <hr/>
+                                    <div class="col-lg-12" style="margin: 10px">
                                     @if ($form == 'update-clinic' && $errors->any())
                                         <div class="alert bg-warning" role="alert">
                                             <ul>
@@ -120,7 +179,8 @@
                                             </ul>
                                         </div>
                                     @endif
-                                    <form method="POST" action="{{ route('clinic.update') }}">
+                                    </div>
+                                    <form method="POST" action="{{ route('clinic.update', [Auth::user()->clinic->id]) }}">
                                         @csrf
                                         @method('PUT')
 
@@ -144,7 +204,6 @@
                                         </div>
                                     </form>
                                 </div>
-                            @endif
                         @else
                             <div class="col-lg-12">
                                 <p>

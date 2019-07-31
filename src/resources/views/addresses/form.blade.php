@@ -26,7 +26,7 @@
                             <label for="identification">
                                 Identificação (um nome para identificar o endereço):
                             </label>
-                            <input class="form-control" id="identification" name="identification" placeholder="Identificação"
+                            <input class="form-control" id="identification" name="identification" placeholder="Casa, consultório, clínica"
                                    value="{{ old('identification') ?? $address->identification ?? '' }}"/>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
                                 Rua:
                             </label>
                             <input class="form-control" id="street" name="street" placeholder="Digite a Rua"
-                                   value="{{ old('street') ?? $address->street ?? '' }}" disabled/>
+                                   value="{{ old('street') ?? $address->street ?? '' }}" {{ old('zip_code') || !empty($address->zip_code) ? '' : 'disabled' }}/>
                         </div>
                     </div>
                     <div class="col-lg-2">
@@ -64,7 +64,7 @@
                             </label>
                             <input class="form-control" id="street_number" name="street_number"
                                    placeholder="Digite o número"
-                                   value="{{ old('street_number') ?? $address->street_number ?? '' }}" disabled/>
+                                   value="{{ old('street_number') ?? $address->street_number ?? '' }}" {{ old('zip_code') || !empty($address->zip_code) ? '' : 'disabled' }}/>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -73,7 +73,7 @@
                                 Complemento:
                             </label>
                             <input class="form-control" id="address_details" name="address_details" placeholder="Digite o Complemento"
-                                   value="{{ old('address_details') ?? $address->address_details ?? '' }}" disabled/>
+                                   value="{{ old('address_details') ?? $address->address_details ?? '' }}" {{ old('zip_code') || !empty($address->zip_code) ? '' : 'street' }}/>
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -82,7 +82,7 @@
                                 Bairro:
                             </label>
                             <input class="form-control" id="district" name="district" placeholder="Digite o Bairro"
-                                   value="{{ old('district') ?? $address->district ?? '' }}" disabled/>
+                                   value="{{ old('district') ?? $address->district ?? '' }}" {{ old('zip_code') || !empty($address->zip_code) ? '' : 'disabled' }}/>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -91,7 +91,7 @@
                                 Cidade:
                             </label>
                             <input class="form-control" id="city" name="city" placeholder="Digite a cidade"
-                                   value="{{ old('city') ?? $address->city ?? '' }}" disabled/>
+                                   value="{{ old('city') ?? $address->city ?? '' }}" {{ old('zip_code') || !empty($address->zip_code) ? '' : 'disabled' }}/>
                         </div>
                     </div>
                     <div class="col-lg-2">
@@ -99,7 +99,7 @@
                             <label for="state">
                                 Estado:
                             </label>
-                            <select class="form-control" style="height: 47px;" id="state" name="state" disabled>
+                            <select class="form-control" style="height: 47px;" id="state" name="state" {{ old('zip_code') || !empty($address->zip_code) ? '' : 'disabled' }}>
                                 <option value="">Selecione</option>
                                 @foreach (config('states') as $state)
                                     <option
@@ -128,7 +128,7 @@
                                 Telefone:
                             </label>
                             <input class="form-control" id="phone" name="phone"
-                                   placeholder="Digite o telefone {{ config('masks.cellphone') }}"
+                                   placeholder="Digite o telefone {{ config('masks.phone') }}"
                                    value="{{ old('phone') ?? $address->phone ?? '' }}"/>
                         </div>
                     </div>
@@ -144,6 +144,7 @@
 
 @section('scripts')
     <script language="javascript">
+        $('#zip_code').mask('99999-999');
         $('#phone').mask('{{ config('masks.phone')}}');
         $('#zip_code').on('change', function () {
             let zip = $('#zip_code').val();

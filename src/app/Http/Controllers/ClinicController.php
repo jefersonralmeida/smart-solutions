@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Clinic;
 use App\Http\Requests\CreateClinic;
+use App\Http\Requests\UpdateClinic;
 use Auth;
 use DB;
 
@@ -44,5 +45,13 @@ class ClinicController extends Controller
         DB::commit();
 
         return redirect('profile/create-clinic')->with('success', true);
+    }
+
+    public function update(Clinic $clinic, UpdateClinic $request)
+    {
+        $clinic->fill($request->all());
+        $clinic->save();
+
+        return redirect('profile')->with('success', 'Clínica Alterada com sucesso');
     }
 }

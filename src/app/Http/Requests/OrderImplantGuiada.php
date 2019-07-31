@@ -32,14 +32,6 @@ class OrderImplantGuiada extends FormRequest
 
         $input['data']['produto'] = 3;
 
-        if (isset($input['data']['protese'])) {
-            $input['data']['protese'] = array_keys($input['data']['protese']);
-        }
-
-        if (isset($input['data']['sistema_implante'])) {
-            $input['data']['sistema_implante'] = array_keys($input['data']['sistema_implante']);
-        }
-
         $this->replace($input);
     }
 

@@ -37,6 +37,7 @@
                     'errors' => $errors
                 ])
 
+                    <div id="collapsible-form">
                 <div class="col-md-12">
                     <div class="radio">
                         <label for="tratamento_pre_protetico">
@@ -169,6 +170,9 @@
                     <textarea class="form-control" rows="3" name="data[observacoes_clinicas_objetivos]"
                               placeholder="Objetivo principal e planejamento geral do caso clínico (por favor, forneça o máximo de informação sobre o que se deseja com o tratamento)."
                     >{{ old('data')['observacoes_clinicas_objetivos'] ?? '' }}</textarea>
+                    <small class="form-text text-danger">
+                        {{ $errors->first('data.observacoes_clinicas_objetivos') }}
+                    </small>
                 </div>
                 <div class="col-md-12">
                     <hr/>
@@ -1835,9 +1839,12 @@
                     <input type="file" name="file_foto_intrabucal_lado_esquerdo">
                     <br/><br/>
                     <label>
-                        - Arquivo Complementar<br/>Radiografia panorâmica e cefalométrica de perfil ou Tomografia
+                        9. Arquivos Complementares<br/>
+                        Radiografia panorâmica e cefalométrica de perfil ou Tomografia
                         computadorizada Cone Beam
                     </label>
+                    <input type="file" name="file_arquivo_complementar_1" style="margin: 5px 0">
+                    <a href="#" id="adicionar_arquivo_complementar"  style="margin: 5px 0">Adicionar Arquivo</a>
                     <br/><br/>
                     <label>
                         Paciente Escaneado pelo Scan Service?
@@ -1862,12 +1869,35 @@
                             />Não
                         </label>
                     </div>
+                    <br/>
+                    <label for="file_scan_service_mandibula">Mandíbula</label>
                     <input
                             type="file"
-                            name="file_scan_service"
-                            {{ (old('data')['scan_service'] ?? 1) == 0 ? 'disabled' : '' }}
+                            id="file_scan_service_mandibula"
+                            name="file_scan_service_mandibula"
+                            {{ (old('data')['scan_service'] ?? 1) == 1 ? 'disabled' : '' }}
+                            required
+                    />
+                    <br/>
+                    <label for="file_scan_service_maxila">Maxila</label>
+                    <input
+                            type="file"
+                            id="file_scan_service_maxila"
+                            name="file_scan_service_maxila"
+                            {{ (old('data')['scan_service'] ?? 1) == 1 ? 'disabled' : '' }}
+                            required
+                    />
+                    <br/>
+
+                    <label for="file_scan_service_registro_mordida">Registro de Mordida</label>
+                    <input
+                            type="file"
+                            id="file_scan_service_registro_mordida"
+                            name="file_scan_service_registro_mordida"
+                            {{ (old('data')['scan_service'] ?? 1) == 1 ? 'disabled' : '' }}
                     />
                 </div>
+                    </div>
                 <div class="col-md-12">
                     <hr/>
                 </div>
@@ -1883,6 +1913,20 @@
 
 @section('scripts')
     <script language="javascript">
+
+        //hide the entire form before dentist and patient are selected
+        const hideForm = function() {
+            if ($('#patient').val() != '' && $('#dentist').val() != '') {
+                $('#collapsible-form').show();
+            } else {
+                $('#collapsible-form').hide();
+            }
+        };
+        hideForm();
+        $('#patient').on('change', hideForm);
+        $('#dentist').on('change', hideForm);
+
+
         const restricaoMovimentoDentarioRadio = $('#restricao_movimento_dentario_radio input[type=radio][name=restricao_movimento_dentario]');
         const restricaoMovimentoDentarioBox = $('#restricao_movimento_dentario_box');
         restricaoMovimentoDentarioRadio.change(function () {
@@ -1969,9 +2013,13 @@
 
         $('input[type=radio][name="data[scan_service]"]').on('change', function () {
             if ($(this).val() == 1) {
-                $('input[type=file][name="file_scan_service"]').prop('disabled', false);
+                $('input[type=file][name="file_scan_service_mandibula"]').prop('disabled', true);
+                $('input[type=file][name="file_scan_service_maxila"]').prop('disabled', true);
+                $('input[type=file][name="file_scan_service_registro_mordida"]').prop('disabled', true);
             } else {
-                $('input[type=file][name="file_scan_service"]').prop('disabled', true);
+                $('input[type=file][name="file_scan_service_mandibula"]').prop('disabled', false);
+                $('input[type=file][name="file_scan_service_maxila"]').prop('disabled', false);
+                $('input[type=file][name="file_scan_service_registro_mordida"]').prop('disabled', false);
             }
         });
 
@@ -1991,6 +2039,16 @@
                 $('select[name="data[linha_media][superior]"]').prop('disabled', true);
                 $('select[name="data[linha_media][inferior]"]').prop('disabled', true);
             }
+        });
+
+        $('#adicionar_arquivo_complementar').on('click', function(e) {
+            e.preventDefault();
+            let last = $(this).prev('input[type=file]');
+            let lastName = last.prop('name');
+            let newName = lastName.replace(/\d+$/, (match) => {
+                return parseInt(match) + 1;
+            });
+            last.after(last.clone().prop('name', newName));
         });
 
     </script>

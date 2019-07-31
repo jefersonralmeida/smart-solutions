@@ -18,10 +18,13 @@
     <p>
         Ponto de Referência: <b>{{ $address->reference_point }}</b>
     </p>
+    <p>
+        <a href="{{ route('addresses.edit', ['address' => $address->id]) }}">Alterar Endereço</a>
+    </p>
 </div>
 <div class="col-lg-6">
     <p>
-        CEP:&nbsp;&nbsp;<b class="zip-code">{{ $address->zip_code }}</b>
+        CEP:&nbsp;&nbsp;<b class="zip-code">{{ addMask($address->zip_code, '99.999-99') }}</b>
     </p>
     <p>
         Cidade:&nbsp;&nbsp;<b>{{ $address->city }} - {{ $address->state }}</b>

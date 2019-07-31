@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'checkEnabled' => env('CRO_CHECK_ENABLED', false),
     'categoryMap' => [
         'CD' => 1,
         'EPAO' => 2,

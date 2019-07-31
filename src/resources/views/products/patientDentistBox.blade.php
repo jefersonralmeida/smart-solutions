@@ -11,7 +11,7 @@
 
             @foreach ($patients as $patient)
                 <option
-                        {{ (old('patient')) == $patient->id ? 'selected' : '' }}
+                        {{ (old('patient_id')) == $patient->id ? 'selected' : '' }}
                         value="{{ $patient->id }}"
                 >
                     {{ "{$patient->name}  | {$patient->email}" }}
@@ -31,7 +31,7 @@
             <option value="">SELECIONE</option>
             @foreach ($dentists as $dentist)
                 <option
-                        {{ (old('dentist')) == $dentist->id ? 'selected' : '' }}
+                        {{ (old('dentist_id')) == $dentist->id ? 'selected' : '' }}
                         value="{{ $dentist->id }}"
                 >
                     {{ "{$dentist->name}  | {$dentist->cro}" }}

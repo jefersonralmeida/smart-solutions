@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Address;
+use App\Dentist;
 use App\Events\OrderConfirmed;
 use App\Events\OrderReproved;
 use App\ExternalApi\Itau\Itau;
@@ -12,6 +13,8 @@ use App\Http\Requests\ConfirmOrder;
 use App\Http\Requests\PayWithRede;
 use App\Jobs\CreateOrderJob;
 use App\Order;
+use App\Patient;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\MessageBag;
@@ -33,14 +36,49 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with('dentist', 'patient')->get();
+
+        $query = Order::with('dentist', 'patient');
+
+        if ($fromDate = $request->query('from_date')) {
+            $query->whereDate('created_at', '>=', Carbon::createFromFormat('Y-m-d', $fromDate));
+        }
+
+        if ($toDate = $request->query('to_date')) {
+            $query->whereDate('created_at', '<=', Carbon::createFromFormat('Y-m-d', $toDate));
+        }
+
+        if ($status = $request->query('status')) {
+            $query->where('status', $status);
+        }
+
+        if ($dentist = $request->query('dentist')) {
+            $query->where('dentist_id', $dentist);
+        }
+
+        if ($patient = $request->query('patient')) {
+            $query->where('patient_id', $patient);
+        }
+
+        $dentists = Dentist::get();
+        $patients = Patient::get();
+
+        $orders = $query->get();
         return view('orders.index', [
             'breadcrumbs' => [
                 ['label' => 'Pedidos']
             ],
-            'orders' => $orders
+            'orders' => $orders,
+            'filters' => [
+                'from_date' => $fromDate,
+                'to_date' => $toDate,
+                'status' => $status,
+                'dentist' => $dentist,
+                'patient' => $patient,
+            ],
+            'patients' => $patients,
+            'dentists' => $dentists,
         ]);
     }
 
