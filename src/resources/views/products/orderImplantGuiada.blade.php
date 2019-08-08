@@ -313,17 +313,17 @@
                         2. Tomografia computadorizada Cone Beam com a boca entreaberta.
                     </label>
                     <input type="file" name="file_tomografia_computadorizada_cone_bean_1" style="margin: 5px 0">
-                    <a href="#" id="adicionar_arquivo_complementar"  style="margin: 5px 0">Adicionar Arquivo</a>
+                    <a href="#" id="adicionar_arquivo_complementar" style="margin: 5px 0">Adicionar Arquivo</a>
                     <br/><br/>
-                    <div class="col-md-12">
-                        <hr/>
-                    </div>
-                    <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary">Enviar solicitação</button>
-                        <button type="reset" class="btn btn-default">Resetar formulário</button>
-                    </div>
-
-                </div><!-- /.panel-->
+                </div>
+                <div class="col-md-12">
+                    <hr/>
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary">Enviar solicitação</button>
+                    <button type="reset" class="btn btn-default">Resetar formulário</button>
+                </div>
+            </div><!-- /.panel-->
         </form>
     </div>
 @endsection
@@ -339,7 +339,7 @@
             }
         });
 
-        $('#adicionar_arquivo_complementar').on('click', function(e) {
+        $('#adicionar_arquivo_complementar').on('click', function (e) {
             e.preventDefault();
             let last = $(this).prev('input[type=file]');
             let lastName = last.prop('name');

@@ -50,8 +50,7 @@
                                     name="data[tipo_caso]"
                                     value="1"
                                     checked
-                            >Somente
-                            Impressão
+                            >Somente Impressão
                         </label>
                     </div>
                 </div>
@@ -86,11 +85,12 @@
                     <hr/>
                 </div>
 
-                <div class="col-md-12"><label>2 - TIPO DE TRABALHO<br/>
+                <div class="col-md-12 tipo-trabalho"><label>2 - TIPO DE TRABALHO<br/>
                         ATENÇÃO: OBRIGATÓRIO SELECIONAR AO MENOS UM TIPO DE CASO ABAIXO</label></div>
 
-                <div class="col-md-12">
-                    <div class="checkbox">
+                <div class="col-md-12 tipo-trabalho">
+                    <div>&nbsp;</div>
+                    <div class="checkbox smart-plan-orthognathics" style="display: none">
                         <label>
                             <input
                                     type="checkbox"
@@ -99,7 +99,7 @@
                             >Pré-montagem de crânio
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="checkbox smart-plan-orthognathics somente-impressao" style="display: none">
                         <label>
                             <input
                                     type="checkbox"
@@ -108,16 +108,16 @@
                             >Smart Splint intermediário
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="checkbox smart-plan-orthognathics somente-impressao" style="display: none">
                         <label>
                             <input
                                     type="checkbox"
                                     name="data[tipo_trabalho][3]"
                                     value="1"
-                            >Smart Splin final
+                            >Smart Splint final
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="checkbox smart-plan-orthognathics" style="display: none">
                         <label>
                             <input
                                     type="checkbox"
@@ -126,7 +126,7 @@
                             >Guia de Palato - fina
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="checkbox smart-plan-orthognathics" style="display: none">
                         <label>
                             <input
                                     type="checkbox"
@@ -135,7 +135,7 @@
                             >Guia de Palato - inteira
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="checkbox smart-plan-orthognathics" style="display: none">
                         <label>
                             <input
                                     type="checkbox"
@@ -144,7 +144,7 @@
                             >Guia de corte e posicionamento de mento
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="checkbox smart-plan-orthognathics" style="display: none">
                         <label>
                             <input
                                     type="checkbox"
@@ -153,7 +153,7 @@
                             >Guia Osteoromia de Wings
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="checkbox smart-plan-orthognathics" style="display: none">
                         <label>
                             <input
                                     type="checkbox"
@@ -162,7 +162,7 @@
                             >Guia de corte - ATM
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="checkbox smart-plan-orthognathics" style="display: none">
                         <label>
                             <input
                                     type="checkbox"
@@ -171,7 +171,7 @@
                             >Guia L invertido - Avulso
                         </label>
                     </div>
-                    <div class="checkbox">
+                    <div class="checkbox smart-plan-orthognathics" style="display: none">
                         <label>
                             <input
                                     type="checkbox"
@@ -190,7 +190,7 @@
 
                 <div class="col-md-12">
                     <label for="textarea_outras_informacoes">
-                        3 - OUTRAS INFORMAÇÕES IMPORTANTES PARA REALIZAÇÃO DO SETUP
+                        3 - OUTRAS INFORMAÇÕES IMPORTANTES PARA REALIZAÇÃO DO PLANEJAMENTO
                     </label>
                     <textarea
                             class="form-control"
@@ -279,12 +279,14 @@
                     <label>
                         2. Perfil direito e esquerdo com o lábio relaxado
                     </label>
-                    <input type="file" name="file_perfil_direito_esquerdo_labio_relaxado">
+                    <input type="file" name="file_perfil_direito_esquerdo_labio_relaxado_1">
+                    <a href="#" class="adicionar_arquivo_complementar" style="margin: 5px 0">Adicionar Arquivo</a>
                     <br/><br/>
                     <label>
                         3. Perfil direito e esquerdo sorrindo
                     </label>
-                    <input type="file" name="file_perfil_direito_esquer_sorrindo">
+                    <input type="file" name="file_perfil_direito_esquer_sorrindo_1">
+                    <a href="#" class="adicionar_arquivo_complementar" style="margin: 5px 0">Adicionar Arquivo</a>
                     <br/><br/>
                     <label>
                         4. Frontal com a boca relaxada
@@ -318,7 +320,63 @@
                         • Digitalização dos modelos em oclusão inicial e final<br/>
                         OBS: recomenda-se que os modelos sejam enviados pelo Cirurgião dentista<br/>
                     </label>
-                    <input type="file" name="file_modelos_digitalizados">
+                    <br/><br/>
+                    <label>
+                        9.1 Oclusão Inicial
+                    </label>
+                    <br/>
+                    <label for="file_modelos_digitalizados_oclusao_inicial_mandibula">Mandíbula</label>
+                    <input
+                            type="file"
+                            id="file_modelos_digitalizados_oclusao_inicial_mandibula"
+                            name="file_modelos_digitalizados_oclusao_inicial_mandibula"
+                            required
+                    />
+                    <br/>
+                    <label for="file_modelos_digitalizados_oclusao_inicial_maxila">Maxila</label>
+                    <input
+                            type="file"
+                            id="file_modelos_digitalizados_oclusao_inicial_maxila"
+                            name="file_modelos_digitalizados_oclusao_inicial_maxila"
+                            required
+                    />
+                    <br/>
+
+                    <label for="file_modelos_digitalizados_oclusao_inicial_registro_mordida">Registro de Mordida</label>
+                    <input
+                            type="file"
+                            id="file_modelos_digitalizados_oclusao_inicial_registro_mordida"
+                            name="file_modelos_digitalizados_oclusao_inicial_registro_mordida"
+                    />
+                    <br/><br/>
+                    <label>
+                        9.2 Oclusão Final
+                    </label>
+                    <br/>
+                    <label for="file_modelos_digitalizados_oclusao_final_mandibula">Mandíbula</label>
+                    <input
+                            type="file"
+                            id="file_modelos_digitalizados_oclusao_final_mandibula"
+                            name="file_modelos_digitalizados_oclusao_final_mandibula"
+                            required
+                    />
+                    <br/>
+                    <label for="file_modelos_digitalizados_oclusao_final_maxila">Maxila</label>
+                    <input
+                            type="file"
+                            id="file_modelos_digitalizados_oclusao_final_maxila"
+                            name="file_modelos_digitalizados_oclusao_final_maxila"
+                            required
+                    />
+                    <br/>
+
+                    <label for="file_modelos_digitalizados_oclusao_final_registro_mordida">Registro de Mordida</label>
+                    <input
+                            type="file"
+                            id="file_modelos_digitalizados_oclusao_final_registro_mordida"
+                            name="file_modelos_digitalizados_oclusao_final_registro_mordida"
+                    />
+
                 </div>
                 <div class="col-md-12">
                     <hr/>
@@ -346,6 +404,39 @@
             } else {
                 $('input[type=radio][name="data[destino_modelo_fisico]"]').prop('disabled', true);
             }
+        });
+
+        const selectCase = function() {
+            const caso = $('input[name="data[tipo_caso]"]:checked', 'form').val();
+            switch (caso) {
+                case '1':
+                    $('.tipo-trabalho').hide();
+                    $('.tipo-trabalho .checkbox').hide();
+                    $('.tipo-trabalho .somente-impressao').show();
+                    $('.tipo-trabalho').show();
+                    break;
+                case '2':
+                    $('.tipo-trabalho').hide();
+                    $('.tipo-trabalho .checkbox').hide();
+                    $('.tipo-trabalho .smart-plan-orthognathics').show();
+                    $('.tipo-trabalho').show();
+                    break;
+                case '3':
+                    $('.tipo-trabalho').hide();
+                    break;
+            }
+        };
+        selectCase();
+        $('form input[name="data[tipo_caso]"]').on('change', selectCase);
+
+        $('.adicionar_arquivo_complementar').on('click', function (e) {
+            e.preventDefault();
+            let last = $(this).prev('input[type=file]');
+            let lastName = last.prop('name');
+            let newName = lastName.replace(/\d+$/, (match) => {
+                return parseInt(match) + 1;
+            });
+            last.after(last.clone().prop('name', newName));
         });
 
     </script>

@@ -192,9 +192,9 @@
                     <label>
                         1. Tomografia computadorizada Cone Beam
                     </label>
-                    <input type="file" name="file_tomografia_computadorizada_cone_bean">
+                    <input type="file" name="file_tomografia_computadorizada_cone_bean_1">
+                    <a href="#" id="adicionar_arquivo_complementar" style="margin: 5px 0">Adicionar Arquivo</a>
                     <br/><br/>
-
                 </div>
                 <div class="col-md-12">
                     <hr/>
@@ -218,6 +218,16 @@
             } else {
                 $('input[type=radio][name="data[destino_modelo_fisico]"]').prop('disabled', true);
             }
+        });
+
+        $('#adicionar_arquivo_complementar').on('click', function (e) {
+            e.preventDefault();
+            let last = $(this).prev('input[type=file]');
+            let lastName = last.prop('name');
+            let newName = lastName.replace(/\d+$/, (match) => {
+                return parseInt(match) + 1;
+            });
+            last.after(last.clone().prop('name', newName));
         });
 
     </script>

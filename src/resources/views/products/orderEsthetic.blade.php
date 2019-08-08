@@ -41,42 +41,42 @@
 
                     <label>1 - PLANEJAMENTO DESEJADO</label>
                 </div>
-                <div class="col-md-12">
-                    <div class="radio">
-                        <label>
-                            <input
-                                    type="radio"
-                                    name="data[planejamento]"
-                                    value="1"
-                                    checked
-                            >DSD 2D
-                        </label>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="radio">
-                        <label>
-                            <input
-                                    type="radio"
-                                    name="data[planejamento]"
-                                    value="2"
-                                    {{ old('data')['planejamento'] == 2 ? 'checked' : '' }}
-                            >DSD 2D + 3D (Enceramento virtual)
-                        </label>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="radio">
-                        <label>
-                            <input
-                                    type="radio"
-                                    name="data[planejamento]"
-                                    value="3"
-                                    {{ old('data')['planejamento'] == 3 ? 'checked' : '' }}
-                            >Smart Plan Trauma e Reconstruction
-                        </label>
-                    </div>
-                </div>
+                {{--<div class="col-md-12">--}}
+                    {{--<div class="radio">--}}
+                        {{--<label>--}}
+                            {{--<input--}}
+                                    {{--type="radio"--}}
+                                    {{--name="data[planejamento]"--}}
+                                    {{--value="1"--}}
+                                    {{--checked--}}
+                            {{-->DSD 2D--}}
+                        {{--</label>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--<div class="col-md-12">--}}
+                    {{--<div class="radio">--}}
+                        {{--<label>--}}
+                            {{--<input--}}
+                                    {{--type="radio"--}}
+                                    {{--name="data[planejamento]"--}}
+                                    {{--value="2"--}}
+                                    {{--{{ old('data')['planejamento'] == 2 ? 'checked' : '' }}--}}
+                            {{-->DSD 2D + 3D (Enceramento virtual)--}}
+                        {{--</label>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--<div class="col-md-12">--}}
+                    {{--<div class="radio">--}}
+                        {{--<label>--}}
+                            {{--<input--}}
+                                    {{--type="radio"--}}
+                                    {{--name="data[planejamento]"--}}
+                                    {{--value="3"--}}
+                                    {{--{{ old('data')['planejamento'] == 3 ? 'checked' : '' }}--}}
+                            {{-->Smart Plan Trauma e Reconstruction--}}
+                        {{--</label>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
                 <div class="col-md-12">
                     <div class="radio">
                         <label>
@@ -84,7 +84,8 @@
                                     type="radio"
                                     name="data[planejamento]"
                                     value="4"
-                                    {{ old('data')['planejamento'] == 4 ? 'checked' : '' }}
+                                    {{--{{ old('data')['planejamento'] == 4 ? 'checked' : '' }}--}}
+                                    checked
                             >Perio guide
                         </label>
                     </div>
@@ -103,7 +104,7 @@
                 </div>
                 <div class="col-md-12">
                     <label>
-                        3 - OUTRAS INFORMAÇÕES IMPORTANTES PARA REALIZAÇÃO DO SETUP
+                        3 - OUTRAS INFORMAÇÕES IMPORTANTES PARA REALIZAÇÃO DO PLANEJAMENTO
                     </label>
                     <textarea class="form-control" name="data[observacoes]" rows="3"></textarea>
                 </div>
@@ -170,52 +171,42 @@
                     <label>
                         1. Modelos digitais: escaneamento intraoral (preferencialmente) ou modelos de gesso obtidos por moldagem com silicone de adição digitalizados.
                     </label>
-                    <input type="file" name="file_modelos_digitais">
+                    <br/>
+                    <label for="file_escaneamento_intraoral_mandibula">Mandíbula</label>
+                    <input
+                            type="file"
+                            id="file_escaneamento_intraoral_mandibula"
+                            name="file_escaneamento_intraoral_mandibula"
+                            required
+                    />
+                    <br/>
+                    <label for="file_escaneamento_intraoral_maxila">Maxila</label>
+                    <input
+                            type="file"
+                            id="file_escaneamento_intraoral_maxila"
+                            name="file_escaneamento_intraoral_maxila"
+                            required
+                    />
+                    <br/>
+
+                    <label for="file_escaneamento_intraoral_registro_mordida">Registro de Mordida</label>
+                    <input
+                            type="file"
+                            id="file_escaneamento_intraoral_registro_mordida"
+                            name="file_escaneamento_intraoral_registro_mordida"
+                    />
                     <br/><br/>
                     <label>
-                        2. Fotografia central de Face
+                        2. Tomografia computadorizada Cone Beam com a boca entreaberta
                     </label>
-                    <input type="file" name="file_foto_central_face">
+                    <input type="file" name="file_tomografia_cone_bean_1">
+                    <a href="#" class="adicionar_arquivo_complementar" style="margin: 5px 0">Adicionar Arquivo</a>
                     <br/><br/>
                     <label>
-                        3. Fotografia central de Face sorrindo
+                        3. Arquivo Complementar (DSD 2D)
                     </label>
-                    <input type="file" name="file_foto_central_face_sorrindo">
-                    <br/><br/>
-                    <label>
-                        4. Fotografia central de Face com afastador labial.
-                    </label>
-                    <input type="file" name="file_foto_central_face_afastador">
-                    <br/><br/>
-                    <label>
-                        5. Fotografia de Perfil de Face em repouso
-                    </label>
-                    <input type="file" name="file_foto_perfil_face_repouso">
-                    <br/><br/>
-                    <label>
-                        6. Fotografia de Perfil de Face sorrindo sem afastar os dentes
-                    </label>
-                    <input type="file" name="file_foto_perfil_face_sorrindo">
-                    <br/><br/>
-                    <label>
-                        7. Fotografia 12 horas
-                    </label>
-                    <input type="file" name="file_foto_12_horas">
-                    <br/><br/>
-                    <label>
-                        8. Vídeo Frontal do Paciente respondendo algumas perguntas.
-                    </label>
-                    <input type="file" name="file_video_frontal">
-                    <br/><br/>
-                    <label>
-                        9. Vídeo Aproximado do Sorriso do Paciente - Movimentos: Mastigação
-                    </label>
-                    <input type="file" name="file_video_aproximado_mastigacao">
-                    <br/><br/>
-                    <label>
-                        10. Protusão e de Lateralidade (Guia Canina)
-                    </label>
-                    <input type="file" name="file_protusao_lateralidade">
+                    <input type="file" name="file_arquivo_complementar_dsd_2d_1">
+                    <a href="#" class="adicionar_arquivo_complementar" style="margin: 5px 0">Adicionar Arquivo</a>
                     <br/><br/>
                 </div>
                 <div class="col-md-12">
@@ -341,6 +332,16 @@
                 $('select[name="data[linha_media][superior]"]').prop('disabled', true);
                 $('select[name="data[linha_media][inferior]"]').prop('disabled', true);
             }
+        });
+
+        $('.adicionar_arquivo_complementar').on('click', function (e) {
+            e.preventDefault();
+            let last = $(this).prev('input[type=file]');
+            let lastName = last.prop('name');
+            let newName = lastName.replace(/\d+$/, (match) => {
+                return parseInt(match) + 1;
+            });
+            last.after(last.clone().prop('name', newName));
         });
 
     </script>
