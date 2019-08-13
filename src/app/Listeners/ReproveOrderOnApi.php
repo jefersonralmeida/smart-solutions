@@ -35,7 +35,7 @@ class ReproveOrderOnApi
 
     public function subscribe(Dispatcher $dispatcher)
     {
-        $dispatcher->listen(OrderConfirmed::class, static::class . '@onOrderReproved');
+        $dispatcher->listen(OrderReproved::class, static::class . '@onOrderReproved');
     }
 
 }
