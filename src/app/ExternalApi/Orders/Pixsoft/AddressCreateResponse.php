@@ -14,7 +14,7 @@ class AddressCreateResponse implements AddressCreateResponseContract
      */
     protected $response;
 
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->response->id ?? null;
     }
