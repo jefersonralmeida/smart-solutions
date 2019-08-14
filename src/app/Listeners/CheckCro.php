@@ -77,7 +77,7 @@ class CheckCro
 
     public function subscribe(Dispatcher $dispatcher)
     {
-        if (env('CRO_CHECK_ENABLED', 0)) {
+        if (config('cro.checkEnabled')) {
             $dispatcher->listen(DentistCreated::class, static::class . '@onCreate');
             $dispatcher->listen(DentistUpdated::class, static::class . '@onUpdate');
             $dispatcher->listen(DentistCroCheckRequested::class, static::class . '@onCheckRequest');

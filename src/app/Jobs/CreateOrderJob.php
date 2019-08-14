@@ -9,6 +9,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Log;
 
 class CreateOrderJob implements ShouldQueue
 {
@@ -43,8 +44,11 @@ class CreateOrderJob implements ShouldQueue
     public function handle(OrdersApiContract $ordersApi, SpcApiContract $spcApi)
     {
 
+        Log::debug("Enviando pedido '{$this->order->id}' para o SOL.");
+
         // check if the dentist already exists on the api, if not, create it
         if ($this->order->dentist->integration_status != 'S') {
+            Log::debug("Enviando o dentista {$this->order->dentist->name} ({$this->order->dentist->cro}) para o SOL.");
             $response = $ordersApi->createDentist($this->order->dentist);
             $this->order->dentist->integration_status = 'S';
             $this->order->dentist->integration_id = $response->getId();
@@ -54,6 +58,7 @@ class CreateOrderJob implements ShouldQueue
         // check if the address is already attached to the dentist on the api, if not, attach it
         $addressIntegration = $this->order->address->integration;
         if (!isset($addressIntegration[$this->order->dentist->id])) {
+            Log::debug("Enviando o endereço {$this->order->address->id} para o SOL.");
             $response = $ordersApi->createAddress($this->order->address, $this->order->dentist);
             $addressIntegration[$this->order->dentist->id] = $response->getId();
             $this->order->address->integration = $addressIntegration;
@@ -61,6 +66,7 @@ class CreateOrderJob implements ShouldQueue
         }
 
         // creates the order
+        Log::debug("Enviando o pedido '{$this->order->id}' para o SOL");
         $orderResponse = $ordersApi->createOrder($this->order);
         if (!empty($id = $orderResponse->getId())) {
 
@@ -87,7 +93,7 @@ class CreateOrderJob implements ShouldQueue
             ];
             $this->order->save();
         }
-
+        Log::debug("Envio do pedido '{$this->order->id}' falhou.");
     }
 
     /**

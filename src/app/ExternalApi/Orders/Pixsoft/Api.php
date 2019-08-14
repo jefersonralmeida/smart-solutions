@@ -151,12 +151,14 @@ class Api implements OrdersApiContract
             'dados' => $order->data,
         ];
 
+        Log::debug("Enviando request para o SOL: POST pedidos " . json_encode($payload));
+
         try {
             $response = $this->httpClient->request('POST', 'pedidos', [
                 'json' => $payload,
             ]);
         } catch (GuzzleException $e) {
-            Log::error($e->getMessage());
+            Log::error('Resposta do SOL: ' . $e->getMessage());
             return null;
         }
 
