@@ -77,8 +77,10 @@ class CheckCro
 
     public function subscribe(Dispatcher $dispatcher)
     {
-        $dispatcher->listen(DentistCreated::class, static::class . '@onCreate');
-        $dispatcher->listen(DentistUpdated::class, static::class . '@onUpdate');
-        $dispatcher->listen(DentistCroCheckRequested::class, static::class . '@onCheckRequest');
+        if (env('CRO_CHECK_ENABLED', 0)) {
+            $dispatcher->listen(DentistCreated::class, static::class . '@onCreate');
+            $dispatcher->listen(DentistUpdated::class, static::class . '@onUpdate');
+            $dispatcher->listen(DentistCroCheckRequested::class, static::class . '@onCheckRequest');
+        }
     }
 }
