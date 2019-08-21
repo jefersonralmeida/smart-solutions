@@ -68,12 +68,18 @@ class Api implements OrdersApiContract
             'email',
         ];
 
+        $method = 'POST';
+        $url = 'profissional';
+        Log::debug("Enviando request para o SOL: $method $url " . json_encode($map));
+
+
         try {
-            $response = $this->httpClient->request('POST', 'profissional', [
+            $response = $this->httpClient->request($method, $url, [
                 'json' => $this->fromModel($dentist, $map),
             ]);
         } catch (GuzzleException $e) {
-            Log::error($e->getMessage());
+            $message = 'Resposta do SOL: ' . $e->getMessage();
+            Log::error($message);
             return null;
         }
 
@@ -101,12 +107,18 @@ class Api implements OrdersApiContract
             'cep' => $address->zip_code,
         ];
 
+        $method = 'POST';
+        $url = 'endereco_dentista';
+
+        Log::debug("Enviando request para o SOL: $method $url " . json_encode($payload));
+
         try {
-            $response = $this->httpClient->request('POST', 'endereco_dentista', [
+            $response = $this->httpClient->request($method, $url, [
                 'json' => $payload,
             ]);
         } catch (GuzzleException $e) {
-            Log::error($e->getMessage());
+            $message = 'Resposta do SOL: ' . $e->getMessage();
+            Log::error($message);
             return null;
         }
 
@@ -151,14 +163,18 @@ class Api implements OrdersApiContract
             'dados' => $order->data,
         ];
 
-        Log::debug("Enviando request para o SOL: POST pedidos " . json_encode($payload));
+        $method = 'POST';
+        $url = 'pedidos';
+
+        Log::debug("Enviando request para o SOL: $method $url " . json_encode($payload));
 
         try {
-            $response = $this->httpClient->request('POST', 'pedidos', [
+            $response = $this->httpClient->request($method, $url, [
                 'json' => $payload,
             ]);
         } catch (GuzzleException $e) {
-            Log::error('Resposta do SOL: ' . $e->getMessage());
+            $message = 'Resposta do SOL: ' . $e->getMessage();
+            Log::error($message);
             return null;
         }
 
@@ -171,8 +187,11 @@ class Api implements OrdersApiContract
      */
     public function listOrders(Dentist $dentist): ?ListOrdersResponseContract
     {
+        $method = 'GET';
+        $url = "pedidos/profissional/{$dentist->integration_id}";
+        Log::debug("Enviando request para o SOL: $method $url");
         try {
-            $response = $this->httpClient->request('GET', "pedidos/profissional/{$dentist->integration_id}");
+            $response = $this->httpClient->request($method, $url);
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());
             return null;
@@ -182,8 +201,11 @@ class Api implements OrdersApiContract
 
     public function prePlanning(Order $order): ?PrePlanningResponseContract
     {
+        $method = 'GET';
+        $url = "pedidos/{$order->integration_id}/pre-planejamento";
+        Log::debug("Enviando request para o SOL: $method $url");
         try {
-            $response = $this->httpClient->request('GET', "pedidos/{$order->integration_id}/pre-planejamento");
+            $response = $this->httpClient->request($method, $url);
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());
             return null;
@@ -193,8 +215,11 @@ class Api implements OrdersApiContract
 
     public function approveOrder(Order $order): bool
     {
+        $method = 'PUT';
+        $url = "pedidos/{$order->integration_id}/pre-planejamento/approve";
+        Log::debug("Enviando request para o SOL: $method $url");
         try {
-            $this->httpClient->request('PUT', "pedidos/{$order->integration_id}/pre-planejamento/approve");
+            $this->httpClient->request($method, $url);
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());
             return false;
@@ -204,8 +229,11 @@ class Api implements OrdersApiContract
 
     public function reproveOrder(Order $order): bool
     {
+        $method = 'PUT';
+        $url = "pedidos/{$order->integration_id}/pre-planejamento/reject";
+        Log::debug("Enviando request para o SOL: $method $url");
         try {
-            $this->httpClient->request('PUT', "pedidos/{$order->integration_id}/pre-planejamento/reject");
+            $this->httpClient->request($method, $url);
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());
             return false;

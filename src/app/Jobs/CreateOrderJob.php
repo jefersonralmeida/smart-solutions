@@ -92,6 +92,7 @@ class CreateOrderJob implements ShouldQueue
                 'error' => $spcError,
             ];
             $this->order->save();
+            return;
         }
         Log::debug("Envio do pedido '{$this->order->id}' falhou.");
     }
