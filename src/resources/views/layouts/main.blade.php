@@ -129,7 +129,7 @@
 @yield('scripts')
 
 {{--File uploader script--}}
-<script src="http://malsup.github.com/jquery.form.js"></script>
+<script src="{{ asset('js/jquery.form.js') }}"></script>
 <script language="javascript">
 
     let bindProgressBar = function (field) {
