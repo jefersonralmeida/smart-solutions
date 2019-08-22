@@ -40,13 +40,44 @@ return [
     // surgery
     4 => [
         'files' => [
-
+            'file_tomografia_computadorizada_cone_bean',
+            'file_perfil_direito_esquerdo_labio_relaxado',
+            'file_perfil_direito_esquerdo_sorrindo',
+            'file_frontal_boca_relaxada',
+            'file_frontal_boca_levemente_aberta',
+            'file_frontal_sorrindo',
+            'file_sub_mento_vertix_boca_fechada',
+            'file_sub_mento_vertix_boca_aberta',
+            'file_modelos_digitalizados_oclusao_inicial_mandibula',
+            'file_modelos_digitalizados_oclusao_inicial_maxila',
+            'file_modelos_digitalizados_oclusao_inicial_registro_mordida',
+            'file_modelos_digitalizados_oclusao_final_mandibula',
+            'file_modelos_digitalizados_oclusao_final_maxila',
+            'file_modelos_digitalizados_oclusao_final_registro_mordida',
         ],
         'required' => [
-
+            'file_tomografia_computadorizada_cone_bean',
+            'file_perfil_direito_esquerdo_labio_relaxado',
+            'file_perfil_direito_esquerdo_sorrindo',
+            'file_frontal_boca_relaxada',
+            'file_frontal_boca_levemente_aberta',
+            'file_frontal_sorrindo',
+            'file_sub_mento_vertix_boca_fechada',
+            'file_sub_mento_vertix_boca_aberta',
+            'file_modelos_digitalizados_oclusao_inicial_mandibula',
+            'file_modelos_digitalizados_oclusao_inicial_maxila',
+            'file_modelos_digitalizados_oclusao_final_mandibula',
+            'file_modelos_digitalizados_oclusao_final_maxila',
         ],
         'multiple' => [
-
+            'file_tomografia_computadorizada_cone_bean',
+            'file_perfil_direito_esquerdo_labio_relaxado',
+            'file_perfil_direito_esquerdo_sorrindo',
+            'file_frontal_boca_relaxada',
+            'file_frontal_boca_levemente_aberta',
+            'file_frontal_sorrindo',
+            'file_sub_mento_vertix_boca_fechada',
+            'file_sub_mento_vertix_boca_aberta',
         ]
     ],
 

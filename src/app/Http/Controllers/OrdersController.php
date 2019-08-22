@@ -412,10 +412,16 @@ class OrdersController extends Controller
     public function finishOrder(Order $order)
     {
         $presentFiles = array_values($this->getPresentFilesForOrder($order));
+        $presentFiles = array_map(function ($item) {
+            return preg_replace('/_[0-9]+$/', '', $item);
+        }, $presentFiles);
+        $presentFiles = array_unique($presentFiles);
         $requiredFiles = array_values(config('uploads')[$order->product]['required']);
-        if (count(array_intersect($requiredFiles, $presentFiles)) < count($requiredFiles)) {
-            $message = 'Arquivos obrigatórios não encontrados. Faça upload de todos os arquivos obrigatórios. 
-            Caso já tenha realizado, tente novamente mais tarde. Seu arquivo pode estar sendo processado.';
+        $required = count($requiredFiles);
+        $missing = $required - count(array_intersect($requiredFiles, $presentFiles));
+        if ($missing > 0) {
+            $message = "$missing de $required arquivos obrigatórios não encontrados. Faça upload de todos os arquivos obrigatórios. 
+            Caso já tenha realizado, tente novamente mais tarde. Seu arquivo pode estar sendo processado.";
             return redirect(route('orders.filesForm', [$order->id]))->with('error', $message);
         }
         $order->setOrderCreated();
