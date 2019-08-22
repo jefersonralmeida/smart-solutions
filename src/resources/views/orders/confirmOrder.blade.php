@@ -67,7 +67,7 @@
                     </div>
                 @endforeach
                 <div class="col-lg-12">
-                    <a href="#">Adicionar Endereço</a>
+                    <a href="{{ route('addresses.create') }}">Adicionar Endereço</a>
                 </div>
                 <div class="col-lg-12">
                     <hr/>

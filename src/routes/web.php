@@ -43,6 +43,11 @@ Route::post('/orders/{order}/reprove-project', 'OrdersController@reproveProject'
 Route::get('/orders/{order}/payments', 'OrdersController@payments')->name('orders.payments')->where('order', '^\d+$');
 Route::get('/orders/{order}/payment-return', 'OrdersController@paymentReturn')->name('orders.paymentReturn')->where('order', '^\d+$');
 Route::post('/orders/{order}/pay/rede', 'OrdersController@payWithRede')->name('orders.pay.rede')->where('order', '^\d+$');
+Route::get('/orders/{order}/files', 'OrdersController@filesForm')->name('orders.filesForm')->middleware('can:place-orders');
+Route::post('/orders/{order}/upload', 'OrdersController@uploadFile')->name('orders.uploadFile')->middleware('can:place-orders');
+Route::get('/orders/{order}/download/{file}', 'OrdersController@downloadFile')->name('orders.downloadFile');
+Route::post('/orders/{order}/finish', 'OrdersController@finishOrder')->name('orders.finish');
+
 
 // Products
 Route::get('/orders/aligner', 'Products\OrderAlignerController@create')->name('order-aligner')->middleware('can:place-orders');

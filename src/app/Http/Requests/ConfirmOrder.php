@@ -31,6 +31,14 @@ class ConfirmOrder extends FormRequest
         return true;
     }
 
+    public function messages()
+    {
+        return [
+            'address_id.required' => 'Selecione um endereço de entrega',
+            'shipping.required' => 'Selecione uma forma de entrega',
+        ];
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *

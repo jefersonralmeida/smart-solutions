@@ -1,6 +1,14 @@
 <?php
 
 return [
+    0 => [
+        'name' => 'Aguardando arquivos',
+        'color' => '#7bdd59',
+        'next' => [
+            'label' => 'Enviar Arquivos',
+            'route' => ['orders.filesForm', ['id']],
+        ]
+    ],
     1 => [
         'name' => 'Pedido Iniciado',
         'color' => '#7bdd59',

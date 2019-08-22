@@ -18,6 +18,7 @@
         const userId = "{{ Auth::user()->id }}";
         const apiToken = "{{Auth::user()->api_token}}";
     </script>
+
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <link href="https://fonts.googleapis.com/css?family=Aldrich|Nova+Square|Parisienne&display=swap" rel="stylesheet">
@@ -29,6 +30,32 @@
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
     <![endif]-->
+
+    <style>
+        .progress {
+            position: relative;
+            width: 100%;
+            height: 30px;
+            border: 1px solid #7F98B2;
+            padding: 1px;
+            border-radius: 3px;
+        }
+
+        .bar {
+            background-color: #B4F5B4;
+            width: 0%;
+            height: 30px;
+            border-radius: 3px;
+        }
+
+        .percent {
+            position: absolute;
+            display: inline-block;
+            top: 3px;
+            left: 48%;
+            color: #7F98B2;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
@@ -100,6 +127,68 @@
 <script src="{{ asset('js/custom.js') }}"></script>
 <script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js') }}"></script>
 @yield('scripts')
+
+{{--File uploader script--}}
+<script src="http://malsup.github.com/jquery.form.js"></script>
+<script language="javascript">
+
+    let bindProgressBar = function (field) {
+        console.log(field);
+        let bar = field.find('.bar');
+        let percent = field.find('.percent');
+
+        field.ajaxForm({
+            beforeSend: function () {
+                let percentVal = '0%';
+                bar.width(percentVal);
+                bar.css('backgroundColor', '#B4F5B4');
+                percent.css('left', '42%');
+                percent.html(percentVal);
+            },
+            uploadProgress: function (event, position, total, percentComplete) {
+                let percentVal = percentComplete + '%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            success: function () {
+                percent.css('left', '35%');
+                percent.html('Arquivo enviado com sucesso.');
+            },
+            error: function () {
+                bar.css('backgroundColor', '#fbb');
+                percent.css('left', '35%');
+                percent.html('Falha ao enviar o arquivo.');
+            }
+        });
+    };
+    $('form.file-upload-form').each(function () {
+        bindProgressBar($(this));
+    });
+
+    $('.multiple-file-uploader .add-file').on('click', function (e) {
+        e.preventDefault();
+        let container = $(this).parent('.multiple-file-uploader');
+        let hidden = container.find('.single-file-uploader:hidden');
+        hidden.first().show();
+        if (hidden.length == 1) {
+            $(this).hide();
+        }
+        container.find('.remove-file').show();
+    });
+
+    $('.multiple-file-uploader .remove-file').on('click', function (e) {
+        e.preventDefault();
+        let container = $(this).parent('.multiple-file-uploader');
+        let visible = container.find('.single-file-uploader:visible')
+        visible.last().hide();
+        if (visible.length == 2) {
+            $(this).hide();
+        }
+        container.find('.add-file').show();
+    });
+</script>
+
+
 
 </body>
 </html>

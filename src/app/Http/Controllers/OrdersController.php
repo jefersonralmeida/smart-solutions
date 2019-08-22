@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Address;
 use App\Dentist;
+use App\Events\FileUploaded;
 use App\Events\OrderConfirmed;
 use App\Events\OrderReproved;
 use App\ExternalApi\Itau\Itau;
@@ -18,6 +19,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\MessageBag;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class OrdersController extends Controller
 {
@@ -346,5 +348,78 @@ class OrdersController extends Controller
             ],
             'order' => $order,
         ]);
+    }
+
+    /**
+     * @param Order $order
+     * @return string[]
+     */
+    protected function getPresentFilesForOrder(Order $order): array
+    {
+        $directory = config('paths.orders') . '/' . $order->id;
+        $orderFiles = \Storage::allFiles($directory);
+        $presentFiles = [];
+        foreach ($orderFiles as $filePath) {
+            $regex = "#^{$directory}/([^.]+)(?:_[0-9]+)?\.[^.]+$#";
+            if (preg_match($regex, $filePath, $matches)) {
+                $fileId = $matches[1];
+                $fileIdWithoutSuffix = preg_replace('#_[0-9]+$#', '', $fileId);
+                if (in_array($fileIdWithoutSuffix, config('uploads')[$order->product]['files'])) {
+                    $presentFiles[] = $fileId;
+                }
+            }
+        }
+        return $presentFiles;
+    }
+
+    public function filesForm(Order $order)
+    {
+        $presentFiles = $this->getPresentFilesForOrder($order);
+        return view("products.files.{$order->product_view}", [
+            'breadcrumbs' => [
+                ['label' => 'Pedidos', 'route' => 'orders'],
+                ['label' => $order->product_name],
+            ],
+            'order' => $order,
+            'presentFiles' => $presentFiles,
+        ]);
+    }
+
+    public function uploadFile(Order $order, Request $request)
+    {
+        event(new FileUploaded($order, $request->allFiles()));
+
+        return response()->json(['success'=> array_keys($request->allFiles())]);
+    }
+
+    public function downloadFile(Order $order, string $file)
+    {
+        $directory = config('paths.orders') . '/' . $order->id;
+        $regex = "#^{$directory}/{$file}\.[^.]+$#";
+        $orderFiles = \Storage::files($directory);
+        $found = array_filter($orderFiles, function ($item) use ($regex) {
+            return preg_match($regex, $item);
+        });
+
+        if (!empty($found)) {
+            $file = array_pop($found);
+            return Storage::download($file);
+        }
+
+        throw new NotFoundHttpException();
+    }
+
+    public function finishOrder(Order $order)
+    {
+        $presentFiles = array_values($this->getPresentFilesForOrder($order));
+        $requiredFiles = array_values(config('uploads')[$order->product]['required']);
+        if (count(array_intersect($requiredFiles, $presentFiles)) < count($requiredFiles)) {
+            $message = 'Arquivos obrigatórios não encontrados. Faça upload de todos os arquivos obrigatórios. 
+            Caso já tenha realizado, tente novamente mais tarde. Seu arquivo pode estar sendo processado.';
+            return redirect(route('orders.filesForm', [$order->id]))->with('error', $message);
+        }
+        $order->setOrderCreated();
+        $order->save();
+        return redirect(route('orders.confirm', ['order' => $order->id]));
     }
 }

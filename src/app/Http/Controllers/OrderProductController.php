@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Dentist;
-use App\Events\OrderCreated;
-use App\Http\Requests\OrderAligner;
 use App\Order;
 use App\Patient;
 use App\Price;
@@ -83,12 +81,11 @@ abstract class OrderProductController extends Controller
         }
 
         $order->fill($request->all());
-        $order->setOrderCreated();
+        $order->setWaitingFiles();
 
         $order->save();
 
-        event(new OrderCreated($order, $request->allFiles()));
+        return redirect(route('orders.filesForm', ['order' => $order->id]));
 
-        return redirect(route('orders.confirm', ['order' => $order->id]));
     }
 }

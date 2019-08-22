@@ -6,7 +6,7 @@ use App\Order;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Queue\SerializesModels;
 
-class OrderCreated
+class FileUploaded
 {
     use SerializesModels;
 

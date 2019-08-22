@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Rede\Store;
 use Storage;
 
 class UploadFile implements ShouldQueue
@@ -46,6 +47,18 @@ class UploadFile implements ShouldQueue
      */
     public function handle()
     {
+
+        // remove the file if it exists (replace)
+        $directory = preg_replace('#/[^/]+$#', '', $this->fileName);
+        $currentFileWithoutExtension = preg_replace("#\.[^.]+$#", '', $this->fileName);
+        $files = Storage::files($directory);
+        foreach ($files as $file) {
+            $remoteFileWithoutExtension = preg_replace("#\.[^.]+$#", '', $file);
+            if ($remoteFileWithoutExtension == $currentFileWithoutExtension) {
+                Storage::delete($file);
+            }
+        }
+
         // copy the file from local storage to remote (default) storage
         Storage::writeStream($this->fileName, Storage::disk('local')->readStream($this->localFileLocation));
 

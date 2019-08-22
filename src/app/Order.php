@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int id
  * @property int product
  * @property string product_name
+ * @property string product_view
  * @property int patient_id
  * @property int dentist_id
  * @property int address_id
@@ -96,12 +97,30 @@ class Order extends Model
      * List of products ids and their names
      */
     const PRODUCTS = [
-        1 => 'Smart Aligner',
-        4 => 'Surgery',
-        3 => 'Implant Guiada',
-        6 => 'Implant ROG',
-        7 => 'Esthetic',
-        8 => 'Smart Aligner Pre Protese',
+        1 => [
+            'name' => 'Smart Aligner',
+            'view' => 'orderAligner',
+        ],
+        4 => [
+            'name' => 'Surgery',
+            'view' => 'orderSurgery',
+        ],
+        3 => [
+            'name' => 'Implant Guiada',
+            'view' => 'orderImplantGuiada',
+        ],
+        6 => [
+            'name' => 'Implant ROG',
+            'view' => 'orderImplantRog',
+        ],
+        7 => [
+            'name' => 'Esthetic',
+            'view' => 'orderEsthetic',
+        ],
+        8 => [
+            'name' => 'Smart Aligner Pre Protese',
+            'view' => 'orderAlignerPP',
+        ],
     ];
 
     /**
@@ -147,7 +166,12 @@ class Order extends Model
      */
     public function getProductNameAttribute()
     {
-        return self::PRODUCTS[$this->product];
+        return self::PRODUCTS[$this->product]['name'];
+    }
+
+    public function getProductViewAttribute()
+    {
+        return self::PRODUCTS[$this->product]['view'];
     }
 
     /**
@@ -236,6 +260,14 @@ class Order extends Model
             'date' => now()->format('d/m/Y H:i')
         ];
         $this->status_history = $statusHistory;
+    }
+
+    /**
+     *
+     */
+    public function setWaitingFiles(): void
+    {
+        $this->setStatus(0);
     }
 
     /**

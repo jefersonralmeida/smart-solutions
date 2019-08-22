@@ -273,54 +273,8 @@
                 <div class="col-md-12">
                     <hr/>
                 </div>
-
-
                 <div class="col-md-12">
-                    <label>
-                        5 - ENVIAR OS ARQUIVOS<br/>
-                    </label>
-                    <br/><br/>
-                    <label>
-                        1. Modelos digitais: escaneamento intraoral (preferencialmente) ou modelo de gesso obtidos por
-                        modelagem com silicone de adição digitalizados.
-                    </label>
-                    <br/>
-                    <label for="file_escaneamento_intraoral_mandibula">Mandíbula</label>
-                    <input
-                            type="file"
-                            id="file_escaneamento_intraoral_mandibula"
-                            name="file_escaneamento_intraoral_mandibula"
-                            required
-                    />
-                    <br/>
-                    <label for="file_escaneamento_intraoral_maxila">Maxila</label>
-                    <input
-                            type="file"
-                            id="file_escaneamento_intraoral_maxila"
-                            name="file_escaneamento_intraoral_maxila"
-                            required
-                    />
-                    <br/>
-
-                    <label for="file_escaneamento_intraoral_registro_mordida">Registro de Mordida</label>
-                    <input
-                            type="file"
-                            id="file_escaneamento_intraoral_registro_mordida"
-                            name="file_escaneamento_intraoral_registro_mordida"
-                    />
-                    <br/><br/>
-                    <label>
-                        2. Tomografia computadorizada Cone Beam com a boca entreaberta.
-                    </label>
-                    <input type="file" name="file_tomografia_computadorizada_cone_bean_1" style="margin: 5px 0">
-                    <a href="#" id="adicionar_arquivo_complementar" style="margin: 5px 0">Adicionar Arquivo</a>
-                    <br/><br/>
-                </div>
-                <div class="col-md-12">
-                    <hr/>
-                </div>
-                <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary">Enviar solicitação</button>
+                    <button type="submit" class="btn btn-primary">Ir para envio de arquivos</button>
                     <button type="reset" class="btn btn-default">Resetar formulário</button>
                 </div>
             </div><!-- /.panel-->
@@ -337,16 +291,6 @@
             } else {
                 $('input[type=radio][name="data[destino_modelo_fisico]"]').prop('disabled', true);
             }
-        });
-
-        $('#adicionar_arquivo_complementar').on('click', function (e) {
-            e.preventDefault();
-            let last = $(this).prev('input[type=file]');
-            let lastName = last.prop('name');
-            let newName = lastName.replace(/\d+$/, (match) => {
-                return parseInt(match) + 1;
-            });
-            last.after(last.clone().prop('name', newName));
         });
 
     </script>

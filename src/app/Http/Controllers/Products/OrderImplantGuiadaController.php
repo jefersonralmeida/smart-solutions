@@ -48,4 +48,5 @@ class OrderImplantGuiadaController extends OrderProductController
     {
         return 'orderImplantGuiada';
     }
+
 }

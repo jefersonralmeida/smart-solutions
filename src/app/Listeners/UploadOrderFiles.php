@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\OrderCreated;
+use App\Events\FileUploaded;
 use App\Jobs\UploadFile;
 use Illuminate\Events\Dispatcher;
 
@@ -19,9 +19,9 @@ class UploadOrderFiles
     }
 
     /**
-     * @param OrderCreated $event
+     * @param FileUploaded $event
      */
-    public function onOrderCreated(OrderCreated $event)
+    public function onFileUploaded(FileUploaded $event)
     {
 
         $destinationPath = config('paths.orders') . '/' . $event->getOrder()->id;
@@ -45,6 +45,6 @@ class UploadOrderFiles
      */
     public function subscribe(Dispatcher $dispatcher)
     {
-        $dispatcher->listen(OrderCreated::class, static::class . '@onOrderCreated');
+        $dispatcher->listen(FileUploaded::class, static::class . '@onFileUploaded');
     }
 }
