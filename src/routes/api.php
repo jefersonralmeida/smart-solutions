@@ -18,8 +18,7 @@ use GuzzleHttp\Client as HttpClient;
 Route::group([], function() {
     Route::get('/notifications', 'NotificationsController@index');
     Route::get('/shipping-info/{provider}/{zipCode}', 'ShippingController@info')
-        ->where('zipCode', '^\d{8}$')
-        ->middleware(['cache', 'cacheFor:1800']);
+        ->where('zipCode', '^\d{8}$');
 });
 
 Route::get('/dentists', function(Request $request, HttpClient $httpClient) {

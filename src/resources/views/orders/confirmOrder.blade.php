@@ -232,8 +232,7 @@
                 });
             });
             $('#shippingMessage').hide();
-            //$('#shippingBox').show();
-            $('#shippingBox').attr("style", "display:block");
+            $('#shippingBox').show();
         };
 
         $('input[type=radio][name=address_id]').on('change', function() {
