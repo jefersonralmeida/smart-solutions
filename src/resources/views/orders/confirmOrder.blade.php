@@ -216,6 +216,7 @@
 
         const getShippingInfo = function (zip) {
             if (!zip) return;
+
             $.each($('.shipping-provider'), function (index, item) {
                 const provider = $(item).find('input[type=radio]').val();
                 const url = '/api/shipping-info/' + provider + '/' + zip;
@@ -231,8 +232,9 @@
                 });
             });
             $('#shippingMessage').hide();
-            $('#shippingBox').show();
-        }
+            //$('#shippingBox').show();
+            $('#shippingBox').attr("style", "display:block");
+        };
 
         $('input[type=radio][name=address_id]').on('change', function() {
             getShippingInfo($(this).attr('data-zipcode'));
