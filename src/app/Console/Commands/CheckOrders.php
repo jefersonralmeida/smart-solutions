@@ -49,6 +49,9 @@ class CheckOrders extends Command
      */
     public function handle()
     {
+
+        \Log::info('Verificando pedidos no sol...');
+
         $dentists = Dentist::withPendingOrders()
             ->withoutGlobalScope(CurrentClinicScope::class)
             ->with(['orders' => function (HasMany $query) {
@@ -64,9 +67,14 @@ class CheckOrders extends Command
         /** @var Dentist $dentist */
         foreach ($dentists as $dentist) {
 
+            \Log::info("Verificando pedidos do dentista {$dentist->name}:{$dentist->cro}...");
+
             $items = $this->ordersApi->listOrders($dentist)->getOrders();
 
             if (!empty($items)) {
+
+                \Log::info("Resposta do sol: " . json_encode($items));
+
                 $ordersToChange = [];
                 foreach ($items as $item) {
                     if ($item['state_id'] == config('orderCheck.checkApiStatus')) {
@@ -91,6 +99,8 @@ class CheckOrders extends Command
                     $order->setWaitingApprovement();
                     $order->save();
                 }
+            } else {
+                \Log::info("Nenhum pedido encontrado para o dentista...");
             }
         }
     }
