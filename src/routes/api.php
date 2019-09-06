@@ -44,6 +44,10 @@ Route::get('/dentists', function(Request $request, HttpClient $httpClient) {
         ];
     }
 
+    if (empty($filters)) {
+        return [];
+    }
+
     $builder = \App\Dentist::withoutGlobalScope(\App\Scopes\CurrentClinicScope::class);
 
     foreach ($filters as $key => $value) {
