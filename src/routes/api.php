@@ -44,11 +44,13 @@ Route::get('/dentists', function(Request $request, HttpClient $httpClient) {
         ];
     }
 
-    if (empty($filters)) {
+    $builder = \App\Dentist::withoutGlobalScope(\App\Scopes\CurrentClinicScope::class);
+
+    if (array_reduce($filters, function ($carry, $item) {
+        return $carry && empty($item);
+    }, true)) {
         return [];
     }
-
-    $builder = \App\Dentist::withoutGlobalScope(\App\Scopes\CurrentClinicScope::class);
 
     foreach ($filters as $key => $value) {
         $builder->where($key, 'like', "%$value%");
