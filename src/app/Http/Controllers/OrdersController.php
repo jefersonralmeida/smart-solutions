@@ -308,6 +308,8 @@ class OrdersController extends Controller
     public function payWithRede(PayWithRede $request, Order $order, Rede $rede)
     {
 
+        \Log::debug('Realizando pagamento pela Rede...');
+
         $errorMessage = $rede->authorize(
             $order->id,
             $request->amount,
@@ -325,7 +327,7 @@ class OrdersController extends Controller
             ]));
         }
 
-        \Log::error("PAYMENT ERROR: $errorMessage");
+        \Log::error("ERRO NO PAGAMENTO: $errorMessage");
 
         return redirect(route('orders.payments', [
             'order' => $order->id
