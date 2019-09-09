@@ -163,14 +163,10 @@ class Api implements OrdersApiContract
             'dados' => $order->data,
         ];
 
-        // Adicionando arquivos:
-        $projectPath = config('paths.orders') . '/' . $order->id;
-        $files = \Storage::files($projectPath);
-        $files = array_map(function ($item) {
-            return config('paths.base_path') . '/' . $item;
-        }, $files);
+        // Adicionando caminho para os arquivos
+        $path = config('paths.base_path') . '/' . config('paths.orders') . '/' . $order->id;
 
-        $payload['dados']['arquivos'] = $files;
+        $payload['dados']['arquivos'][] = $path;
 
 
         $method = 'POST';
