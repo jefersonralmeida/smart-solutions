@@ -21,6 +21,8 @@ class RedeProvider extends ServiceProvider
             $pv = config('rede.pv');
             $token = config('rede.token');
 
+            \Log::debug("Criando provider da Rede: modo: $mode, PV: $pv, Token: $token");
+
             $store = new Store($pv, $token, $mode === 'production' ? \Rede\Environment::production() : \Rede\Environment::sandbox());
             $handler = new eRede($store);
 
