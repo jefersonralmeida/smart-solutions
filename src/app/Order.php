@@ -24,7 +24,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property array data
  * @property integer status
  * @property string status_desc
- * @property string status_color
  * @property array status_history
  * @property string status_next_label
  * @property string status_next_route
@@ -135,11 +134,6 @@ class Order extends Model
     public function getStatusDescAttribute()
     {
         return config('status')[$this->status]['name'];
-    }
-
-    public function getStatusColorAttribute()
-    {
-        return config('status')[$this->status]['color'];
     }
 
     public function getStatusNextLabelAttribute()

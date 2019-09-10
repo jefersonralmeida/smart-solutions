@@ -53,12 +53,5 @@
                 <button type="submit" class="btn btn-primary" style="margin-top: 30px;">Procurar</button>
             </div>
         </form>
-        <div class="col-lg-12">&nbsp;</div>
-        <div class="col-lg-12">
-            @foreach (config('status') as $status)
-                <div class="legenda" style="background-color: {{ $status['color'] }}"></div>
-                <div class="pos-legenda">{{ $status['name'] }}</div>
-            @endforeach
-        </div>
     </div>
 </div>
