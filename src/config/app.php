@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => strpos($_SERVER['APP_URL'], env('ALIGNER_DOMAIN')) !== false ? 'Smart Aligner' : 'Smart Solutions',
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => $_SERVER['APP_URL'],
 
     'asset_url' => env('ASSET_URL', null),
 
