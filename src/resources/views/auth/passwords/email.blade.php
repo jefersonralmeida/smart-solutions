@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-    <div class="container">
+    <div class="container" style="width: 430px">
 
         @if (session('status'))
             <div class="alert alert-success" role="alert">
@@ -22,7 +22,7 @@
             <fieldset>
                 <div class="form-group">
                         <input id="email" type="email" class="form-control"
-                               name="email" value="{{ old('email') }}" placeholder="E-mail" required style="width: 550px" />
+                               name="email" value="{{ old('email') }}" placeholder="E-mail" required />
                 </div>
                 <button type="submit" class="btn btn-primary">
                     Enviar link de renovação
