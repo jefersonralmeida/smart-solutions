@@ -5,11 +5,21 @@ namespace App\Http\Requests;
 use App\Rules\Cnpj;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Waavi\Sanitizer\Laravel\SanitizesInput;
 
 class CreateClinic extends FormRequest
 {
 
+    use SanitizesInput;
+
     protected $redirect = 'profile/create-clinic';
+
+    public function filters()
+    {
+        return [
+            'cnpj' => 'digit'
+        ];
+    }
 
     /**
      * Determine if the user is authorized to make this request.
