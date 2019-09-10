@@ -128,7 +128,7 @@
                                 Telefone:
                             </label>
                             <input class="form-control" id="phone" name="phone"
-                                   placeholder="Digite o telefone {{ config('masks.phone') }}"
+                                   placeholder="Digite o telefone"
                                    value="{{ old('phone') ?? $address->phone ?? '' }}"/>
                         </div>
                     </div>
