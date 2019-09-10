@@ -15,6 +15,14 @@ $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
+// hack to change the storage path
+try
+{
+    (new Dotenv\Dotenv(__DIR__.'/../'))->load();
+}
+catch (Dotenv\Exception\InvalidPathException $ignored) { }
+$app->useStoragePath(env('APP_STORAGE', storage_path()));
+
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces
@@ -51,5 +59,4 @@ $app->singleton(
 | from the actual running of the application and sending responses.
 |
 */
-
 return $app;
