@@ -1,0 +1,65 @@
+version: '3'
+services:
+  web:
+    build:
+      context: env/web
+    ports:
+      - "${APP_PORT:-80}:80"
+      - "${APP_BUILD_PORT:-81}:81"
+    volumes:
+      - ./src:/var/www/dev:${CACHING_OPTION:-cached}
+      - ./env/web/conf/nginx.conf:/etc/nginx/conf.d/default.conf:cached
+    working_dir: /var/www/dev
+    links:
+      - api
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: env/api
+    environment:
+      - XDEBUG_PORT=${XDEBUG_PORT:-9000}
+    volumes:
+      - ./src:/var/www/dev:${CACHING_OPTION:-cached}
+      - ./env/api/conf/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:cached
+    working_dir: /var/www/dev
+    links:
+      - db
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0.17
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'smart'
+      MYSQL_USER: 'smart'
+      MYSQL_PASSWORD: 'smart'
+      MYSQL_ROOT_PASSWORD: 'smart'
+    ports:
+      - '${MYSQL_PORT:-3306}:3306'
+    volumes:
+      - database-volume:/var/lib/mysql
+
+  redis:
+    image: redis:5
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+
+  ngrok:
+    build:
+      context: env/ngrok
+    environment:
+      NGROK_ENABLED: ${NGROK_ENABLED:-false}
+      NGROK_AUTH_TOKEN: ${NGROK_AUTH_TOKEN:-}
+      NGROK_AUTH_USER: ${NGROK_AUTH_USER:-}
+      NGROK_AUTH_PASSWORD: ${NGROK_AUTH_PASSWORD:-}
+      NGROK_SUBDOMAIN: ${NGROK_SUBDOMAIN:-}
+    volumes:
+      - ./env/ngrok/ngrok.yml:/ngrok.yml
+    ports:
+      - "${NGROK_PORT:-4040}:4040"
+
+volumes:
+  database-volume:
