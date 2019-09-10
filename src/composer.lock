@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eae65dc297999314036c2050d8d6188d",
+    "content-hash": "499bec61a1a6b46abe9f2628db50a274",
     "packages": [
         {
             "name": "barryvdh/laravel-httpcache",
@@ -175,49 +175,6 @@
                 "laravel"
             ],
             "time": "2018-12-10T12:53:41+00:00"
-        },
-        {
-            "name": "caouecs/laravel-lang",
-            "version": "3.0.62",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/caouecs/Laravel-lang.git",
-                "reference": "fcb8cec051b175278e0a9efa440f0b1033d12dd7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/caouecs/Laravel-lang/zipball/fcb8cec051b175278e0a9efa440f0b1033d12dd7",
-                "reference": "fcb8cec051b175278e0a9efa440f0b1033d12dd7",
-                "shasum": ""
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.10"
-            },
-            "suggest": {
-                "ablunier/laravel-lang-installer": "Command for easily add languages to a Laravel project",
-                "andrey-helldar/laravel-lang-publisher": "Easy installation and update of translation files for your project",
-                "arcanedev/laravel-lang": "Translations manager and checker for Laravel 5",
-                "overtrue/laravel-lang": "Command to add languages in your project"
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "caouecs",
-                    "email": "caouecs@caouecs.net"
-                }
-            ],
-            "description": "Languages for Laravel",
-            "keywords": [
-                "lang",
-                "languages",
-                "laravel",
-                "lpm"
-            ],
-            "time": "2019-03-17T10:36:46+00:00"
         },
         {
             "name": "developersrede/erede-php",
@@ -3992,6 +3949,66 @@
             "time": "2018-07-29T20:33:41+00:00"
         },
         {
+            "name": "waavi/sanitizer",
+            "version": "1.0.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Waavi/Sanitizer.git",
+                "reference": "ab12ea90dcaae937dcce9970abb30dbfe9e35b78"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Waavi/Sanitizer/zipball/ab12ea90dcaae937dcce9970abb30dbfe9e35b78",
+                "reference": "ab12ea90dcaae937dcce9970abb30dbfe9e35b78",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5.3",
+                "illuminate/validation": "~5.3",
+                "nesbot/carbon": "~1.0|~2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6.0|~7.0|~8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Waavi\\Sanitizer\\Laravel\\SanitizerServiceProvider"
+                    ],
+                    "aliases": {
+                        "Sanitizer": "Waavi\\Sanitizer\\Laravel\\Facade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Waavi\\Sanitizer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Wallace San Paulo",
+                    "email": "info@waavi.com"
+                }
+            ],
+            "description": "Data sanitizer and Laravel 5 form requests with input sanitation.",
+            "keywords": [
+                "input",
+                "input filter",
+                "input sanitation",
+                "input sanitizer",
+                "laravel",
+                "sanitation",
+                "transform input"
+            ],
+            "time": "2019-04-25T13:11:15+00:00"
+        },
+        {
             "name": "zendframework/zend-diactoros",
             "version": "1.8.6",
             "source": {
@@ -4240,6 +4257,49 @@
                 "laravel-dump-server"
             ],
             "time": "2018-10-04T07:22:24+00:00"
+        },
+        {
+            "name": "caouecs/laravel-lang",
+            "version": "3.0.62",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/caouecs/Laravel-lang.git",
+                "reference": "fcb8cec051b175278e0a9efa440f0b1033d12dd7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/caouecs/Laravel-lang/zipball/fcb8cec051b175278e0a9efa440f0b1033d12dd7",
+                "reference": "fcb8cec051b175278e0a9efa440f0b1033d12dd7",
+                "shasum": ""
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.10"
+            },
+            "suggest": {
+                "ablunier/laravel-lang-installer": "Command for easily add languages to a Laravel project",
+                "andrey-helldar/laravel-lang-publisher": "Easy installation and update of translation files for your project",
+                "arcanedev/laravel-lang": "Translations manager and checker for Laravel 5",
+                "overtrue/laravel-lang": "Command to add languages in your project"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "caouecs",
+                    "email": "caouecs@caouecs.net"
+                }
+            ],
+            "description": "Languages for Laravel",
+            "keywords": [
+                "lang",
+                "languages",
+                "laravel",
+                "lpm"
+            ],
+            "time": "2019-03-17T10:36:46+00:00"
         },
         {
             "name": "composer/ca-bundle",

@@ -39,4 +39,13 @@ class OrderAlignerPPController extends OrderProductController
     {
         return $this->storeInternal($request);
     }
+
+    /**
+     * The view template for the product form
+     * @return string
+     */
+    protected function viewTemplate(): string
+    {
+        // TODO: Implement viewTemplate() method.
+    }
 }

@@ -4,26 +4,14 @@ FROM php:7.2-fpm
 RUN apt-get update
 
 # install the php extensions
-RUN apt-get install -y libpq-dev libzip-dev unzip librdkafka-dev libzookeeper-mt-dev --no-install-recommends && \
+RUN apt-get install -y libpq-dev libzip-dev unzip librdkafka-dev libzookeeper-mt-dev libpng-dev libxml2-dev --no-install-recommends && \
     docker-php-ext-install \
         pdo \
         pdo_mysql \
-        zip
+        zip \
+        gd \
+        soap
 
-# redis extension
-RUN pecl install -o -f redis && \
-    rm -rf /tmp/pear && \
-    docker-php-ext-enable redis
-
-# kafka extension
-RUN pecl install -o -f rdkafka && \
-    rm -rf /tmp/pear && \
-    docker-php-ext-enable rdkafka
-
-# zookeeper extension 
-RUN pecl install -o -f zookeeper && \
-    rm -rf /tmp/pear && \
-    docker-php-ext-enable zookeeper
 
 # install xdebug
 RUN pecl install xdebug; \
