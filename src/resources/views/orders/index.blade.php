@@ -21,7 +21,7 @@
                         <p>
                             <strong>Status:</strong> {{ $order->status_desc }}
                             @if($order->integration_id)
-                                | OS-{{ str_pad($order->integration_id, 5, '0', STR_PAD_LEFT) }}
+                                | OS-{{ $order->integration_id }}
                             @endif
                             @if(!empty($order->status_next_label))
                                 | <a href="{{ $order->status_next_route }}">{{ $order->status_next_label }}</a>
