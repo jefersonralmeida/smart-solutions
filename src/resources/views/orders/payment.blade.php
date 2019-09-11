@@ -33,7 +33,8 @@
                 </div>
             @endif
             <div class="col-lg-12">
-                <input id="radio-boleto" type="radio" name="payment_method" style="position: relative; top: -4px;" value="boleto"/>
+                <input id="radio-boleto" type="radio" name="payment_method" style="position: relative; top: -4px;"
+                       value="boleto"/>
                 &nbsp;
                 <i class="fa fa-barcode fa-2x"></i>
                 &nbsp;
@@ -55,7 +56,8 @@
                 <hr/>
             </div>
             <div class="col-lg-12">
-                <input id="radio-card" type="radio" name="payment_method" style="position: relative; top: -4px;" value="card"/>
+                <input id="radio-card" type="radio" name="payment_method" style="position: relative; top: -4px;"
+                       value="card"/>
                 &nbsp;
                 <i class="fa fa-credit-card-alt fa-2x"></i>
                 &nbsp;
@@ -66,149 +68,42 @@
                     #panel-boleto {
                         display: none;
                     }
+
                     #panel-card {
                         display: none;
                     }
-                    .credit-card {
-                        background: lightskyblue;
-                        width: 300px;
-                        height: 180px;
-                        border-radius: 10px;
-                        margin: 10px;
-                        position: relative;
-                    }
-
-                    .credit-card .bank-logo {
-                        background-color: cornflowerblue;
-                        width: 30px;
-                        height: 30px;
-                        position: absolute;
-                        top: 15px;
-                        left: 30px;
-                    }
-
-                    .credit-card .holographic {
-                        background-color: lightblue;
-                        width: 80px;
-                        height: 50px;
-                        position: absolute;
-                        top: 70px;
-                        right: 15px;
-                    }
-
-                    .credit-card .bank-name {
-                        position: absolute;;
-                        top: 20px;
-                        right: 30px;
-                        font-family: 'Aldrich', sans-serif;
-                        font-size: 30px;
-                    }
-
-                    .credit-card .chip {
-                        width: 40px;
-                        height: 30px;
-                        position: absolute;
-                        top: 60px;
-                        left: 30px;
-                    }
-
-                    .credit-card .magnetic {
-                        background-color: slategrey;
-                        position: absolute;
-                        width: 100%;
-                        height: 40px;
-                        top: 30px;
-                    }
-
-                    .credit-card .signature {
-                        background-color: lightgrey;
-                        position: absolute;
-                        width: 180px;
-                        height: 20px;
-                        top: 80px;
-                        left: 8px;
-                        padding-left: 10px;
-                        font-family: 'Parisienne', cursive;
-                    }
-
-                    .credit-card .company {
-                        background-color: silver;
-                        background-image: url('{{ asset('images/credit_card_sprite.png') }}');
-                        background-position-x: 70px;
-                        background-position-y: 0px;
-                        background-repeat: no-repeat;
-                        position: absolute;
-                        top: 130px;
-                        right: 15px;
-                        width: 61px;
-                        height: 39px;
-                    }
-
-                    .credit-card .field {
-                        background: transparent;
-                        /*background: white;*/
-                        border: none;
-                        position: absolute;
-                        font-family: 'Nova Square', cursive;
-                    }
-
-                    .credit-card .field.number {
-                        top: 95px;
-                        left: 30px;
-                        width: 240px;
-                        font-size: 18px;
-                    }
-
-                    .credit-card .field.name {
-                        top: 130px;
-                        left: 30px;
-                        width: 180px;
-                        font-size: 12px;
-                        text-transform: uppercase;
-                    }
-
-                    .credit-card .field.expiration {
-                        top: 150px;
-                        left: 30px;
-                        width: 50px;
-                        font-size: 12px;
-                    }
-
-                    .credit-card .field.security {
-                        background-color: ghostwhite;
-                        top: 81px;
-                        left: 190px;
-                        width: 50px;
-                        font-size: 12px;
-                        padding: 0 10px;
-                    }
                 </style>
-                <form method="POST" action="{{ route('orders.pay.rede', $order->id) }}" class="form form-inline">
+                <form method="POST" action="{{ route('orders.pay.rede', $order->id) }}" class="form">
                     @csrf
-                    <div class="col-lg-3">
-                        <div class="credit-card">
-                            <div class="bank-logo"></div>
-                            <div class="holographic"></div>
-                            <img src="{{ asset('images/card_chip.png') }}" class="chip"/>
-                            <div class="bank-name">Banco</div>
-                            <div class="company"></div>
-                            <input type="text" name="card_number" class="field number"
-                                   placeholder="0000 0000 0000 0000"/>
-                            <input type="text" name="card_holder" class="field name" placeholder="SEU NOME"/>
-                            <input type="text" name="expiration" class="field expiration" placeholder="00/00"/>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="numero_cartao">
+                                Número do cartão:
+                            </label>
+                            <input id="numero_cartao" type="text" name="card_number" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="card_holder">
+                                Nome Impresso no Cartão
+                            </label>
+                            <input type="text" id="card_holder" name="card_holder" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="numero_cartao">
+                                Validade (mm/aa):
+                            </label>
+                            <input type="text" name="expiration" class="form-control" placeholder="00/00"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="card_holder">
+                                Código de segurança:
+                            </label>
+                            <input type="text" name="security_code" class="form-control" placeholder="000">
                         </div>
                     </div>
-                    <div class="col-lg-3">
-                        <div class="credit-card">
-                            <div class="magnetic"></div>
-                            <div class="signature">
-                                Sua Assinatura
-                            </div>
-                            <input type="text" name="security_code" class="field security" placeholder="000">
-                            <div class="company"></div>
-                        </div>
-                        <input type="hidden" name="amount" value="{{ $order->value }}"/>
-                    </div>
+
+                    <input type="hidden" name="amount" value="{{ $order->value }}"/>
                     <div class="col-lg-12">
                         <br/>
                     </div>
@@ -236,7 +131,7 @@
                 $('#panel-card input[type=text][name=card_number]').focus();
             }
         });
-        $('#panel-card input[type=text][name=card_number]').on('keyup', function() {
+        $('#panel-card input[type=text][name=card_number]').on('keyup', function () {
             var input = $(this).val();
 
             var companySprite = $('#panel-card .credit-card .company');
