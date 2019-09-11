@@ -47,6 +47,7 @@ Route::get('/orders/{order}/files', 'OrdersController@filesForm')->name('orders.
 Route::post('/orders/{order}/upload', 'OrdersController@uploadFile')->name('orders.uploadFile')->middleware('can:place-orders');
 Route::get('/orders/{order}/download/{file}', 'OrdersController@downloadFile')->name('orders.downloadFile');
 Route::post('/orders/{order}/finish', 'OrdersController@finishOrder')->name('orders.finish');
+Route::post('/orders/{order}/thankYou', 'OrdersController@thankYou')->name('orders.thankYou');
 
 
 // Products
