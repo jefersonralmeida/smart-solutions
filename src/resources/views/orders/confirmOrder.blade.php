@@ -188,7 +188,7 @@
                             <input type="radio" name="shipping" value="{{ $provider }}"
                                    id="shippingProvider_{{ $provider }}"/>
                             <label for="shippingProvider_{{ $provider }}" id="label_shippingProvider_{{ $provider }}">
-                                <b></b> | R$ <span class="price"></span> | <span class="prize"></span>
+                                <b></b> | R$ <span class="price"></span>
                             </label>
                         </div>
                     @endforeach
