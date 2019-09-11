@@ -80,6 +80,9 @@ class OrderAligner extends FormRequest
     public function messages()
     {
         return [
+            'patient_id.required' => 'O campo "Paciente" é obrigatório.',
+            'dentist_id.required' => 'O campo "Dentista" é obrigatório.',
+            'data.observacoes_clinicas_objetivos.required' => 'O campo "Objetivo principal" é obrigatório.',
             'data.tratamento_arcada_superior.required' => 'Forma de tratamento para arcada superior obrigatória',
             'data.tratamento_arcada_inferior.required' => 'Forma de tratamento para arcada inferior obrigatória',
             'data.diastemas.correcao_apinhamento.superior.extracao_transversal.required' => 'Prioridade para extração transversal superior obrigatória',
