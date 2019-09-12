@@ -34,23 +34,16 @@
                 <br/>
                 @include('products.files.multipleFileUpload', ['order' => $order, 'id' => 'file_arquivo_complementar', 'presentFiles' => $presentFiles])
 
-
-                <hr/>
-                <label>
-                Escaneamento intraoral (.stl):
-                </label>
-                <br/><br/>
-                @include('products.files.singleFileUpload', ['order' => $order, 'id' => 'file_scan_service_mandibula', 'label' => 'Mandíbula (Obrigatório)', 'presentFiles' => $presentFiles])
-                @include('products.files.singleFileUpload', ['order' => $order, 'id' => 'file_scan_service_maxila', 'label' => 'Maxila (Obrigatório)', 'presentFiles' => $presentFiles])
-                @include('products.files.singleFileUpload', ['order' => $order, 'id' => 'file_scan_service_registro_mordida', 'label' => 'Registro de Mordida', 'presentFiles' => $presentFiles])
-
-{{--                <br/><br/>--}}
-{{--                <label>--}}
-{{--                    2. Tomografia computadorizada Cone Beam com a boca entreaberta.--}}
-{{--                </label>--}}
-{{--                <br/><br/>--}}
-
-{{--                @include('products.files.multipleFileUpload', ['order' => $order, 'id' => 'file_tomografia_computadorizada_cone_bean', 'presentFiles' => $presentFiles])--}}
+                @if(!($order->data['scan_service'] ?? true))
+                    <hr/>
+                    <label>
+                    Escaneamento intraoral (.stl):
+                    </label>
+                    <br/><br/>
+                    @include('products.files.singleFileUpload', ['order' => $order, 'id' => 'file_scan_service_mandibula', 'label' => 'Mandíbula (Obrigatório)', 'presentFiles' => $presentFiles])
+                    @include('products.files.singleFileUpload', ['order' => $order, 'id' => 'file_scan_service_maxila', 'label' => 'Maxila (Obrigatório)', 'presentFiles' => $presentFiles])
+                    @include('products.files.singleFileUpload', ['order' => $order, 'id' => 'file_scan_service_registro_mordida', 'label' => 'Registro de Mordida', 'presentFiles' => $presentFiles])
+                @endif
                 <br/><br/>
             </div>
             <div class="col-md-12">
