@@ -50,7 +50,7 @@ class Api implements OrdersApiContract
      * @param Dentist $dentist
      * @return DentistCreateResponseContract
      */
-    public function createDentist(Dentist $dentist): DentistCreateResponseContract
+    public function createDentist(Dentist $dentist): ?DentistCreateResponseContract
     {
 
         $map = [
