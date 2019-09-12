@@ -82,7 +82,13 @@ class Api implements OrdersApiContract
             return null;
         }
 
-        return new DentistCreateResponse($response);
+        $response = new DentistCreateResponse($response);
+
+        if ($response->getId() === null) {
+            return null;
+        }
+
+        return $response;
 
     }
 
@@ -121,7 +127,12 @@ class Api implements OrdersApiContract
             return null;
         }
 
-        return new AddressCreateResponse($response);
+        $response = new AddressCreateResponse($response);
+        if ($response->getId() === null) {
+            return null;
+        }
+
+        return $response;
     }
 
     /**
@@ -183,7 +194,12 @@ class Api implements OrdersApiContract
             return null;
         }
 
-        return new OrderCreateResponse($response);
+        $response = new OrderCreateResponse($response);
+        if ($response->getId() === null) {
+            return null;
+        }
+
+        return $response;
     }
 
     /**
