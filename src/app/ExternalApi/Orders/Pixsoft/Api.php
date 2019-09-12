@@ -93,7 +93,7 @@ class Api implements OrdersApiContract
      * @param Dentist $dentist
      * @return AddressCreateResponseContract
      */
-    public function createAddress(Address $address, Dentist $dentist): AddressCreateResponseContract
+    public function createAddress(Address $address, Dentist $dentist): ?AddressCreateResponseContract
     {
         $payload = [
             'dentista' => $dentist->integration_id,
@@ -117,7 +117,6 @@ class Api implements OrdersApiContract
                 'json' => $payload,
             ]);
         } catch (GuzzleException $e) {
-            Log::critical('mensagem super crítica!!');
             $message = 'Resposta do SOL: ' . $e->getMessage();
             Log::error($message);
             return null;
@@ -130,7 +129,7 @@ class Api implements OrdersApiContract
      * @param Order $order
      * @return OrderCreateResponseContract
      */
-    public function createOrder(Order $order): OrderCreateResponseContract
+    public function createOrder(Order $order): ?OrderCreateResponseContract
     {
 
         $order->load('dentist', 'patient');
