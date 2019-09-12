@@ -27,7 +27,7 @@
                 @include('products.files.singleFileUpload', ['order' => $order, 'id' => 'file_foto_intrabucal_lado_esquerdo', 'label' => '8. Foto intrabucal lado esquerdo (Obrigatório)', 'presentFiles' => $presentFiles])
 
                 <label>
-                    9. Arquivos Complementares<br/>
+                    9. Arquivos Complementares<br/><br/>
                     Radiografia panorâmica e cefalométrica de perfil ou Tomografia
                     computadorizada Cone Beam
                 </label>
@@ -36,6 +36,10 @@
 
 
                 <hr/>
+                <label>
+                Escaneamento intraoral (.stl):
+                </label>
+                <br/><br/>
                 @include('products.files.singleFileUpload', ['order' => $order, 'id' => 'file_scan_service_mandibula', 'label' => 'Mandíbula (Obrigatório)', 'presentFiles' => $presentFiles])
                 @include('products.files.singleFileUpload', ['order' => $order, 'id' => 'file_scan_service_maxila', 'label' => 'Maxila (Obrigatório)', 'presentFiles' => $presentFiles])
                 @include('products.files.singleFileUpload', ['order' => $order, 'id' => 'file_scan_service_registro_mordida', 'label' => 'Registro de Mordida', 'presentFiles' => $presentFiles])
