@@ -50,9 +50,11 @@ class CreateOrderJob implements ShouldQueue
         if ($this->order->dentist->integration_status != 'S') {
             Log::debug("Enviando o dentista {$this->order->dentist->name} ({$this->order->dentist->cro}) para o SOL.");
             $response = $ordersApi->createDentist($this->order->dentist);
-            $this->order->dentist->integration_status = 'S';
-            $this->order->dentist->integration_id = $response->getId();
-            $this->order->dentist->save();
+            if ($response !== null) {
+                $this->order->dentist->integration_status = 'S';
+                $this->order->dentist->integration_id = $response->getId();
+                $this->order->dentist->save();
+            }
         }
 
         // check if the address is already attached to the dentist on the api, if not, attach it
@@ -60,9 +62,11 @@ class CreateOrderJob implements ShouldQueue
         if (!isset($addressIntegration[$this->order->dentist->id])) {
             Log::debug("Enviando o endereço {$this->order->address->id} para o SOL.");
             $response = $ordersApi->createAddress($this->order->address, $this->order->dentist);
-            $addressIntegration[$this->order->dentist->id] = $response->getId();
-            $this->order->address->integration = $addressIntegration;
-            $this->order->address->save();
+            if ($response !== null) {
+                $addressIntegration[$this->order->dentist->id] = $response->getId();
+                $this->order->address->integration = $addressIntegration;
+                $this->order->address->save();
+            }
         }
 
         // creates the order

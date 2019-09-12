@@ -54,7 +54,7 @@ class Api implements OrdersApiContract
     {
 
         $map = [
-            'nome' => 'name',
+            'nome' => $dentist->name,
             'CRO' => function (Model $model) {
                 return str_replace('-', '', $model->getAttribute('cro'));
             },
@@ -65,7 +65,7 @@ class Api implements OrdersApiContract
                 $phone = $model->getAttribute('cellphone') ?? $model->getAttribute('phone');
                 return str_replace('-', '', $phone);
             },
-            'email',
+            'email' => $dentist->email,
         ];
 
         $method = 'POST';
@@ -117,6 +117,7 @@ class Api implements OrdersApiContract
                 'json' => $payload,
             ]);
         } catch (GuzzleException $e) {
+            Log::critical('mensagem super crítica!!');
             $message = 'Resposta do SOL: ' . $e->getMessage();
             Log::error($message);
             return null;
