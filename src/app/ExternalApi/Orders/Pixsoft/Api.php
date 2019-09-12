@@ -72,7 +72,6 @@ class Api implements OrdersApiContract
         $url = 'profissional';
         Log::debug("Enviando request para o SOL: $method $url " . json_encode($map));
 
-
         try {
             $response = $this->httpClient->request($method, $url, [
                 'json' => $this->fromModel($dentist, $map),

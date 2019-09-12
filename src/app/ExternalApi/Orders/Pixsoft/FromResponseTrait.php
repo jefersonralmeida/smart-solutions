@@ -13,7 +13,7 @@ trait FromResponseTrait
         $result = json_decode($rawContent);
 
         if (!empty($result->msgErro)) {
-            Log::error($result->msgErro);
+            Log::error('Mensagem de erro do SOL:' . $result->msgErro);
             $this->response = null;
             return;
         }
