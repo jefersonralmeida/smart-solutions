@@ -72,7 +72,7 @@ class CreateOrderJob implements ShouldQueue
         // creates the order
         Log::debug("Enviando o pedido '{$this->order->id}' para o SOL");
         $orderResponse = $ordersApi->createOrder($this->order);
-        if (!empty($id = $orderResponse->getId())) {
+        if (isset($orderResponse) && !empty($id = $orderResponse->getId())) {
 
             // check spc
             try {
