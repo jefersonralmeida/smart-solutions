@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\MessageBag;
+use Illuminate\Support\ViewErrorBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class OrdersController extends Controller
@@ -251,9 +252,9 @@ class OrdersController extends Controller
     {
 
         // verifica se houve erro no processamento da rede, e exibe
-        $errors = new MessageBag();
+        $errors = session()->get('errors', app(ViewErrorBag::class));;
         if (request()->query('payment_error')) {
-            $errors->add('payment_error', 'O pagamento falhou. Tente novamente mais tarde, e caso o problema 
+            $errors->add('payment_error', 'O pagamento falhou. Tente novamente mais tarde, e caso o problema
         permaneça, contacte a Smart Solutions diretamente.');
         }
 
@@ -272,7 +273,8 @@ class OrdersController extends Controller
             ],
             'order' => $order,
             'data' => $encryptedData,
-        ])->withErrors($errors);
+            'errors' => $errors
+        ]);
     }
 
     /**

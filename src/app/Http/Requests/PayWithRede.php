@@ -15,6 +15,7 @@ use Illuminate\Foundation\Http\FormRequest;
  */
 class PayWithRede extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -23,6 +24,18 @@ class PayWithRede extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    public function messages()
+    {
+        return [
+            'card_number.required' => 'O campo "Número do Cartão" é obrigatório.',
+            'card_holder.required' => 'O campo "Nome Impresso no Cartão" é obrigatório.',
+            'expiration.required' => 'O campo "Validade" é obrigatório.',
+            'expiration.required' => 'O campo "Validade" deve estar no formato mm/aa.',
+            'security_code.required' => 'O campo "Código de segurança" é obrigatório.',
+            'security_code.integer' => 'O campo "Código de segurança" deve conter um número inteiro.',
+        ];
     }
 
     /**

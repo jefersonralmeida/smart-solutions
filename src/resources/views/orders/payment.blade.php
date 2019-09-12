@@ -1,6 +1,6 @@
 @php
-    /** @var array[] $files */
     /** @var \App\Order $order */
+//dd($errors);
 @endphp
 @extends('layouts.main')
 
