@@ -413,6 +413,15 @@ class OrdersController extends Controller
         throw new NotFoundHttpException();
     }
 
+    protected function getRequiredFiles(Order $order)
+    {
+        $required = config('uploads')[$order->product]['required'];
+        if (is_callable($required)) {
+            $required = $required($order);
+        }
+        return array_values($required);
+    }
+
     public function finishOrder(Order $order)
     {
         $presentFiles = array_values($this->getPresentFilesForOrder($order));
@@ -420,7 +429,7 @@ class OrdersController extends Controller
             return preg_replace('/_[0-9]+$/', '', $item);
         }, $presentFiles);
         $presentFiles = array_unique($presentFiles);
-        $requiredFiles = array_values(config('uploads')[$order->product]['required']);
+        $requiredFiles = $this->getRequiredFiles($order);
         $required = count($requiredFiles);
         $missing = $required - count(array_intersect($requiredFiles, $presentFiles));
         if ($missing > 0) {

@@ -5,10 +5,11 @@
         <div class="panel-body">
             @include('layouts/flash-message')
             <div class="row" style="margin: 10px;">
+                <div id="dados_acesso" class="container">
                 <div class="col-lg-2">
                     <img src="{{ route('profile.avatar') }}" class="img-responsive"
                          style="height: 140px; width: 140px;"/>
-                    <a href="#changeAvatarForm" data-toggle="collapse">Alterar imagem</a>
+                    <a href="#" id="alterar_avatar">Alterar imagem</a>
                 </div>
                 <div class="col-lg-10">
                     <div class="row"><h3>Dados Acesso</h3></div>
@@ -22,15 +23,14 @@
                             </div>
                         </div>
                         @if ($form != 'update-profile' || !$errors->any())
-                            <a href="#updateProfileForm" data-toggle="collapse">Alterar dados</a> |
+                            <a href="#" id="alterar_dados">Alterar dados</a> |
                         @endif
-                        <a href="#changePasswordForm" data-toggle="collapse">Alterar senha</a>
+                        <a href="#" id="alterar_senha">Alterar senha</a>
                     </div>
                     <hr/>
                     <div class="row">
                         <div class="col-lg-12">
-                            <div id="updateProfileForm"
-                                 class="{{ ($form == 'update-profile') && old() ? '' : 'collapse' }}">
+                            <div id="updateProfileForm" style="display: {{ ($form == 'update-profile' ? 'block' : 'none') }}">
                                 @if ($form == 'update-profile' && $errors->any())
                                     <div class="alert bg-warning" role="alert">
                                         <ul>
@@ -66,7 +66,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <div id="changePasswordForm" class="collapse">
+                            <div id="changePasswordForm" style="display: {{ ($form == 'change-password' ? 'block' : 'none') }}">
                                 <form method="POST" action="{{ route('profile.change-password') }}">
                                     @csrf
                                     @method('PUT')
@@ -100,8 +100,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <div id="changeAvatarForm"
-                                 class="{{ ($form == 'change-avatar') && old() ? '' : 'collapse' }}">
+                            <div id="changeAvatarForm" style="display: {{ ($form == 'change-avatar' ? 'block' : 'none') }}">
                                 @if ($form == 'change-avatar' && $errors->any())
                                     <div class="alert bg-warning" role="alert">
                                         <ul>
@@ -135,6 +134,7 @@
                         </div>
                     </div>
 
+                </div>
                 </div>
             </div>
             <div class="row" style="margin: 10px;">
@@ -293,5 +293,21 @@
     <script language="javascript">
         $('#update_clinic_cnpj').mask('{{ config('masks.cnpj') }}');
         $('#create_clinic_cnpj').mask('{{ config('masks.cnpj') }}');
+
+        $("#alterar_avatar").on('click', function() {
+            $('#updateProfileForm').hide();
+            $('#changePasswordForm').hide();
+            $('#changeAvatarForm').toggle();
+        });
+        $("#alterar_dados").on('click', function() {
+            $('#updateProfileForm').toggle();
+            $('#changePasswordForm').hide();
+            $('#changeAvatarForm').hide();
+        });
+        $("#alterar_senha").on('click', function() {
+            $('#updateProfileForm').hide();
+            $('#changePasswordForm').toggle();
+            $('#changeAvatarForm').hide();
+        });
     </script>
 @endsection

@@ -47,19 +47,19 @@ services:
     ports:
       - '${REDIS_PORT:-6379}:6379'
 
-  ngrok:
-    build:
-      context: env/ngrok
-    environment:
-      NGROK_ENABLED: ${NGROK_ENABLED:-false}
-      NGROK_AUTH_TOKEN: ${NGROK_AUTH_TOKEN:-}
-      NGROK_AUTH_USER: ${NGROK_AUTH_USER:-}
-      NGROK_AUTH_PASSWORD: ${NGROK_AUTH_PASSWORD:-}
-      NGROK_SUBDOMAIN: ${NGROK_SUBDOMAIN:-}
-    volumes:
-      - ./env/ngrok/ngrok.yml:/ngrok.yml
-    ports:
-      - "${NGROK_PORT:-4040}:4040"
+#  ngrok:
+#    build:
+#      context: env/ngrok
+#    environment:
+#      NGROK_ENABLED: ${NGROK_ENABLED:-false}
+#      NGROK_AUTH_TOKEN: ${NGROK_AUTH_TOKEN:-}
+#      NGROK_AUTH_USER: ${NGROK_AUTH_USER:-}
+#      NGROK_AUTH_PASSWORD: ${NGROK_AUTH_PASSWORD:-}
+#      NGROK_SUBDOMAIN: ${NGROK_SUBDOMAIN:-}
+#    volumes:
+#      - ./env/ngrok/ngrok.yml:/ngrok.yml
+#    ports:
+#      - "${NGROK_PORT:-4040}:4040"
 
 volumes:
   database-volume:

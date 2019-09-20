@@ -2,6 +2,9 @@
 /*
  * As chaves sao os ids dos produtos
  */
+
+use App\Order;
+
 return [
 
     // smart aligner
@@ -20,18 +23,25 @@ return [
             'file_scan_service_maxila',
             'file_scan_service_registro_mordida',
         ],
-        'required' => [
-            'file_foto_frontal',
-            'file_foto_frontal_sorrindo',
-            'file_foto_perfil_direito',
-            'file_foto_oclusal_superior',
-            'file_foto_oclusal_inferior',
-            'file_foto_intrabucal_frontal',
-            'file_foto_intrabucal_lado_direito',
-            'file_foto_intrabucal_lado_esquerdo',
-            'file_scan_service_mandibula',
-            'file_scan_service_maxila',
-        ],
+        'required' => function(Order $order) {
+            $required = [
+                'file_foto_frontal',
+                'file_foto_frontal_sorrindo',
+                'file_foto_perfil_direito',
+                'file_foto_oclusal_superior',
+                'file_foto_oclusal_inferior',
+                'file_foto_intrabucal_frontal',
+                'file_foto_intrabucal_lado_direito',
+                'file_foto_intrabucal_lado_esquerdo',
+            ];
+
+            if(!($order->data['scan_service'] ?? true)) {
+                $required[] = 'file_scan_service_mandibula';
+                $required[] = 'file_scan_service_maxila';
+            }
+
+            return $required;
+        },
         'multiple' => [
             'file_arquivo_complementar'
         ]

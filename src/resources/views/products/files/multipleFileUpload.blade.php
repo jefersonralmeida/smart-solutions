@@ -17,7 +17,7 @@
         ]
         )
 @endfor
-Se desejar enviar a mais algum arquivo clique <a href="#" class="add-file" style="margin: 5px 0">aqui</a>&nbsp;&nbsp;&nbsp;&nbsp;
+Se desejar enviar mais algum arquivo clique <a href="#" class="add-file" style="margin: 5px 0">aqui</a>&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="#" class="remove-file" style="margin: 5px 0; display: none">Remover último Arquivo</a>
 </div>
 

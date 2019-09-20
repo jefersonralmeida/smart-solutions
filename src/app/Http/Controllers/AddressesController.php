@@ -20,6 +20,12 @@ class AddressesController extends Controller
 
     public function create()
     {
+
+        $redirect = request()->query('redirect');
+        if ($redirect !== null) {
+            session(['address_create_redirect' => $redirect]);
+        }
+
         return view('addresses.form', [
             'breadcrumbs' => [
                 ['label' => 'Endereços'],
@@ -36,11 +42,20 @@ class AddressesController extends Controller
         $address->fill($request->all());
         $address->save();
 
-        return redirect(route('profile'))->with('success', 'Endereço criado com sucesso');
+        $redirect = session('address_create_redirect', route('profile'));
+        session()->forget('address_create_redirect');
+
+        return redirect($redirect)->with('success', 'Endereço criado com sucesso');
     }
 
     public function edit(Address $address)
     {
+
+        $redirect = request()->query('redirect');
+        if ($redirect !== null) {
+            session(['address_edit_redirect' => $redirect]);
+        }
+
         return view('addresses.form', [
             'breadcrumbs' => [
                 ['label' => 'Endereços'],
@@ -58,6 +73,9 @@ class AddressesController extends Controller
         $address->fill($request->all());
         $address->save();
 
-        return redirect(route('profile'))->with('success', 'Endereço alterado com sucesso');;
+        $redirect = session('address_edit_redirect', route('profile'));
+        session()->forget('address_edit_redirect');
+
+        return redirect($redirect)->with('success', 'Endereço alterado com sucesso');;
     }
 }

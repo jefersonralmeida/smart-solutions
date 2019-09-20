@@ -67,7 +67,7 @@
                     </div>
                 @endforeach
                 <div class="col-lg-12">
-                    <a href="{{ route('addresses.create') }}">Adicionar Endereço</a>
+                    <a href="{{ route('addresses.create', ['redirect' => route('orders.confirm', [$order->id])]) }}">Adicionar Endereço</a>
                 </div>
                 <div class="col-lg-12">
                     <hr/>
@@ -95,7 +95,7 @@
                     <br/>
                 </div>
                 <div id="dados_cobranca_form" style="display: {{ old('billing_data') == 'manual' ? 'block' : 'none' }};">
-                    <div class="col-lg-12">
+                    <div class="col-lg-7">
                         <div class="form-group">
                             <label for="cobranca_nome_completo">
                                 Nome Completo:
@@ -104,7 +104,7 @@
                                    name="billing_name"/>
                         </div>
                     </div>
-                    <div class="col-lg-12">
+                    <div class="col-lg-5">
                         <div class="form-group">
                             <label for="cobranca_cpf">
                                 CPF:
@@ -112,59 +112,76 @@
                             <input type="text" id="cobranca_cpf" class="form-control" name="billing_document"/>
                         </div>
                     </div>
-                    <div class="col-lg-12">
+                    <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="cobranca_endereco">
-                                Endereço (Logradouro e número):
+                            <label for="zip_code">
+                                CEP:
                             </label>
-                            <input type="text" id="cobranca_endereco" class="form-control" name="billing_address"/>
+                            <input class="form-control" id="zip_code" name="billing_zip_code" placeholder="Digite o CEP"
+                                   value="{{ old('billing_zip_code') }}"/>
                         </div>
                     </div>
-                    <div class="col-lg-5">
+                    <div class="col-lg-4">
                         <div class="form-group">
-                            <label for="cobranca_bairro">
-                                Bairro:
+                            <label for="street">
+                                Rua:
                             </label>
-                            <input type="text" id="cobranca_bairro" class="form-control" name="billing_district"/>
-                        </div>
-                    </div>
-                    <div class="col-lg-5">
-                        <div class="form-group">
-                            <label for="cobranca_cidade">
-                                Cidade:
-                            </label>
-                            <input type="text" id="cobranca_cidade" class="form-control" name="billing_city"/>
+                            <input class="form-control" id="street" name="billing_street" placeholder="Digite a Rua"
+                                   value="{{ old('billing_street') }}" {{ old('billing_zip_code')  ? '' : 'disabled' }}/>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label for="cobranca_uf">
+                            <label for="street_number">
+                                Número:
+                            </label>
+                            <input class="form-control" id="street_number" name="billing_street_number"
+                                   placeholder="Digite o número"
+                                   value="{{ old('billing_street_number')}}" {{ old('billing_zip_code') ? '' : 'disabled' }}/>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="address_details">
+                                Complemento:
+                            </label>
+                            <input class="form-control" id="address_details" name="billing_address_details" placeholder="Digite o Complemento"
+                                   value="{{ old('billing_address_details') }}" {{ old('billing_zip_code') ? '' : 'street' }}/>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="district">
+                                Bairro:
+                            </label>
+                            <input class="form-control" id="district" name="billing_district" placeholder="Digite o Bairro"
+                                   value="{{ old('billing_district') }}" {{ old('billing_zip_code') ? '' : 'disabled' }}/>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="city">
+                                Cidade:
+                            </label>
+                            <input class="form-control" id="city" name="billing_city" placeholder="Digite a cidade"
+                                   value="{{ old('billing_city') ?? '' }}" {{ old('billing_zip_code') ? '' : 'disabled' }}/>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label for="state">
                                 Estado:
                             </label>
-                            <select class="form-control" style="height: 47px;" id="cobranca_uf" name="billing_state">
+                            <select class="form-control" style="height: 47px;" id="state" name="billing_state" {{ old('billing_zip_code') ? '' : 'disabled' }}>
                                 <option value="">Selecione</option>
                                 @foreach (config('states') as $state)
-                                    <option value="{{ $state }}">
+                                    <option
+                                        value="{{ $state }}"
+                                    >
                                         {{ $state }}
                                     </option>
                                 @endforeach
                             </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="cep">
-                                CEP:
-                            </label>
-                            <input type="text" id="cep" class="form-control" name="billing_zip_code"/>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="phone">
-                                Principal Telefone:
-                            </label>
-                            <input type="text" id="phone" class="form-control" name="billing_phone"/>
                         </div>
                     </div>
                     <div class="col-lg-12">
@@ -241,5 +258,46 @@
 
         getShippingInfo('{{ $addresses->find(old('address_id'))->zip_code  ?? ''}}');
 
+        // completar com cep
+        $('#cobranca_cpf').mask('999.999.999-99');
+        $('#zip_code').mask('99999-999');
+        $('#phone').mask('{{ config('masks.phone')}}');
+        $('#zip_code').on('change', function () {
+            let zip = $('#zip_code').val();
+            zip = zip.replace('-', '');
+            if (zip.search(/^[0-9]{8}$/) < 0) {
+                alert('CEP inválido');
+                return false;
+            }
+            let street = $('#street');
+            let street_number = $('#street_number');
+            let address_details = $('#address_details');
+            let district = $('#district');
+            let city = $('#city');
+            let state = $('#state');
+
+            const url = 'https://viacep.com.br/ws/' + zip + '/json/';
+            $.get(url, '', function (response) {
+                street.val(response.logradouro);
+                street.prop('disabled', false);
+                street_number.prop('disabled', false);
+                address_details.prop('disabled', false);
+
+                district.val(response.bairro);
+                district.prop('disabled', false);
+                city.val(response.localidade);
+                city.prop('disabled', false);
+                state.val(response.uf);
+                state.prop('disabled', false);
+
+                if (street.val()) {
+                    street_number.focus();
+                } else {
+                    street.focus();
+                }
+
+            });
+
+        });
     </script>
 @endsection
