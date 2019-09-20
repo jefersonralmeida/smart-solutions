@@ -75,6 +75,11 @@ class DentistsController extends Controller
     public function create()
     {
 
+        $redirect = request()->query('redirect');
+        if ($redirect !== null) {
+            session(['dentist_create_redirect' => $redirect]);
+        }
+
         $users = User::where(['clinic_id' => Auth::user()->clinic->id])->get();
 
         return view('dentists.form', [
@@ -121,7 +126,10 @@ class DentistsController extends Controller
 
         event(new DentistCreated($dentist));
 
-        return redirect(route('dentists.view', [$dentist->id]));
+        $redirect = session('dentist_create_redirect', route('dentists.view', [$dentist->id]));
+        session()->forget('dentist_create_redirect');
+
+        return redirect($redirect);
 
     }
 

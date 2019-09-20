@@ -21,7 +21,7 @@
         <small class="form-text text-danger">
             {{ $errors->first('patient') }}
         </small>
-        <div><a href="{{ route('patients.create') }}">Adicionar paciente</a></div>
+        <div><a href="{{ route('patients.create', ['redirect' => route('order-aligner')]) }}">Adicionar paciente</a></div>
     </div>
 </div>
 <div class="col-md-6">
@@ -41,6 +41,6 @@
         <small class="form-text text-danger">
             {{ $errors->first('dentist') }}
         </small>
-        <div><a href="{{ route('dentists.create') }}">Adicionar dentista</a></div>
+        <div><a href="{{ route('dentists.create', ['redirect' => route('order-aligner')]) }}">Adicionar dentista</a></div>
     </div>
 </div>

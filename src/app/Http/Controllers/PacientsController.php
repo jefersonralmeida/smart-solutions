@@ -69,6 +69,11 @@ class PacientsController extends Controller
 
     public function create()
     {
+        $redirect = request()->query('redirect');
+        if ($redirect !== null) {
+            session(['patient_create_redirect' => $redirect]);
+        }
+
         return view('patients.form', [
             'breadcrumbs' => [
                 ['label' => 'Pacientes', 'route' => 'patients'],
@@ -93,8 +98,10 @@ class PacientsController extends Controller
         $patient->clinic_id = Auth::user()->clinic->id;
         $patient->save();
 
+        $redirect = session('patient_create_redirect', route('patients.view', ['patient' => $patient->id]));
+        session()->forget('patient_create_redirect');
 
-        return redirect(route('patients.view', ['patient' => $patient->id]));
+        return redirect($redirect);
 
     }
 
