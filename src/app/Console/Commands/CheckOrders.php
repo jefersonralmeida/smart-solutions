@@ -45,7 +45,7 @@ class CheckOrders extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -93,6 +93,11 @@ class CheckOrders extends Command
                     // ignore orders without price value
                     if ($value == 0) {
                         \Log::error("Pedido {$order->id} ({$order->integration_id}) sem preço.");
+                        continue;
+                    }
+
+                    if (count(getAvailableProjectFiles($order->id)) === 0) {
+                        \Log::error("Pedido {$order->id} ({$order->integration_id}) não tem arquivos.");
                         continue;
                     }
                     $order->value = $this->ordersApi->prePlanning($order)->getPrice();

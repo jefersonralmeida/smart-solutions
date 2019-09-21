@@ -139,28 +139,6 @@ class OrdersController extends Controller
     }
 
     /**
-     * Convenience method that get the project files
-     *
-     * @param int $orderId
-     * @return array
-     */
-    protected function getAvailableProjectFiles(int $orderId): array
-    {
-
-        // TODO - move this method to another place, a controller should not have a protected convenience method
-
-        // get the configured path for the project
-        $projectPath = implode('/', [
-            config('paths.orders'),
-            $orderId,
-            config('paths.project'),
-        ]);
-
-        // get the available files
-        return Storage::files($projectPath);
-    }
-
-    /**
      * Convenience method that translate the file size in bytes to human readable format
      *
      * @param string $path
@@ -194,7 +172,7 @@ class OrdersController extends Controller
 
         $order->load(['patient', 'dentist']);
 
-        $paths = $this->getAvailableProjectFiles($order->id);
+        $paths = getAvailableProjectFiles($order->id);
 
         // generate the links for each file
         $files = [];
@@ -224,7 +202,7 @@ class OrdersController extends Controller
 
     public function downloadProjectFile(Order $order, int $fileId)
     {
-        $paths = $this->getAvailableProjectFiles($order->id);
+        $paths = getAvailableProjectFiles($order->id);
         return Storage::download($paths[$fileId]);
     }
 

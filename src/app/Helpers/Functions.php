@@ -160,3 +160,18 @@ if (!function_exists('sanitizeString')) {
         return strtoupper($string);
     }
 }
+if (!function_exists('getAvailableProjectFiles')) {
+    function getAvailableProjectFiles(int $orderId): array
+    {
+
+        // get the configured path for the project
+        $projectPath = implode('/', [
+            config('paths.orders'),
+            $orderId,
+            config('paths.project'),
+        ]);
+
+        // get the available files
+        return \Illuminate\Support\Facades\Storage::files($projectPath);
+    }
+}
