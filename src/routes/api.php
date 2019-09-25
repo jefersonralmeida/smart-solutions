@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 use GuzzleHttp\Client as HttpClient;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,13 +15,13 @@ use GuzzleHttp\Client as HttpClient;
 */
 
 //Route::middleware('auth:api')->group(function() {
-Route::group([], function() {
+Route::group([], function () {
     Route::get('/notifications', 'NotificationsController@index');
     Route::get('/shipping-info/{provider}/{zipCode}', 'ShippingController@info')
         ->where('zipCode', '^\d{8}$');
 });
 
-Route::get('/dentists', function(Request $request, HttpClient $httpClient) {
+Route::get('/dentists', function (Request $request, HttpClient $httpClient) {
 
     $perPage = $request->query('perpage', 15);
 
@@ -44,7 +44,7 @@ Route::get('/dentists', function(Request $request, HttpClient $httpClient) {
         ];
     }
 
-    $builder = \App\Dentist::withoutGlobalScope(\App\Scopes\CurrentClinicScope::class);
+    $builder = \App\Dentist::with('user')->withoutGlobalScope(\App\Scopes\CurrentClinicScope::class);
 
     if (array_reduce($filters, function ($carry, $item) {
         return $carry && empty($item);
@@ -56,14 +56,14 @@ Route::get('/dentists', function(Request $request, HttpClient $httpClient) {
         $builder->where($key, 'like', "%$value%");
     }
 
-   $columns = [
-       'name',
-       'email',
-       'city',
-       'state',
-       'phone',
-       'cellphone'
-   ];
+    $columns = [
+        'name',
+        'email',
+        'city',
+        'state',
+        'phone',
+        'cellphone'
+    ];
 
     if ($perPage === '0') {
         return $builder->get($columns)->toArray();

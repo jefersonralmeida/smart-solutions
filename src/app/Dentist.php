@@ -77,12 +77,12 @@ class Dentist extends Model
 
     public function getNameAttribute()
     {
-        return $this->attributes['name'] ?? $this->user->name;
+        return $this->attributes['name'] ?? $this->user->name ?? $this->getRelation('user')['name'];
     }
 
     public function getEmailAttribute()
     {
-        return $this->attributes['email'] ?? $this->user->email;
+        return $this->attributes['email'] ?? $this->user->email ?? $this->getRelation('user')['email'];
     }
 
     /**
