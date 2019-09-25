@@ -30,7 +30,7 @@ class Clinic extends Model
 
     public function getCnpjAttribute()
     {
-        return addMask($this->attributes['cnpj'], config('masks.cnpj'));
+        return !is_null($this->attributes['cnpj']) ? addMask($this->attributes['cnpj'], config('masks.cnpj')) : null;
     }
 
     public function addresses()

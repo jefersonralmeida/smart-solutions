@@ -27,20 +27,25 @@
 <div class="col-md-6">
     <div class="form-group">
         <label for="dentist">DENTISTA</label>
-        <select id="dentist" name="dentist_id" class="form-control">
-            <option value="">SELECIONE</option>
-            @foreach ($dentists as $dentist)
-                <option
-                        {{ (old('dentist_id')) == $dentist->id ? 'selected' : '' }}
-                        value="{{ $dentist->id }}"
-                >
-                    {{ "{$dentist->name}  | {$dentist->cro}" }}
-                </option>
-            @endforeach
-        </select>
-        <small class="form-text text-danger">
-            {{ $errors->first('dentist') }}
-        </small>
-        <div><a href="{{ route('dentists.create', ['redirect' => route('order-aligner')]) }}">Adicionar dentista</a></div>
+        @if(Auth::user()->clinic->cnpj !== null)
+            <select id="dentist" name="dentist_id" class="form-control">
+                <option value="">SELECIONE</option>
+                @foreach ($dentists as $dentist)
+                    <option
+                            {{ (old('dentist_id')) == $dentist->id ? 'selected' : '' }}
+                            value="{{ $dentist->id }}"
+                    >
+                        {{ "{$dentist->name}  | {$dentist->cro}" }}
+                    </option>
+                @endforeach
+            </select>
+            <small class="form-text text-danger">
+                {{ $errors->first('dentist') }}
+            </small>
+            <div><a href="{{ route('dentists.create', ['redirect' => route('order-aligner')]) }}">Adicionar dentista</a></div>
+        @else
+            <p><strong>{{ "{$dentists->first()->name}  | {$dentists->first()->cro}" }}</strong></p>
+            <input type="hidden" name="dentist_id" value="{{ $dentists->first()->id }}"/>
+        @endif
     </div>
 </div>

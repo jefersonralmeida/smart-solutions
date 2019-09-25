@@ -27,9 +27,9 @@
                     @if (!empty($query))
                         <p>Sua busca por '{{ $query }}' não retornou resultados.</p>
                     @else
-                        <p>Não há dentistas cadastrados para essa clínica. <a
+                        <p>Não há pacientes cadastrados para essa clínica. <a
                                     href="{{ route('patients.create') }}">Cadastre</a>
-                            um novo dentista.</p>
+                            um novo paciente.</p>
                     @endif
                 </div>
             @endif

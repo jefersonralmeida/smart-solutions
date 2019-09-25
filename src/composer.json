@@ -16,6 +16,7 @@
     "barryvdh/laravel-httpcache": "^0.3.6",
     "benjamincrozat/laravel-dropbox-driver": "^2.0",
     "developersrede/erede-php": "^4.2",
+    "doctrine/dbal": "^2.9",
     "econea/nusoap": "^0.9.6",
     "fideloper/proxy": "^4.0",
     "guzzlehttp/guzzle": "^6.3",

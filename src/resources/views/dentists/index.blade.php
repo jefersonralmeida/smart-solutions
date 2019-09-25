@@ -7,6 +7,7 @@
     <div class="panel panel-default">
 
         <div class="panel-body">
+            @if (Auth::user()->clinic->cnpj !== null)
             <div class="col-lg-10" style="padding:0;">
                 <form method="get" action="{{ route('dentists') }}">
                     <div class="col-lg-6" style="padding:0;">
@@ -20,6 +21,7 @@
             <div class="col-lg-2" style="padding:0; text-align: right">
                 <a class="btn btn-primary" href="{{ route('dentists.create') }}">Adicionar Dentista</a>
             </div>
+            @endif
 
             @if (!$dentists->count())
                 <div class="col-lg-12" style="padding:0;">
@@ -41,18 +43,20 @@
                     <a href="{{ route('dentists.edit', ['dentist' => $dentist->id]) }}" class="btn btn-primary btn-sm">
                         <i class="fa fa-pencil-square-o"></i> Alterar dados
                     </a>
-                    <form
-                            action="{{ route('dentists.destroy', ['dentist' => $dentist->id]) }}"
-                            method="post"
-                            style="display:inline;"
-                            onsubmit="return confirm('Deseja realmente excluir o dentista {{ $dentist->name }}')"
-                    >
-                        @csrf
-                        @method ('delete')
-                        <button type="submit" class="btn btn-danger btn-sm">
-                            <i class="fa fa-trash-o"></i> Excluir Dentista
-                        </button>
-                    </form>
+                    @if(Auth::user()->clinic->cnpj)
+                        <form
+                                action="{{ route('dentists.destroy', ['dentist' => $dentist->id]) }}"
+                                method="post"
+                                style="display:inline;"
+                                onsubmit="return confirm('Deseja realmente excluir o dentista {{ $dentist->name }}')"
+                        >
+                            @csrf
+                            @method ('delete')
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fa fa-trash-o"></i> Excluir Dentista
+                            </button>
+                        </form>
+                    @endif
                 </div>
             @endforeach
         </div>

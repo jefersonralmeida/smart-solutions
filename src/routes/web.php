@@ -27,6 +27,8 @@ Route::get('/profile/{form?}', 'ProfileController@index')->name('profile');
 
 // Clinics
 Route::post('/clinics', 'ClinicController@store')->name('clinic.store');
+Route::get('/clinics/single_dentist/create', 'ClinicController@createSingleDentist')->name('clinic.createSingleDentist');
+Route::post('/clinics/single_dentist', 'ClinicController@storeSingleDentist')->name('clinic.storeSingleDentist');
 Route::put('/clinics/{clinic}', 'ClinicController@update')->name('clinic.update');
 
 // Orders

@@ -1,5 +1,5 @@
 @php
-/** @var \App\Patient $patient */
+/** @var \App\Dentist $dentist */
 @endphp
 @extends('layouts.main')
 
@@ -23,25 +23,11 @@
 
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="name">
-                                Nome do paciente:
+                            <label for="cro">
+                                CRO:
                             </label>
-                            <input class="form-control" id="name" name="name" placeholder="Digite o nome completo"
-                                   value="{{ old('name') ?? $patient->name ?? '' }}"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="birthday">
-                                Data de Nascimento:
-                            </label>
-                            <input class="form-control" id="birthday" name="birthday" placeholder="Digite a data de nascimento"
-                                   value="{{ old('birthday') ?? (isset($patient) ? $patient->birthday->format('d/m/Y') : '') }}"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">
-                                E-mail:
-                            </label>
-                            <input class="form-control" id="email" name="email" placeholder="Digite o e-mail"
-                                   value="{{ old('email') ?? $patient->email ?? '' }}"/>
+                            <input class="form-control" id="cro" name="cro" placeholder="Digite o CRO (Formato: UF-9999)"
+                                   value="{{ old('cro') ?? $dentist->cro ?? '' }}"/>
                         </div>
                         <div class="form-group">
                             <label for="phone">
@@ -49,7 +35,14 @@
                             </label>
                             <input class="form-control" id="phone" name="phone"
                                    placeholder="Digite o telefone"
-                                   value="{{ old('phone') ?? $patient->phone ?? '' }}"/>
+                                   value="{{ old('phone') ?? $dentist->phone ?? '' }}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf">
+                                CPF:
+                            </label>
+                            <input class="form-control" id="cpf" name="cpf" placeholder="Digite o CPF"
+                                   value="{{ old('cpf') ?? $dentist->cpf ?? '' }}"/>
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -58,7 +51,7 @@
                                 Cidade:
                             </label>
                             <input class="form-control" id="city" name="city" placeholder="Digite a cidade"
-                                   value="{{ old('city') ?? $patient->city ?? '' }}"/>
+                                   value="{{ old('city') ?? $dentist->city ?? '' }}"/>
                         </div>
                         <div class="form-group">
                             <label for="state">
@@ -68,7 +61,7 @@
                                 <option value="">Selecione</option>
                                 @foreach (config('states') as $state)
                                     <option
-                                            {{ (old('state') ?? $patient->state ?? '') == $state ? 'selected' : '' }}
+                                            {{ (old('state') ?? $dentist->state ?? '') == $state ? 'selected' : '' }}
                                             value="{{ $state }}"
                                     >
                                         {{ $state }}
@@ -77,27 +70,17 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="gender">
-                                Sexo:
-                            </label>
-                            <select class="form-control" style="height: 47px;" id="gender" name="gender">
-                                <option value="">Selecione</option>
-                                <option value="M" {{ (old('gender') ?? $patient->gender ?? '') == 'M' ? 'selected' : '' }}>Masculino</option>
-                                <option value="F" {{ (old('gender') ?? $patient->gender ?? '') == 'F' ? 'selected' : '' }}>Feminino</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <label for="cellphone">
                                 Celular:
                             </label>
                             <input class="form-control" id="cellphone" name="cellphone"
-                                   placeholder="Digite o telefone"
-                                   value="{{ old('cellphone') ?? $patient->cellphone ?? '' }}"/>
+                                   placeholder="Digite o telefone {{ config('masks.cellphone') }}"
+                                   value="{{ old('cellphone') ?? $dentist->cellphone ?? '' }}"/>
                         </div>
                     </div>
                     <div class="col-lg-12">&nbsp;</div>
                     <div class="col-lg-12">
-                        <button type="submit" class="btn btn-primary">Gravar Paciente</button>
+                        <button type="submit" class="btn btn-primary">Completar Cadastro</button>
                     </div>
                 </form>
             </div>
@@ -107,8 +90,18 @@
 
 @section('scripts')
     <script language="javascript">
-        $('#birthday').mask('{{ config('masks.date')}}');
+        $('#cpf').mask('{{ config('masks.cpf')}}');
         $('#phone').mask('{{ config('masks.phone')}}');
         $('#cellphone').mask('{{ config('masks.cellphone')}}');
+        $('#user_id').on('change', function () {
+            if ($('#user_id').val() === '') {
+                $("#name").prop('disabled', false);
+                $("#email").prop('disabled', false);
+            } else {
+                $("#name").prop('disabled', true);
+                $("#email").prop('disabled', true);
+            }
+        });
+        $('#user_id').change();
     </script>
 @endsection

@@ -143,28 +143,37 @@
                     <div class="row">
                         @if (Auth::user()->clinic)
                             <div class="col-lg-12" style="background-color: #c8e0f0; padding-top: 20px;">
+                                @if(Auth::user()->clinic->cnpj !== null)
                                 <div class="col-lg-6">
                                     <p>Nome:&nbsp&nbsp;<b>{{ Auth::user()->clinic->name }}</b></p>
-                                    <p>Dentistas:
-                                        @if ($dentistsCount = Auth::user()->clinic->dentists->count())
-                                            <b><a href="{{ route('dentists') }}">{{ $dentistsCount }}</a></b>
-                                        @else
-                                            <b>0</b>
-                                            @can ('admin-clinic')
-                                                (<a href="{{ route('dentists.create') }}">Adicionar</a>)
-                                            @endcan
-                                        @endif
-                                    </p>
-                                    @can ('admin-clinic')
-                                        <p><b>Você é administrador dessa clínica!</b></p>
-                                    @endcan
+
+                                        <p>Dentistas:
+                                            @if ($dentistsCount = Auth::user()->clinic->dentists->count())
+                                                <b><a href="{{ route('dentists') }}">{{ $dentistsCount }}</a></b>
+                                            @else
+                                                <b>0</b>
+                                                @can ('admin-clinic')
+                                                    (<a href="{{ route('dentists.create') }}">Adicionar</a>)
+                                                @endcan
+                                            @endif
+                                        </p>
+                                        @can ('admin-clinic')
+                                            <p><b>Você é administrador dessa clínica!</b></p>
+                                        @endcan
                                 </div>
                                 <div class="col-lg-6">
                                     <p>CNPJ:&nbsp;&nbsp;<b>{{ Auth::user()->clinic->cnpj }}</b></p>
                                 </div>
+                                @else
+                                    <div class="col-lg-12">
+                                    <p><b>Você é o único dentista dessa clínica</b></p>
+                                    </div>
+                                @endif
                             </div>
                             @if ($form != 'update-clinic' || !$errors->any())
-                                <a href="#updateClinicForm" data-toggle="collapse">Alterar dados</a>
+                                @if(Auth::user()->clinic->cnpj !== null)
+                                    <a href="#updateClinicForm" data-toggle="collapse">Alterar dados</a>
+                                @endif
                             @endif
                                 <div id="updateClinicForm"
                                      class="{{ ($form == 'update-clinic') && old() ? '' : 'collapse' }}">
@@ -211,6 +220,10 @@
                                     <a href="#createClinicForm" data-toggle="collapse">Crie</a> uma nova clínica ou
                                     <a href="#">solicite o ingresso</a>
                                     em uma clínica existente.
+                                </p>
+                                <p>
+                                    Caso você não faça parte de uma clínica, complete seu
+                                    <a href="{{ route('clinic.createSingleDentist') }}">cadastro de dentista</a>.
                                 </p>
                                 <div id="createClinicForm"
                                      class="{{ ($form == 'create-clinic') && old() ? '' : 'collapse' }}">
