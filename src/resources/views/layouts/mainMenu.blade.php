@@ -38,4 +38,9 @@
 @can ('view-dentists')
     <li><a href="{{ route('dentists') }}"><em class="fa fa-user-md">&nbsp;</em> {{ Auth::user()->clinic->cnpj === null ? 'Dados de Dentista' : 'Dentistas' }}</a></li>
 @endcan
+
+@if((Auth::user()->clinic->cnpj ?? null) !== null)
+<li><a href="{{ route('clinic.users') }}"><em class="fa fa-user">&nbsp;</em> Usuários</a></li>
+@endif
+
 <!-- <li><a href="#"><em class="fa fa-phone">&nbsp;</em> Abrir chamado</a></li> -->

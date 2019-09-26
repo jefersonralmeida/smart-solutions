@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeAvatar;
 use App\Http\Requests\UpdateProfile;
+use App\User;
 use Auth;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -82,6 +83,21 @@ class ProfileController extends Controller
         $disk = \Storage::disk('local');
         if (!$disk->exists($path)) {
             $userName = Auth::user()->name;
+            $imageSize = $size === 'small' ? 50 : 140;
+            $response = $httpClient->get("https://ui-avatars.com/api/?name=$userName&size=$imageSize&background=0D8ABC&color=fff");
+            $disk->put($path, $response->getBody()->getContents());
+        }
+        $type = $disk->mimeType($path);
+        $content = $disk->get($path);
+        return response($content)->header('Content-Type', $type);
+    }
+
+    public function userAvatar(Client $httpClient, User $user, ?string $size = null)
+    {
+        $path = $size === 'small' ? "avatar/{$user->id}.small.png" : "avatar/{$user->id}.png";
+        $disk = \Storage::disk('local');
+        if (!$disk->exists($path)) {
+            $userName = $user->name;
             $imageSize = $size === 'small' ? 50 : 140;
             $response = $httpClient->get("https://ui-avatars.com/api/?name=$userName&size=$imageSize&background=0D8ABC&color=fff");
             $disk->put($path, $response->getBody()->getContents());

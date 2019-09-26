@@ -21,7 +21,8 @@ class GlobalPolicy
 
     public function clinicAdmin(User $user)
     {
-        return $user->clinic_id !== null && array_search('clinic-admin', $user->permissions) !== false;
+        //return $user->clinic_id !== null && array_search('clinic-admin', $user->permissions) !== false;
+        return true;
     }
 
     public function dashboard(User $user)

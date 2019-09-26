@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateClinic;
 use App\User;
 use Auth;
 use DB;
+use Illuminate\Http\Request;
 
 class ClinicController extends Controller
 {
@@ -97,5 +98,58 @@ class ClinicController extends Controller
         $clinic->save();
 
         return redirect('profile')->with('success', 'Clínica Alterada com sucesso');
+    }
+
+    public function usersIndex()
+    {
+        return view('clinics.users', [
+            'breadcrumbs' => [
+                ['label' => 'Usuários da Clínica'],
+            ],
+            'users' => Auth::user()->clinic->users,
+            'applicants' => Auth::user()->clinic->applicants,
+        ]);
+    }
+
+    public function userRemove(User $user)
+    {
+        $user->clinic_id = null;
+        $user->save();
+        return redirect(route('clinic.users'))->with('success', 'Acesso do usuário removido com sucesso');
+    }
+
+    public function applyForm()
+    {
+        $clinics = Clinic::whereNotNull('cnpj')->get();
+        return view('clinics.applyForm', [
+            'breadcrumbs' => [
+                ['label' => 'Solicitar ingresso em clínica'],
+            ],
+            'clinics' => $clinics
+        ]);
+    }
+
+    public function apply(Request $request)
+    {
+        $loggedUser = Auth::user();
+        $loggedUser->applied_clinic_id = $request->clinic_id;
+        $loggedUser->save();
+        return redirect('profile')->with('success', 'Solicitação de acesso enviada com sucesso.');
+    }
+
+    public function applicantApprove(User $applicant)
+    {
+        $targetClinicId = $applicant->applied_clinic_id;
+        $applicant->applied_clinic_id = null;
+        $applicant->clinic_id = $targetClinicId;
+        $applicant->save();
+        return redirect(route('clinic.users'))->with('success', 'Solicitação aprovada com sucesso');
+    }
+
+    public function applicantReprove(User $applicant)
+    {
+        $applicant->applied_clinic_id = null;
+        $applicant->save();
+        return redirect(route('clinic.users'))->with('success', 'Solicitação reprovada com sucesso');
     }
 }

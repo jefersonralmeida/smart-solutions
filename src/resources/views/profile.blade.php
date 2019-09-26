@@ -213,12 +213,16 @@
                                         </div>
                                     </form>
                                 </div>
+                        @elseif(Auth::user()->applied_clinic_id)
+                            <div class="col-lg-12">
+                                <p>Você solicitou acesso a clínica {{ Auth::user()->applied_clinic->name }}. Aguarde a aprovação.</p>
+                            </div>
                         @else
                             <div class="col-lg-12">
                                 <p>
                                     Seu usuário não está ligado a nenhuma clínica.
                                     <a href="#createClinicForm" data-toggle="collapse">Crie</a> uma nova clínica ou
-                                    <a href="#">solicite o ingresso</a>
+                                    <a href="{{ route('clinic.apply_form') }}">solicite o ingresso</a>
                                     em uma clínica existente.
                                 </p>
                                 <p>

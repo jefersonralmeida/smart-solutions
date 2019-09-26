@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Eloquent;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
@@ -17,10 +18,13 @@ use Illuminate\Notifications\Notifiable;
  * @property int clinic_id
  * @property int dentist_id
  * @property string[] permissions
+ * @property int applied_clinic_id
  * @property Clinic clinic
+ * @property Dentist dentist
+ * @property Clinic applied_clinic
  * @property DatabaseNotificationCollection|DatabaseNotification[] notifications
  * @property DatabaseNotificationCollection|DatabaseNotification[] unreadNotifications
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class User extends Authenticatable
 {
@@ -53,6 +57,16 @@ class User extends Authenticatable
     public function clinic()
     {
         return $this->belongsTo(Clinic::class);
+    }
+
+    public function dentist()
+    {
+        return $this->belongsTo(Dentist::class);
+    }
+
+    public function applied_clinic()
+    {
+        return $this->belongsTo(Clinic::class, 'applied_clinic_id');
     }
 
 }

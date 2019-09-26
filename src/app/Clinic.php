@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,6 +14,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string cnpj
  * @property Collection|Address[] addresses
  * @property Collection|Dentist[] dentists
+ * @property Collection|User[] users
+ * @property Collection|User[] applicants
+ * @mixin Eloquent
  */
 class Clinic extends Model
 {
@@ -41,5 +45,15 @@ class Clinic extends Model
     public function dentists()
     {
         return $this->hasMany(Dentist::class);
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function applicants()
+    {
+        return $this->hasMany(User::class, 'applied_clinic_id');
     }
 }

@@ -23,13 +23,21 @@ Route::put('/profile', 'ProfileController@update')->name('profile.update');
 Route::put('/profile/change-password', 'ProfileController@changePassword')->name('profile.change-password');
 Route::post('/profile/avatar/change', 'ProfileController@changeAvatar')->name('profile.change-avatar');
 Route::get('/profile/avatar/{size?}', 'ProfileController@avatar')->name('profile.avatar');
+Route::get('/profile/{user}/avatar/{size?}', 'ProfileController@userAvatar')->name('profile.user.avatar');
 Route::get('/profile/{form?}', 'ProfileController@index')->name('profile');
 
 // Clinics
 Route::post('/clinics', 'ClinicController@store')->name('clinic.store');
-Route::get('/clinics/single_dentist/create', 'ClinicController@createSingleDentist')->name('clinic.createSingleDentist');
+Route::get('/clinic/single_dentist/create', 'ClinicController@createSingleDentist')->name('clinic.createSingleDentist');
 Route::post('/clinics/single_dentist', 'ClinicController@storeSingleDentist')->name('clinic.storeSingleDentist');
 Route::put('/clinics/{clinic}', 'ClinicController@update')->name('clinic.update');
+Route::get('/clinic/users', 'ClinicController@usersIndex')->name('clinic.users');
+Route::delete('/clinic/users/{user}', 'ClinicController@userRemove')->name('clinic.user_remove');
+Route::get('/clinics/apply', 'ClinicController@applyForm')->name('clinic.apply_form');
+Route::post('/clinic/apply', 'ClinicController@apply')->name('clinic.apply');
+Route::post('/clinic/applicant/{applicant}/approve', 'ClinicController@applicantApprove')->name('clinic.applicant_approve');
+Route::post('/clinic/applicant/{applicant}/reprove', 'ClinicController@applicantReprove')->name('clinic.applicant_reprove');
+
 
 // Orders
 Route::get('/orders', 'OrdersController@index')->name('orders')->middleware('can:view-orders');
