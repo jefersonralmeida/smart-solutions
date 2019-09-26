@@ -23,6 +23,7 @@ services:
     volumes:
       - ./src:/var/www/dev:${CACHING_OPTION:-cached}
       - ./env/php/conf/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:cached
+      - ./env/php/conf/php.ini:/usr/local/etc/php/php.ini:cached
     working_dir: /var/www/dev
     links:
       - mysql

@@ -29,7 +29,7 @@ class UploadOrderFiles
         foreach ($event->getFiles() as $fileName => $fileObject) {
 
             // save the file on local storage before sending to the queue (so we don't lose the temporary file)
-            $localFileLocation = $fileObject->store($destinationPath, 'local');
+            $localFileLocation = $fileObject->storeAs($destinationPath, uniqid(true) . '.' . $fileObject->getClientOriginalExtension(), 'local');
 
             // calculate the correct file name to be stored (included the automatic found extension)
             $fileName = preg_replace('/^.+?(\.[A-Za-z0-9]+)$/', "{$fileName}$1", $localFileLocation);
