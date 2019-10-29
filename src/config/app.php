@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => strpos($_SERVER['APP_URL'], env('ALIGNER_DOMAIN')) !== false ? 'Smart Aligner' : 'Smart Solutions',
+    'name' => strpos($_SERVER['HTTP_HOST'], env('ALIGNER_DOMAIN')) !== false ? 'Smart Aligner' : 'Smart Solutions',
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => $_SERVER['APP_URL'],
+    'url' => !empty($_SERVER['HTTP_HOST']) ? $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] : env('APP_URL'),
 
     'asset_url' => env('ASSET_URL', null),
 
