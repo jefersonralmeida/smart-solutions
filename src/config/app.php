@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => strpos($_SERVER['APP_URL'], env('ALIGNER_DOMAIN')) !== false ? env('ALIGNER_DOMAIN') : env('SOLUTIONS_DOMAIN'),
+    'url' => $_SERVER['APP_URL'],
 
     'asset_url' => env('ASSET_URL', null),
 
