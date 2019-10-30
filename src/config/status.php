@@ -24,10 +24,10 @@ return [
         ]
     ],
     3 => [
-        'name' => 'Pedido Realizado - Aguardando Pre-projeto',
+        'name' => 'Pedido em Planejamento',
     ],
     4 => [
-        'name' => 'Pre projeto criado - Aguardando Aprovação',
+        'name' => 'SETUP VIRTUAL disponível para aprovação',
         'next' => [
             'label' => 'Aprovar Projeto',
             'route' => ['orders.approve.view', ['id']],
@@ -45,5 +45,24 @@ return [
     ],
     8 => [
         'name' => 'Pagamento Confirmado',
-    ]
+    ],
+    9 => [
+        'name' => 'Documentação em análise técnica',
+    ],
+    10 => [
+        'name' => 'Documentação com problema / incompleta',
+    ],
+    11 => [
+        'name' => 'Alteração Solicitada',
+    ],
+    12 => [
+        'name' => 'Em produção',
+    ],
+    13 => [
+        'name' => 'Preparando envio',
+    ],
+    14 => [
+        'name' => 'Pedido enviado',
+    ],
+
 ];

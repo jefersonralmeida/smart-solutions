@@ -281,8 +281,8 @@ class Order extends Model
     }
 
     /**
-     * Set the status of the order to 3 - Order Placed, when the product requires pre-planning, otherwise set's it
-     * to 6 - Waiting Payment
+     * Set the status of the order to 9 - "Documentação em análise técnica", when the product requires pre-planning, otherwise set's it
+     * to 6 - "Aguardando pagamento"
      */
     public function setOrderPlaced(): void
     {
@@ -290,6 +290,22 @@ class Order extends Model
             $this->setWaitingPayment();
             return;
         }
+        $this->setStatus(9);
+    }
+
+    /**
+     * Documentação incompleta / com problema
+     */
+    public function setFailedDoc(): void
+    {
+        $this->setStatus(10);
+    }
+
+    /**
+     * Pedido em planejamento
+     */
+    public function setPlanning(): void
+    {
         $this->setStatus(3);
     }
 
@@ -299,6 +315,14 @@ class Order extends Model
     public function setWaitingApprovement(): void
     {
         $this->setStatus(4);
+    }
+
+    /**
+     * Alteração solicitada
+     */
+    public function setChangeRequired(): void
+    {
+        $this->setStatus(11);
     }
 
     /**
@@ -323,6 +347,30 @@ class Order extends Model
     public function setPaymentConfirmed(): void
     {
         $this->setStatus(8);
+    }
+
+    /**
+     * Em produção
+     */
+    public function setUnderProduction(): void
+    {
+        $this->setStatus(12);
+    }
+
+    /**
+     * Preparando envio
+     */
+    public function setPreparingShipping(): void
+    {
+        $this->setStatus(13);
+    }
+
+    /**
+     * Pedido enviado
+     */
+    public function setShipped(): void
+    {
+        $this->setStatus(14);
     }
 
     public static function findLastMonthsCount(int $months)

@@ -75,35 +75,88 @@ class CheckOrders extends Command
 
                 \Log::info("Resposta do sol: " . json_encode($items));
 
-                $ordersToChange = [];
                 foreach ($items as $item) {
-                    if ($item['state_id'] == config('orderCheck.checkApiStatus')) {
-                        $ordersToChange[] = (int)$item['integration_id'];
-                    }
-                }
 
-                $orders = $dentist->orders->filter(function (Order $order) use ($ordersToChange) {
-                    return in_array($order->integration_id, $ordersToChange);
-                });
+                    // check if the order exists for the dentist
+                    /** @var Order $order */
+                    $order = $dentist->orders->first(function (Order $order) use ($item) {
+                        return $order->integration_id == $item['integration_id'];
+                    });
 
-                /** @var Order $order */
-                foreach ($orders as $order) {
-                    $value = $this->ordersApi->prePlanning($order)->getPrice();
-
-                    // ignore orders without price value
-                    if ($value == 0) {
-                        \Log::error("Pedido {$order->id} ({$order->integration_id}) sem preço.");
+                    // if it don't exists do nothing
+                    if (empty($order)) {
                         continue;
                     }
 
-                    if (count(getAvailableProjectFiles($order->id)) === 0) {
-                        \Log::error("Pedido {$order->id} ({$order->integration_id}) não tem arquivos.");
-                        continue;
+                    switch ($item['state_id']) {
+
+                        // documentação em análise técnica - comentado porque esse é o pedido inicial após integração. Não precisa verificar
+//                        case 33:
+//                        case 35:
+//                            $order->setOrderPlaced();
+//                            $order->save();
+//                            break;
+
+                        // documentacao com problema
+                        case 24:
+                        case 25:
+                            $order->setFailedDoc();
+                            $order->save();
+                            break;
+
+                        // pedido em planejamento
+                        case 37:
+                            $order->setPlanning();
+                            $order->save();
+                            break;
+
+                        // setup virtual disponível para aprovação
+                        case 15:
+
+                            $value = $this->ordersApi->prePlanning($order)->getPrice();
+
+                            // ignore orders without price value
+                            if ($value == 0) {
+                                \Log::error("Pedido {$order->id} ({$order->integration_id}) sem preço.");
+                                break;
+                            }
+
+                            // ignore orders without files
+                            if (count(getAvailableProjectFiles($order->id)) === 0) {
+                                \Log::error("Pedido {$order->id} ({$order->integration_id}) não tem arquivos.");
+                                break;
+                            }
+
+                            // set the status
+                            $order->value = $value;
+                            $order->setWaitingApprovement();
+                            $order->save();
+                            break;
+
+                        // Alteração solicitada - comentado porque esse é o status quando uma alteração é solicitada. Não precisa verificar
+//                        case 23:
+//                            $order->setChangeRequired();
+//                            $order->save();
+//                            break;
+
+                        // em produção
+                        case 44:
+                            $order->setUnderProduction();
+                            $order->save();
+                            break;
+
+                        // preparando envio
+                        case 22:
+                            $order->setPreparingShipping();
+                            break;
+
+                        // pedido enviado
+                        case 54:
+                            $order->setShipped();
+                            break;
                     }
-                    $order->value = $this->ordersApi->prePlanning($order)->getPrice();
-                    $order->setWaitingApprovement();
-                    $order->save();
                 }
+
             } else {
                 \Log::info("Nenhum pedido encontrado para o dentista...");
             }
