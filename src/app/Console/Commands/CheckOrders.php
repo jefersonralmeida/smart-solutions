@@ -148,11 +148,13 @@ class CheckOrders extends Command
                         // preparando envio
                         case 22:
                             $order->setPreparingShipping();
+                            $order->save();
                             break;
 
                         // pedido enviado
                         case 54:
                             $order->setShipped();
+                            $order->save();
                             break;
                     }
                 }
