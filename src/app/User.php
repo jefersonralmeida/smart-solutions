@@ -19,6 +19,8 @@ use Illuminate\Notifications\Notifiable;
  * @property int dentist_id
  * @property string[] permissions
  * @property int applied_clinic_id
+ * @property string|null social_provider
+ * @property string|null social_id
  * @property Clinic clinic
  * @property Dentist dentist
  * @property Clinic applied_clinic

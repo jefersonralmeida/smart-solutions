@@ -118,3 +118,6 @@ Route::post('addresses', 'AddressesController@store')->name('addresses.store');
 Route::get('addresses/{address}/edit', 'AddressesController@edit')->name('addresses.edit');
 Route::put('addresses/{address}', 'AddressesController@update')->name('addresses.update');
 
+// social login
+Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->name('socialLogin');
+Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('socialLogin.callback');

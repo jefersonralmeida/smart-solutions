@@ -32,10 +32,12 @@
             </button>
         </fieldset>
     </form>
-
     <div class="cadastrese">
         <a class="btn btn-link" href="{{ route('password.request') }}">Esqueci a senha</a> |
         <a class="nav-link" href="{{ route('register') }}">Cadastrar-se</a>
     </div>
+    <hr/>
+    <a href="{{ route('socialLogin', 'facebook') }}" class="btn btn-primary"><i class="fa fa-facebook-square"></i> Continuar com o Facebook</a>
+    <a href="{{ route('socialLogin', 'google') }}" class="btn btn-danger"><i class="fa fa-google-plus-square"></i> Continuar com o Google</a>
 @endsection
 

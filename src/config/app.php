@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => strpos($_SERVER['HTTP_HOST'], env('ALIGNER_DOMAIN')) !== false ? 'Smart Aligner' : 'Smart Solutions',
+    'name' => strpos(($_SERVER['HTTP_HOST'] ?? 'justforartisan'), env('ALIGNER_DOMAIN')) !== false ? 'Smart Aligner' : 'Smart Solutions',
 
     /*
     |--------------------------------------------------------------------------
