@@ -14,6 +14,7 @@ use App\ExternalApi\Shipping\ShippingManagerContract;
 use App\Http\Requests\ConfirmOrder;
 use App\Http\Requests\PayWithRede;
 use App\Jobs\CreateOrderJob;
+use App\Mail\OrderStatusChanged;
 use App\Order;
 use App\Patient;
 use Carbon\Carbon;

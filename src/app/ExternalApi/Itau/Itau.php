@@ -74,9 +74,6 @@ class Itau
         $obsAd2 = "";
         $obsAd3 = "";
 
-//        dd($this->code, $pedido, $valor, $observacao, $this->key, $nomeSacado,
-//            $codigoInscricao, $numeroInscricao, $enderecoSacado, $bairroSacado, $cepSacado, $cidadeSacado, $estadoSacado,
-//            $dataVencimento, $urlRetorna, $obsAd1, $obsAd2, $obsAd3);
         try {
             $data = $this->crypto->geraDados($this->code, $pedido, $valor, $observacao, $this->key, $nomeSacado,
                 $codigoInscricao, $numeroInscricao, $enderecoSacado, $bairroSacado, $cepSacado, $cidadeSacado, $estadoSacado,

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\ExternalApi\Shipping\ShippingManagerContract;
+use App\Mail\OrderStatusChanged;
 use App\Scopes\CurrentClinicScope;
 use App\Scopes\DomainScope;
 use Carbon\Carbon;
@@ -250,6 +251,9 @@ class Order extends Model
      */
     protected function setStatus($status): void
     {
+
+        $oldStatus = $this->status;
+
         $this->status = $status;
 
         // include the history
@@ -259,6 +263,11 @@ class Order extends Model
             'date' => now()->format('d/m/Y H:i')
         ];
         $this->status_history = $statusHistory;
+
+        // send a notification about the status change to the dentist, by email
+        if ($oldStatus != $status) {
+            \Mail::to($this->dentist->email)->send(new OrderStatusChanged($this, $oldStatus, $status));
+        }
     }
 
     /**
