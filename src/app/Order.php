@@ -177,6 +177,11 @@ class Order extends Model
         return $this->billing_document ?? $this->dentist->cpf;
     }
 
+    public function getBillingZipCodeAttribute()
+    {
+        return $this->billing_zip_code ?? $this->address->zip_code;
+    }
+
     /**
      * If set, return the billing name, or return the dentist name
      * @return string
