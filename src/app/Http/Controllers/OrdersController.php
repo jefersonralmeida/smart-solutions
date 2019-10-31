@@ -8,6 +8,7 @@ use App\Events\FileUploaded;
 use App\Events\OrderConfirmed;
 use App\Events\OrderReproved;
 use App\ExternalApi\Itau\Itau;
+use App\ExternalApi\Orders\OrdersApiContract;
 use App\ExternalApi\Rede\Rede;
 use App\ExternalApi\Shipping\ShippingManagerContract;
 use App\Http\Requests\ConfirmOrder;
@@ -499,5 +500,30 @@ class OrdersController extends Controller
         $order->setOrderCreated();
         $order->save();
         return redirect(route('orders.confirm', ['order' => $order->id]));
+    }
+
+    public function requestChangesForm(Order $order)
+    {
+        return view('orders.requestChanges', [
+            'breadcrumbs' => [
+                ['label' => 'Pedidos', 'route' => 'orders'],
+                ['label' => $order->id],
+                ['label' => 'Solicitar Alterações'],
+            ],
+            'order' => $order
+        ]);
+    }
+
+    public function requestChanges(Order $order, OrdersApiContract $ordersApi)
+    {
+        $changes = request('changes');
+        if ($ordersApi->requestChanges($order, $changes)) {
+            $order->setChangeRequired();
+            $order->save();
+            return redirect(route('orders.index'))->with('success', 'Mudanças solicitadas');
+        }
+        return redirect(route('orders.index'))->with('error', 'Falha ao enviar as mudanças. Contacte o suporte.');
+
+
     }
 }

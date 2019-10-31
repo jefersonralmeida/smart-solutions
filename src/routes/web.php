@@ -53,6 +53,8 @@ Route::post('/orders/{order}/cancel-project', 'OrdersController@cancelProject')-
 Route::get('/orders/{order}/cancel-force', 'OrdersController@cancelProject')->name('orders.forceCancel')->where('order', '^\d+$');
 Route::get('/orders/{order}/cancel-penalty', 'OrdersController@cancelPenalty')->name('orders.cancel.penalty')->where('order', '^\d+$');
 Route::get('/orders/{order}/penalty-payment-return', 'OrdersController@penaltyPaymentReturn')->name('orders.penaltyPaymentReturn')->where('order', '^\d+$');
+Route::get('/orders/{order}/request-changes', 'OrdersController@requestChangesForm')->name('orders.requestChangesForm')->where('order', '^\d+$');
+Route::post('/orders/{order}/request-changes', 'OrdersController@requestChanges')->name('orders.requestChanges')->where('order', '^\d+$');
 Route::get('/orders/{order}/payments', 'OrdersController@payments')->name('orders.payments')->where('order', '^\d+$');
 Route::get('/orders/{order}/payment-return', 'OrdersController@paymentReturn')->name('orders.paymentReturn')->where('order', '^\d+$');
 Route::post('/orders/{order}/pay/rede', 'OrdersController@payWithRede')->name('orders.pay.rede')->where('order', '^\d+$');

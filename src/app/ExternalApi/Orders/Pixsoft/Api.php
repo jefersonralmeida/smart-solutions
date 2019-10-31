@@ -261,4 +261,25 @@ class Api implements OrdersApiContract
         }
         return true;
     }
+
+    public function requestChanges(Order $order, string $changes): bool
+    {
+        $method = 'PUT';
+        $url = "pedidos/{$order->integration_id}/pre-planejamento/alter";
+
+        $payload = [
+            'justificativa' => $changes,
+        ];
+
+        Log::debug("Enviando request para o SOL: $method $url" . json_encode($payload));
+        try {
+            $this->httpClient->request($method, $url, [
+                'json' => $payload,
+            ]);
+        } catch (GuzzleException $e) {
+            Log::error($e->getMessage());
+            return false;
+        }
+        return true;
+    }
 }

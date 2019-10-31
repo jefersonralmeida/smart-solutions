@@ -21,4 +21,6 @@ interface OrdersApiContract
     public function approveOrder(Order $order): bool;
 
     public function reproveOrder(Order $order): bool;
+
+    public function requestChanges(Order $order, string $changes): bool;
 }

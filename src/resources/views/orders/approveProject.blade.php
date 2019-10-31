@@ -29,12 +29,15 @@
                 @endforeach
             </ul>
             <hr/>
-            <div class="row">
+            <div class="row">web.
                 <div class="col-lg-2">
                     <form method="POST" action="{{ route('orders.approve', ['order' => $order->id]) }}">
                         @csrf
                         <button type="submit" class="btn btn-success">Aprovar Projeto</button>
                     </form>
+                </div>
+                <div class="col-lg-2">
+                    <a class="btn btn-warning" href="{{ route('orders.requestChanges', ['order' => $order->id]) }}">Solicitar Alterações</a>
                 </div>
                 <div class="col-lg-2">
                     <form method="POST" action="{{ route('orders.cancel', ['order' => $order->id]) }}">
