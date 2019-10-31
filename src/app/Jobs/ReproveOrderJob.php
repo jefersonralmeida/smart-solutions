@@ -40,11 +40,13 @@ class ReproveOrderJob implements ShouldQueue
      */
     public function handle(OrdersApiContract $ordersApi)
     {
+        $this->order->setCancelProcess();
+        $this->order->save();
         if (!$ordersApi->reproveOrder($this->order)) {
             \Log::critical("Failed to send reprovement of order {$this->order->id} to the orders api.");
             return;
         }
-        $this->order->setOrderPlaced();
+        $this->order->setCanceled();
         $this->order->save();
     }
 

@@ -50,13 +50,15 @@ class Itau
 
     /**
      * @param Order $order
+     * @param float|null $value
+     * @param string|null $returnRoute
      * @return string
      * @throws \Exception
      */
-    public function getEncryptedData(Order $order): string
+    public function getEncryptedData(Order $order, ?float $value = null, ?bool $isPenalty = false): string
     {
         $pedido = $order->id;
-        $valor = number_format($order->total_value, 2, ',', '');
+        $valor = number_format(($value ?? $order->total_value), 2, ',', '');
         $observacao = "";
         $nomeSacado = $order->billing_name;
         $codigoInscricao = "01";
@@ -67,7 +69,7 @@ class Itau
         $cidadeSacado = $order->billing_city;
         $estadoSacado = $order->billing_state;
         $dataVencimento = now()->addDays(5)->format('dmY');
-        $urlRetorna = route('orders.paymentReturn', ['order' => $order->id]);
+        $urlRetorna = $isPenalty ? route('orders.penaltyPaymentReturn') : route('orders.paymentReturn', ['order' => $order->id]);
         $obsAd1 = "";
         $obsAd2 = "";
         $obsAd3 = "";

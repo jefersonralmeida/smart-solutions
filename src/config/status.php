@@ -64,5 +64,22 @@ return [
     14 => [
         'name' => 'Pedido enviado',
     ],
+    15 => [
+        'name' => 'Pedido em cancelamento',
+        'next' => [
+            'label' => 'Processar novamente o cancelamento',
+            'route' => ['orders.forceCancel', ['id']],
+        ]
+    ],
+    16 => [
+        'name' => 'Pedido cancelado - Aguardando Pagamento de Multa',
+        'next' => [
+            'label' => 'Realizar Pagamento',
+            'route' => ['orders.cancel.penalty', ['id']],
+        ]
+    ],
+    17 => [
+        'name' => 'Pedido cancelado'
+    ]
 
 ];

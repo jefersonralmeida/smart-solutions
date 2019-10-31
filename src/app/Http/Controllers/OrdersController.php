@@ -213,10 +213,42 @@ class OrdersController extends Controller
         return redirect(route('orders.payments', ['order' => $order->id]));
     }
 
-    public function reproveProject(Order $order)
+    public function cancelProject(Order $order)
     {
         event(new OrderReproved($order));
-        return redirect(route('orders'));
+        if ($order->status === 16) {
+            return redirect(route('orders.cancel.penalty', $order->id));
+        } else {
+            return redirect(route('orders'));
+        }
+    }
+
+    public function cancelPenalty(Order $order, Itau $itau)
+    {
+
+        // verifica se houve erro no processamento da rede, e exibe
+        $errors = session()->get('errors', app(ViewErrorBag::class));
+        if (request()->query('payment_error')) {
+            $errors->add('payment_error', 'O pagamento falhou. Tente novamente mais tarde, e caso o problema
+        permaneça, contacte a Smart Solutions diretamente.');
+        }
+
+        // gera a criptografia para o Itaú
+        try {
+            $encryptedData = $itau->getEncryptedData($order, config('app.cancelPenaltyValue'));
+        } catch (\Throwable $e) {
+            return abort(500, 'Falha ao realizar o pagamento. Contate o nosso suporte.');
+        }
+
+        return view('orders.penaltyPayment', [
+            'breadcrumbs' => [
+                ['label' => 'Pedidos', 'route' => 'orders'],
+                ['label' => $order->id],
+                ['label' => 'Pagamento de Multa de Cancelamento'],
+            ],
+            'order' => $order,
+            'data' => $encryptedData,
+        ]);
     }
 
     /**
@@ -230,7 +262,7 @@ class OrdersController extends Controller
     {
 
         // verifica se houve erro no processamento da rede, e exibe
-        $errors = session()->get('errors', app(ViewErrorBag::class));;
+        $errors = session()->get('errors', app(ViewErrorBag::class));
         if (request()->query('payment_error')) {
             $errors->add('payment_error', 'O pagamento falhou. Tente novamente mais tarde, e caso o problema
         permaneça, contacte a Smart Solutions diretamente.');
@@ -285,6 +317,30 @@ class OrdersController extends Controller
         ]));
     }
 
+    /**
+     * Return uri for the payment system
+     *
+     * @param Request $request
+     * @param Itau $itau
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function penaltyPaymentReturn(Request $request, Itau $itau)
+    {
+        $encryptedData = $request->query('DC');
+
+        if ($encryptedData === null) {
+            return abort(403, 'Falha ao receber o retorno de pagamento');
+        }
+
+        try {
+            $itau->decryptReturn($encryptedData);
+        } catch (\Throwable $e) {
+            return abort(403, 'Falha ao receber o retorno de pagamento.');
+        }
+
+        return redirect(route('orders.index'));
+    }
+
     public function payWithRede(PayWithRede $request, Order $order, Rede $rede)
     {
 
@@ -312,6 +368,31 @@ class OrdersController extends Controller
         return redirect(route('orders.payments', [
             'order' => $order->id
         ]) . '?payment_error=1');
+
+    }
+
+    public function payPenaltyWithRede(PayWithRede $request, Order $order, Rede $rede)
+    {
+        $errorMessage = $rede->authorize(
+            $order->id,
+            $request->amount,
+            $request->card_holder,
+            str_replace(' ', '', $request->card_number),
+            $request->expiration,
+            $request->security_code
+        );
+
+        if (empty($errorMessage)) {
+            $order->setConfirmCancel();
+            $order->save();
+            return redirect(route('orders.index'));
+        }
+
+        \Log::error("ERRO NO PAGAMENTO: $errorMessage");
+
+        return redirect(route('orders.cancel.penalty', [
+                'order' => $order->id
+            ]) . '?payment_error=1');
 
     }
 

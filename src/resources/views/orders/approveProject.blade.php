@@ -37,9 +37,9 @@
                     </form>
                 </div>
                 <div class="col-lg-2">
-                    <form method="POST" action="{{ route('orders.reprove', ['order' => $order->id]) }}">
+                    <form method="POST" action="{{ route('orders.cancel', ['order' => $order->id]) }}">
                         @csrf
-                        <button type="submit" class="btn btn-danger">Reprovar Projeto</button>
+                        <button type="submit" class="btn btn-danger">Cancelar Projeto</button>
                     </form>
                 </div>
             </div>

@@ -373,6 +373,30 @@ class Order extends Model
         $this->setStatus(14);
     }
 
+    /**
+     * Pedido em cancelamento
+     */
+    public function setCancelProcess(): void
+    {
+        $this->setStatus(15);
+    }
+
+    /**
+     * Pedido cancelado - Aguardando pagamento
+     */
+    public function setCanceled(): void
+    {
+        $this->setStatus(16);
+    }
+
+    /**
+     * Pedido cancelado
+     */
+    public function setConfirmCancel(): void
+    {
+        $this->setStatus(17);
+    }
+
     public static function findLastMonthsCount(int $months)
     {
         $limit = now()->subMonth($months - 1)->firstOfMonth();

@@ -235,4 +235,6 @@ return [
 
     ],
 
+    'cancelPenaltyValue' => env('CANCEL_PENALTY_VALUE', 300),
+
 ];

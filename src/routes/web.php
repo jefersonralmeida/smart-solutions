@@ -49,7 +49,10 @@ Route::get('/orders/{order}/download-project-file/{fileId}', 'OrdersController@d
     ->name('orders.downloadProjectFile')
     ->where(['order', '^\d+$', 'fileId' => '^\d+$']);
 Route::post('/orders/{order}/approve-project', 'OrdersController@approveProject')->name('orders.approve')->where('order', '^\d+$');
-Route::post('/orders/{order}/reprove-project', 'OrdersController@reproveProject')->name('orders.reprove')->where('order', '^\d+$');
+Route::post('/orders/{order}/cancel-project', 'OrdersController@cancelProject')->name('orders.cancel')->where('order', '^\d+$');
+Route::get('/orders/{order}/cancel-force', 'OrdersController@cancelProject')->name('orders.forceCancel')->where('order', '^\d+$');
+Route::get('/orders/{order}/cancel-penalty', 'OrdersController@cancelPenalty')->name('orders.cancel.penalty')->where('order', '^\d+$');
+Route::get('/orders/{order}/penalty-payment-return', 'OrdersController@penaltyPaymentReturn')->name('orders.penaltyPaymentReturn')->where('order', '^\d+$');
 Route::get('/orders/{order}/payments', 'OrdersController@payments')->name('orders.payments')->where('order', '^\d+$');
 Route::get('/orders/{order}/payment-return', 'OrdersController@paymentReturn')->name('orders.paymentReturn')->where('order', '^\d+$');
 Route::post('/orders/{order}/pay/rede', 'OrdersController@payWithRede')->name('orders.pay.rede')->where('order', '^\d+$');

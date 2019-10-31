@@ -7,6 +7,7 @@ use App\Events\OrderConfirmed;
 use App\Events\OrderReproved;
 use App\ExternalApi\Orders\OrdersApiContract;
 use App\Jobs\ApproveOrderJob;
+use App\Jobs\ReproveOrderJob;
 use Illuminate\Events\Dispatcher;
 
 class ReproveOrderOnApi
@@ -30,7 +31,7 @@ class ReproveOrderOnApi
     public function onOrderReproved(OrderReproved $orderReproved)
     {
         $order = $orderReproved->getOrder();
-        ApproveOrderJob::dispatch($order);
+        ReproveOrderJob::dispatch($order);
     }
 
     public function subscribe(Dispatcher $dispatcher)
