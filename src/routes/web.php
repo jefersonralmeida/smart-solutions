@@ -126,3 +126,11 @@ Route::put('addresses/{address}', 'AddressesController@update')->name('addresses
 // social login
 Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->name('socialLogin');
 Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('socialLogin.callback');
+
+Route::get('privacy', function() {
+    return view('privacy');
+});
+
+Route::get('termsofservice', function() {
+    return view('termsofservice');
+});
