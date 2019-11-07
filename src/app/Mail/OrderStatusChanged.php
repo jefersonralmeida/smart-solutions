@@ -51,7 +51,7 @@ class OrderStatusChanged extends Mailable
         return $this->markdown('emails.orderStatusChanged', [
             'order' => $this->order,
             'oldStatus' => config('status')[$this->oldStatus]['name'] ?? '',
-            'newStatus' => config('status')[$this->oldStatus]['name'] ?? '',
+            'newStatus' => config('status')[$this->newStatus]['name'] ?? '',
         ]);
     }
 }
