@@ -1,0 +1,53 @@
+﻿SOL:
+https://sol.pixsoft.com.br/smartsolutions/servlet?act=login&amp;pixrnd=0118102315162971788904
+SWILCK
+smart.123
+
+spc:
+Logon: 2162180
+Senha: 14012019
+
+AWS:
+bruno.rodrigues@smartsolutions3d.com.br
+Is001233.
+
+dropbox:
+login: dropbox@smartsolutions3d.com.br
+senha: is001233
+
+REDE:
+Doc: userede.com.br/desenvolvedores
+Env:
+REDE_MODE=production
+REDE_PV=80228941
+REDE_TOKEN=46e1df62d8ef42d2b3fb8e5c4b4ea43f
+
+SENHAS PRODUÇÃO:
+Senha Bruno:
+bruno.rodrigues@smartsolutions3d.com.br
+is001233
+
+Senha Andre:
+andre.tavares@smartsolutions3d.com.br
+A810523t
+
+Senha Felipe:
+felipe.moreira@smatrtsolutions3d.com.br
+smart.123
+----------------
+
+Github Smart (pra passar o código)
+smart3d2019
+
+-----------------
+
+Acesso Mailgun:
+bruno.rodrigues@smartsolutions3d.com.br
+is001233
+
+----------------
+Acesso google/facebook:
+144.smartsolutions@gmail.com
+site01mala
+
+
